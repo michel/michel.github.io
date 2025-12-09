@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import Lightbox from "../components/Lightbox"
 
 export const learningRustTheHardWay: { title: string; date: string; lines: ReactNode[] } = {
 	title: "Learning Rust the Hard Way",
@@ -21,6 +22,15 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			# Learning Rust the hard way: reverse engineering a 2000s P2P protocol
 		</h1>,
 		"",
+		<div key="video" className="flex flex-col gap-1">
+			<video
+				src="/images/posts/learning-rust-the-hard-way/soulseek-rs-demo.webm"
+				controls
+				className="max-w-full rounded border border-border bg-black"
+			/>
+			<span className="text-comment text-sm">{"// soulseek-rs demo"}</span>
+		</div>,
+		"",
 		<span key="intro1">
 			I wanted to really learn Rust. I needed a challenge after so many years of building systems
 			for the web. Not tutorials. Not toy projects.{" "}
@@ -34,14 +44,11 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			sets.
 		</span>,
 		"",
-		<div key="img1" className="flex flex-col gap-1">
-			<img
-				src="/images/posts/learning-rust-the-hard-way/soulseek_client.png"
-				alt="Old Soulseek Windows client"
-				className="max-w-full rounded border border-border"
-			/>
-			<span className="text-comment text-sm">{"// Old Soulseek Windows client"}</span>
-		</div>,
+		<Lightbox
+			key="img1"
+			src="/images/posts/learning-rust-the-hard-way/soulseek_client.png"
+			alt="Old Soulseek Windows client"
+		/>,
 		"",
 		<h2 key="rules" className="text-green font-bold text-lg">
 			## The Rules I set myself:
@@ -53,14 +60,11 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		<span key="rule3">• No AI assistance - just me, the compiler, and documentation</span>,
 		<span key="rule4">• Keep going till it works</span>,
 		"",
-		<div key="img2" className="flex flex-col gap-1">
-			<img
-				src="/images/posts/learning-rust-the-hard-way/packet_dump.png"
-				alt="tcpdump and hexyl packet analysis"
-				className="max-w-full rounded border border-border"
-			/>
-			<span className="text-comment text-sm">{"// tcpdump and hexyl packet analysis"}</span>
-		</div>,
+		<Lightbox
+			key="img2"
+			src="/images/posts/learning-rust-the-hard-way/packet_dump.png"
+			alt="tcpdump and hexyl packet analysis"
+		/>,
 		"",
 		<span key="p1">
 			The reality? I got stuck on reverse engineering the protocol for months, testing against the
@@ -79,14 +83,11 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			finally got things working. Of course, it was an off-by-one bit error"
 		</div>,
 		"",
-		<div key="img3" className="flex flex-col gap-1">
-			<img
-				src="/images/posts/learning-rust-the-hard-way/rust_code.png"
-				alt="Rust code for message decoding"
-				className="max-w-full rounded border border-border"
-			/>
-			<span className="text-comment text-sm">{"// Rust code for message decoding"}</span>
-		</div>,
+		<Lightbox
+			key="img3"
+			src="/images/posts/learning-rust-the-hard-way/rust_code.png"
+			alt="Rust code for message decoding"
+		/>,
 		"",
 		<h2 key="built" className="text-green font-bold text-lg">
 			## What I ended up building from scratch
@@ -110,14 +111,11 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			event loop (epoll/kqueue)
 		</span>,
 		"",
-		<div key="img4" className="flex flex-col gap-1">
-			<img
-				src="/images/posts/learning-rust-the-hard-way/costa_rica.png"
-				alt="Hacking in the Costa Rica jungle"
-				className="max-w-full rounded border border-border"
-			/>
-			<span className="text-comment text-sm">{"// Hacking in the Costa Rica jungle"}</span>
-		</div>,
+		<Lightbox
+			key="img4"
+			src="/images/posts/learning-rust-the-hard-way/costa_rica.png"
+			alt="Hacking in the Costa Rica jungle"
+		/>,
 		"",
 		<span key="p4">
 			The verdict on Rust? The compiler is brutal, but it becomes your friend once you start

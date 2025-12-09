@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useEditor } from "../context/EditorContext"
-import { executeCommand } from "../hooks/useTerminalCommands"
+import { availableCommands, executeCommand, hackerFileNames } from "../hooks/useTerminalCommands"
 
 interface TerminalLine {
 	id: string
@@ -48,23 +48,6 @@ function parseColoredText(text: string): React.ReactNode[] {
 	return parts.length > 0 ? parts : [text]
 }
 
-const availableCommands = [
-	"neofetch",
-	"ls",
-	"cat",
-	"npm",
-	"cowsay",
-	"clear",
-	"help",
-	"pwd",
-	"whoami",
-	"date",
-	"uname",
-	"top",
-	"ps",
-	"htop",
-	"echo",
-]
 
 export default function Terminal() {
 	const { terminalFocused, focusTerminal, unfocusTerminal, closeTerminal, setActiveTmuxWindow } = useEditor()
@@ -80,6 +63,7 @@ export default function Terminal() {
 	const [input, setInput] = useState("")
 	const [commandHistory, setCommandHistory] = useState<string[]>([])
 	const [historyIndex, setHistoryIndex] = useState(-1)
+	const [tabIndex, setTabIndex] = useState(0)
 	const containerRef = useRef<HTMLDivElement>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
 
@@ -95,11 +79,34 @@ export default function Terminal() {
 		setHistory((h) => [...h, { id: crypto.randomUUID(), type, content }])
 	}
 
-	const autocomplete = (partial: string): string | null => {
-		if (!partial) return null
-		const lower = partial.toLowerCase()
-		return availableCommands.find((c) => c.startsWith(lower) && c !== lower) ?? null
-	}
+	// Fish-style autocomplete: get all matching commands or files
+	const matches = useMemo(() => {
+		if (!input.trim()) return []
+		const trimmed = input.trim()
+		const lower = trimmed.toLowerCase()
+
+		// Check if we're completing a file argument for cat
+		if (lower.startsWith("cat ")) {
+			const fileArg = trimmed.slice(4) // Everything after "cat "
+			if (!fileArg) return hackerFileNames.map((f) => `cat ${f}`)
+			const fileLower = fileArg.toLowerCase()
+			return hackerFileNames
+				.filter((f) => f.toLowerCase().startsWith(fileLower) && f.toLowerCase() !== fileLower)
+				.map((f) => `cat ${f}`)
+		}
+
+		// Only match the command part (first word) if no space
+		if (lower.includes(" ")) return []
+		return availableCommands.filter((c) => c.startsWith(lower) && c !== lower)
+	}, [input])
+
+	// Reset tab index when input changes
+	useEffect(() => {
+		setTabIndex(0)
+	}, [input])
+
+	// Current suggestion based on tab index
+	const suggestion = matches[tabIndex % Math.max(1, matches.length)] ?? null
 
 	const handleClick = () => {
 		focusTerminal()
@@ -173,8 +180,27 @@ export default function Terminal() {
 			}
 		} else if (e.key === "Tab") {
 			e.preventDefault()
-			const match = autocomplete(input)
-			if (match) setInput(match)
+			if (matches.length > 0) {
+				// If we have a suggestion, accept it or cycle to next
+				if (suggestion) {
+					const currentMatch = matches[tabIndex % matches.length]
+					if (input.toLowerCase() === currentMatch) {
+						// Already at this match, cycle to next
+						setTabIndex((i) => i + 1)
+					} else {
+						// Accept current suggestion
+						setInput(suggestion)
+						setTabIndex((i) => i + 1)
+					}
+				}
+			}
+		} else if (e.key === "ArrowRight" && suggestion) {
+			// Fish-style: right arrow accepts suggestion
+			const cursorAtEnd = inputRef.current?.selectionStart === input.length
+			if (cursorAtEnd) {
+				e.preventDefault()
+				setInput(suggestion)
+			}
 		}
 	}
 
@@ -185,7 +211,7 @@ export default function Terminal() {
 					<div key={line.id} className="whitespace-pre break-all">
 						{line.type === "input" ? (
 							<>
-								<span className="text-green">michel@macbook</span>
+								<span className="text-green">michel@spaceheater</span>
 								<span className="text-fg">:</span>
 								<span className="text-cyan">~/src/michel</span>
 								<span className="text-fg">$ {line.content}</span>
@@ -197,7 +223,7 @@ export default function Terminal() {
 				))}
 
 				<div className="flex whitespace-pre-wrap break-all">
-					<span className="text-green">michel@macbook</span>
+					<span className="text-green">michel@spaceheater</span>
 					<span className="text-fg">:</span>
 					<span className="text-cyan">~/src/michel</span>
 					<span className="text-fg">$ </span>
@@ -213,6 +239,7 @@ export default function Terminal() {
 							autoFocus={terminalFocused}
 						/>
 						<span className="text-fg">{input}</span>
+						<span className="text-comment">{suggestion?.slice(input.length)}</span>
 						<span className={`${terminalFocused ? "cursor-blink" : ""} bg-fg text-bg`}> </span>
 					</div>
 				</div>

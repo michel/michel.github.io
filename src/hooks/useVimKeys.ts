@@ -30,6 +30,8 @@ export function useVimKeys() {
 		terminalFocused,
 		focusTerminal,
 		unfocusTerminal,
+		adventureGameOpen,
+		snakeGameOpen,
 	} = useEditor()
 
 	const visibleNodes = useMemo(
@@ -83,7 +85,7 @@ export function useVimKeys() {
 				return
 			}
 
-			if (commandLineOpen || fuzzyFinderOpen || helpPopupOpen) return
+			if (commandLineOpen || fuzzyFinderOpen || helpPopupOpen || adventureGameOpen || snakeGameOpen) return
 			if (isInput && mode !== "NORMAL") return
 
 			if (e.ctrlKey && e.key === "p") {
@@ -218,6 +220,8 @@ export function useVimKeys() {
 		commandLineOpen,
 		fuzzyFinderOpen,
 		helpPopupOpen,
+		adventureGameOpen,
+		snakeGameOpen,
 		sidebarOpen,
 		sidebarFocused,
 		sidebarCursorIndex,

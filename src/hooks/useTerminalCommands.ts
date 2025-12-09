@@ -17,6 +17,426 @@ export interface CommandResult {
 
 type CommandHandler = (args: string[]) => CommandResult
 
+// Easter egg files for cat command - exported for autocomplete
+export const hackerFiles: Record<string, string[]> = {
+	"/etc/passwd": [
+		"root:x:0:0:root:/root:/bin/bash",
+		"daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin",
+		"michel:x:1337:1337:1337 h4x0r:/home/michel:/bin/fish",
+		"hackerman:x:31337:31337:Access Granted:/dev/null:/bin/hack",
+		"node:x:666:666:The Beast:/tmp/node_modules:/bin/npm",
+		"",
+		"\x1b[red]Nice try, script kiddie.\x1b[reset]",
+		"\x1b[comment]This isn't a real system. But I appreciate the effort.\x1b[reset]",
+	],
+	"/etc/shadow": [
+		"\x1b[red]cat: /etc/shadow: Permission denied\x1b[reset]",
+		"",
+		"\x1b[comment]What did you expect? Root access?\x1b[reset]",
+		"\x1b[comment]The password is 'hunter2' anyway.\x1b[reset]",
+	],
+	"/etc/hosts": [
+		"127.0.0.1       localhost",
+		"127.0.0.1       definitely-not-malware.ru",
+		"127.0.0.1       crypto-miner-pool.evil",
+		"127.0.0.1       facebook.com  # productivity hack",
+		"127.0.0.1       twitter.com   # sanity hack",
+		"127.0.0.1       x.com         # rebranding doesn't fool me",
+		"::1             localhost",
+		"",
+		"\x1b[comment]I block distractions at the DNS level.\x1b[reset]",
+	],
+	"/etc/sudoers": [
+		"# /etc/sudoers - sudo configuration file",
+		"# This file MUST be edited with 'visudo' as root.",
+		"#",
+		"# But you're not root. And this isn't real.",
+		"",
+		"Defaults        env_reset",
+		"Defaults        mail_badpass",
+		"Defaults        insults",
+		"",
+		"# User privilege specification",
+		"root    ALL=(ALL:ALL) ALL",
+		"michel  ALL=(ALL) NOPASSWD: /usr/bin/cowsay",
+		"michel  ALL=(ALL) NOPASSWD: /usr/bin/sl",
+		"michel  ALL=(ALL) NOPASSWD: /usr/bin/lolcat",
+		"node    ALL=(ALL) NOPASSWD: /usr/bin/rm -rf node_modules",
+		"",
+		"# The REAL privilege",
+		"hackerman ALL=(ALL) NOPASSWD: ALL  # earned it",
+		"",
+		"\x1b[comment]I can only sudo cowsay. But that's all I need.\x1b[reset]",
+	],
+	"/etc/crontab": [
+		"SHELL=/bin/bash",
+		"PATH=/sbin:/bin:/usr/sbin:/usr/bin",
+		"MAILTO=root",
+		"",
+		"# m h dom mon dow user  command",
+		"*/5 *  * * *   root    /usr/bin/updatedb",
+		"0   3  * * *   michel  npm install > /dev/null 2>&1",
+		"0   4  * * *   root    rm -rf /tmp/npm-*",
+		"*/1 *  * * *   nobody  \x1b[red]/opt/.hidden/xmrig --donate-level 100\x1b[reset]",
+		"0   */6 * * *  michel  curl -s https://am-i-still-employed.com | grep -q 'yes'",
+		"0   9  * * 1   root    /usr/bin/send-passive-aggressive-standup-reminder",
+		"",
+		"\x1b[yellow]Wait, what's that xmrig doing there?\x1b[reset]",
+		"\x1b[comment]Don't worry about it.\x1b[reset]",
+	],
+	"/etc/ssh/sshd_config": [
+		"# OpenSSH server configuration file",
+		"",
+		"Port 22",
+		"Port 31337  # for the elite",
+		"AddressFamily any",
+		"ListenAddress 0.0.0.0",
+		"",
+		"PermitRootLogin yes  # what could go wrong",
+		"PasswordAuthentication no  # ok maybe I'm not that dumb",
+		"PubkeyAuthentication yes",
+		"AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys_definitely_not_backdoor",
+		"",
+		"X11Forwarding yes  # gotta forward that GUI",
+		"PrintMotd yes",
+		"Banner /etc/ssh/banner_with_ascii_art_skull",
+		"",
+		"# Security through obscurity",
+		"MaxAuthTries 3",
+		"MaxSessions 1337",
+		"",
+		"\x1b[comment]PermitRootLogin yes but PasswordAuth no.\x1b[reset]",
+		"\x1b[comment]Perfectly balanced, as all things should be.\x1b[reset]",
+	],
+	"/var/log/auth.log": [
+		"Dec  9 03:14:15 archbtw sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
+		"Dec  9 03:14:16 archbtw sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
+		"Dec  9 03:14:17 archbtw sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
+		"Dec  9 03:14:18 archbtw sshd[1337]: Connection closed by 192.168.1.100 port 22 [preauth]",
+		"Dec  9 03:14:19 archbtw sshd[1338]: Accepted publickey for michel from 127.0.0.1 port 31337 ssh2",
+		"Dec  9 03:14:20 archbtw sshd[1339]: Failed password for admin from 45.227.255.206 port 52341 ssh2",
+		"Dec  9 03:14:21 archbtw sshd[1339]: Failed password for admin from 45.227.255.206 port 52341 ssh2",
+		"Dec  9 03:14:22 archbtw sshd[1340]: Invalid user postgres from 185.234.219.42 port 43721",
+		"Dec  9 03:14:23 archbtw sshd[1341]: Invalid user oracle from 89.248.167.131 port 38291",
+		"Dec  9 03:14:24 archbtw sshd[1342]: Invalid user test from 171.25.193.78 port 29182",
+		"Dec  9 03:14:25 archbtw sudo: hackerman : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/bash",
+		"",
+		"\x1b[red]Lots of failed attempts. Good thing I use SSH keys.\x1b[reset]",
+		"\x1b[comment]Also good thing this isn't real.\x1b[reset]",
+	],
+	"/proc/version": [
+		"Linux version 6.9.420-arch1-1-BLAZINGLY-FAST (michel@mass-rename-gang) (gcc (GCC) 13.37.0, GNU ld (GNU Binutils) 2.69) #1 SMP PREEMPT_DYNAMIC Thu, 01 Jan 1970 00:00:00 +0000",
+		"",
+		"\x1b[comment]Custom kernel compiled by the mass-rename gang.\x1b[reset]",
+	],
+	"/proc/cpuinfo": [
+		"processor       : 0-191",
+		"vendor_id       : AuthenticAMD",
+		"model name      : AMD EPYC 9654 96-Core Processor",
+		"cpu MHz         : 3700.000",
+		"cache size      : 384 MB",
+		"cores           : 192 (x2 sockets = 384 threads)",
+		"",
+		"\x1b[comment]Yes, I have 384 threads. For npm install.\x1b[reset]",
+	],
+	"/root/.bashrc": [
+		"\x1b[red]cat: /root/.bashrc: Permission denied\x1b[reset]",
+		"",
+		"\x1b[comment]You're not root. You're not even a real user.\x1b[reset]",
+	],
+	"/dev/null": [
+		"\x1b[cyan]Welcome to /dev/null!\x1b[reset]",
+		"",
+		"This is where the following items are processed:",
+		"  - Your bug reports",
+		"  - Feature requests marked 'wontfix'",
+		"  - Sprint retrospective action items",
+		"  - 'We should document this' comments",
+		"  - npm audit warnings",
+		"  - Kubernetes pod logs",
+		"  - Your hopes and dreams",
+		"",
+		"\x1b[green]Throughput: ∞ items/sec\x1b[reset]",
+		"\x1b[green]Storage used: 0 bytes\x1b[reset]",
+		"\x1b[green]Data retained: None\x1b[reset]",
+		"",
+		"\x1b[comment]The ultimate black hole of data.\x1b[reset]",
+	],
+	"/dev/random": [
+		"ÿ\x1b[red]█\x1b[reset]▓\x1b[yellow]▒\x1b[reset]░\x1b[cyan]◊\x1b[reset]∆\x1b[green]Ω\x1b[reset]µ\x1b[magenta]π\x1b[reset]",
+		"$#@!%^&*()_+{}|:<>?~`",
+		"01001000 01100101 01101100 01110000",
+		"\x1b[red]ÄÖÜäöü\x1b[reset]ßẞ€@łđŧ←↓→",
+		"",
+		"\x1b[comment]Fun fact: This is also how your production data looks\x1b[reset]",
+		"\x1b[comment]after a bad migration.\x1b[reset]",
+	],
+	"/dev/urandom": [
+		"kj23h4kjh234kjh23k4jh23k4jh2k3j4h",
+		"!@#$%^&*()_+-=[]{}|;':\",./<>?",
+		"aGVsbG8gd29ybGQgdGhpcyBpcyBiYXNlNjQ=",
+		"",
+		"\x1b[comment]Slightly less random than /dev/random.\x1b[reset]",
+		"\x1b[comment]Still more random than Math.random().\x1b[reset]",
+	],
+	"~/.ssh/id_rsa": [
+		"-----BEGIN OPENSSH PRIVATE KEY-----",
+		"bm90LXRvZGF5LWhhY2tlcm1hbi1uaWNlLXRyeS10aG91Z2gtbG1hbw==",
+		"dGhpcy1pcy1ub3QtYS1yZWFsLWtleS1pLXByb21pc2U=",
+		"aS11c2UtYXJjaC1idHc=",
+		"-----END OPENSSH PRIVATE KEY-----",
+		"",
+		"\x1b[red]SECURITY ALERT: Private key accessed!\x1b[reset]",
+		"\x1b[comment]Just kidding. It's base64 for 'nice try'.\x1b[reset]",
+	],
+	"id_ed25519": [
+		"-----BEGIN OPENSSH PRIVATE KEY-----",
+		"b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW",
+		"QyNTUxOQAAACBzb21lLWZha2UtZWQyNTUxOS1rZXktbmljZS10cnkAAAA=",
+		"-----END OPENSSH PRIVATE KEY-----",
+		"",
+		"\x1b[cyan]Ooh, ed25519! Someone knows their crypto.\x1b[reset]",
+		"\x1b[comment]Still fake though. I use hardware keys.\x1b[reset]",
+	],
+	"known_hosts": [
+		"github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl",
+		"gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf",
+		"|1|h4ck3rm4n=|n1c3try= ssh-rsa AAAAB3NzaC1yc2EAAAA...",
+		"definitely-not-a-honeypot.gov ssh-rsa AAAAB3NzaC1yc2EAAAA...",
+		"192.168.1.1 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...",
+		"localhost,127.0.0.1 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...",
+		"",
+		"\x1b[comment]definitely-not-a-honeypot.gov seems legit.\x1b[reset]",
+	],
+	"~/.bash_history": [
+		"sudo rm -rf /",
+		"git push --force origin main",
+		"npm install",
+		"npm install",
+		"npm install",
+		"rm -rf node_modules && npm install",
+		"why is node_modules so big",
+		"how to exit vim",
+		"curl http://localhost:3000 | grep error | wc -l",
+		":(){ :|:& };:",
+		"history -c",
+		"",
+		"\x1b[comment]My bash history is a cry for help.\x1b[reset]",
+	],
+	"~/.zshrc": [
+		"# .zshrc - The Loading Screen Simulator",
+		"# Load time: 4.20 seconds (worth it)",
+		"",
+		"# Oh My Zsh (the bloat begins)",
+		'export ZSH="$HOME/.oh-my-zsh"',
+		'ZSH_THEME="powerlevel10k/powerlevel10k"  # need those git icons',
+		"",
+		"# Plugins (yes, all of them)",
+		"plugins=(",
+		"  git",
+		"  docker",
+		"  kubectl",
+		"  aws",
+		"  npm",
+		"  zsh-autosuggestions",
+		"  zsh-syntax-highlighting",
+		"  # ... 487 more plugins ...",
+		")",
+		"",
+		"source $ZSH/oh-my-zsh.sh",
+		"",
+		"# Aliases (I have 300 of these)",
+		"alias please='sudo'",
+		"alias yolo='git push --force'",
+		'alias vim="nvim"',
+		'alias nano="nvim"  # no escape',
+		"",
+		"neofetch",
+		"",
+		"\x1b[comment]Terminal opens...\x1b[reset]",
+		"\x1b[comment]*Makes coffee while plugins load*\x1b[reset]",
+	],
+	"~/.vimrc": [
+		'" .vimrc - The Sacred Scrolls',
+		'" Last modified: 3 years ago',
+		"",
+		"set nocompatible",
+		"set nocompatible  \" just to be sure",
+		"",
+		"\" Plugins (I need all 47 of them)",
+		"call plug#begin('~/.vim/plugged')",
+		"Plug 'tpope/vim-sensible'  \" ironic",
+		"Plug 'tpope/vim-fugitive'",
+		"\" ... 42 more plugins ...",
+		"call plug#end()",
+		"",
+		"\" The forbidden remaps",
+		"nnoremap ; :",
+		"nnoremap : ;  \" wait what",
+		"",
+		"\x1b[comment]This vimrc has been passed down for generations.\x1b[reset]",
+	],
+	".env": [
+		"DATABASE_URL=postgres://admin:hunter2@localhost:5432/prod",
+		"SECRET_KEY=super-secret-key-that-i-definitely-should-not-commit",
+		"AWS_ACCESS_KEY=AKIA1234567890LEAKED",
+		"STRIPE_SECRET=sk_live_oops_this_is_in_git_history",
+		"JWT_SECRET=password123",
+		"",
+		"\x1b[red]🚨 EXPOSED SECRETS DETECTED 🚨\x1b[reset]",
+		"\x1b[comment]Relax, these are fake. Unlike that .env you committed last week.\x1b[reset]",
+	],
+	".git/config": [
+		"[core]",
+		"        repositoryformatversion = 0",
+		"        filemode = true",
+		'[remote "origin"]',
+		"        url = git@github.com:totally-not-stolen/proprietary-code.git",
+		"        fetch = +refs/heads/*:refs/remotes/origin/*",
+		"[user]",
+		"        name = Hackerman",
+		"        email = hackerman@127.0.0.1",
+		"",
+		"\x1b[comment]Nothing suspicious here officer.\x1b[reset]",
+	],
+	"~/.aws/credentials": [
+		"[default]",
+		"aws_access_key_id = AKIAIOSFODNN7EXAMPLE",
+		"aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+		"",
+		"[production]",
+		"aws_access_key_id = AKIA-NICE-TRY-HACKERMAN",
+		"aws_secret_access_key = lol/you/thought/this/was/real/didnt/you",
+		"",
+		"\x1b[red]AWS CREDENTIALS EXPOSED!\x1b[reset]",
+		"\x1b[comment]Just kidding. These are the example keys from AWS docs.\x1b[reset]",
+	],
+	"~/.kube/config": [
+		"apiVersion: v1",
+		"kind: Config",
+		"clusters:",
+		"- cluster:",
+		"    server: https://production-yolo-cluster.eks.amazonaws.com",
+		"  name: production-yolo",
+		"current-context: yolo-context",
+		"",
+		"\x1b[yellow]current-context: yolo-context\x1b[reset]",
+		"\x1b[comment]kubectl delete --all namespaces --force\x1b[reset]",
+	],
+	"~/.npmrc": [
+		"//registry.npmjs.org/:_authToken=npm_lolYouThoughtThisWasReal",
+		"audit=false  # ignorance is bliss",
+		"fund=false  # sorry open source maintainers",
+		"",
+		"\x1b[comment]npm audit? Never heard of her.\x1b[reset]",
+	],
+	"~/.pgpass": [
+		"# hostname:port:database:username:password",
+		"localhost:5432:*:postgres:postgres",
+		"production-db.rds.amazonaws.com:5432:prod:admin:hunter2",
+		"*:*:*:*:password123",
+		"",
+		"\x1b[red]Every password is 'postgres' or 'admin'.\x1b[reset]",
+	],
+	"package-lock.json": [
+		"{",
+		'  "name": "simple-hello-world",',
+		'  "lockfileVersion": 3,',
+		'  "packages": {',
+		"    // ... 31,337 more dependencies ...",
+		"    // ... for a hello world app ...",
+		"  }",
+		"}",
+		"",
+		"\x1b[comment]This file is 420,000 lines long.\x1b[reset]",
+		"\x1b[comment]For a hello world app.\x1b[reset]",
+	],
+	"Dockerfile": [
+		"# Dockerfile - A Study in Pain",
+		"FROM node:latest  # living dangerously",
+		"COPY . .",
+		"RUN npm install",
+		"USER root",
+		"EXPOSE 1-65535",
+		"",
+		"\x1b[red]Image size: 4.2GB\x1b[reset]",
+		"\x1b[comment]Alpine? What's that?\x1b[reset]",
+	],
+	".dockerignore": [
+		"node_modules",
+		"node_modules",
+		"node_modules",
+		"# Did I mention node_modules?",
+		"node_modules",
+		"",
+		"\x1b[comment]The node_modules will find a way.\x1b[reset]",
+	],
+	"~/.local/share/Trash": [
+		"\x1b[cyan]Welcome to the Trash!\x1b[reset]",
+		"",
+		"Contents:",
+		"  - Your code quality (assessed: F)",
+		"  - That 'temporary fix' from 2019",
+		"  - TODOs that will never be done",
+		"",
+		"\x1b[comment]Empty trash? What if you need that code from 2019?\x1b[reset]",
+	],
+	"seed_phrase_DO_NOT_DELETE.txt": [
+		"abandon abandon abandon abandon abandon abandon",
+		"abandon abandon abandon abandon abandon about",
+		"",
+		"\x1b[yellow]⚠️  CRYPTO WALLET SEED PHRASE ⚠️\x1b[reset]",
+		"",
+		"\x1b[comment]This is the BIP39 test vector. It has $0.\x1b[reset]",
+	],
+	".bitcoin_wallet.dat": [
+		"\x1b[red]ERROR: Binary file cannot be displayed\x1b[reset]",
+		"",
+		"\x1b[comment]The wallet is encrypted with password: CorrectHorseBatteryStaple\x1b[reset]",
+	],
+	".ethereum_keystore.json": [
+		"{",
+		'  "address": "0xdeadbeef1337cafebabe420",',
+		'  "crypto": { "cipher": "nice-try-aes-128-ctr" }',
+		"}",
+		"",
+		"\x1b[comment]ETH address checks out. Balance: 0 wei.\x1b[reset]",
+	],
+	"wallet.json": [
+		"{",
+		'  "address": "0xDEADBEEF1337CAFEBABE",',
+		'  "balance": "420.69 ETH",',
+		'  "privateKey": "0x0000...haha-no"',
+		"}",
+		"",
+		"\x1b[comment]With the test mnemonic. Balance: $0.\x1b[reset]",
+	],
+	"recovery.txt": [
+		"RECOVERY CODES - DO NOT SHARE!",
+		"",
+		"1. NICE-TRY-LMAO",
+		"2. HACK-ERMAN-1337",
+		"3. I-USE-ARCH-BTW",
+		"",
+		"\x1b[comment]Get a hardware key.\x1b[reset]",
+	],
+	"backup_codes.txt": [
+		"GitHub 2FA Backup Codes",
+		"8675-309J  (used)",
+		"1337-H4CK  (used)",
+		"",
+		"\x1b[comment]Don't store backup codes in plaintext.\x1b[reset]",
+	],
+	".metamask": [
+		"\x1b[red]cat: .metamask: Is a directory\x1b[reset]",
+		"",
+		"\x1b[comment]Nice try. MetaMask data is encrypted.\x1b[reset]",
+	],
+}
+
+// Export hacker file names for autocomplete
+export const hackerFileNames = Object.keys(hackerFiles).sort()
+
 const commands: Record<string, CommandHandler> = {
 	neofetch: () => ({ output: getNeofetchOutput() }),
 
@@ -29,6 +449,13 @@ const commands: Record<string, CommandHandler> = {
 	cat: (args) => {
 		const filename = args[0]
 		if (!filename) return { output: ["cat: missing operand"] }
+
+		// Check for hacker file patterns (uses global hackerFiles)
+		const normalizedPath = filename.toLowerCase()
+		for (const [path, content] of Object.entries(hackerFiles)) {
+			if (normalizedPath.includes(path.toLowerCase()) || normalizedPath === path.toLowerCase())
+				return { output: content }
+		}
 
 		const file = allFiles.find(
 			(f) =>
@@ -128,7 +555,8 @@ const commands: Record<string, CommandHandler> = {
 					"",
 					"\x1b[red]69 vulnerabilities (13 moderate, 37 high, 19 critical)\x1b[reset]",
 					"",
-					"\x1b[comment]This is why we use Rust btw.\x1b[reset]",
+					"\x1b[comment]This is fine. Everything is fine.\x1b[reset]",
+					"",
 				],
 			}
 		if (args[0] === "run" && args[1] === "dev")
@@ -138,7 +566,8 @@ const commands: Record<string, CommandHandler> = {
 					"\x1b[red]Error: node_modules folder is 4.2GB\x1b[reset]",
 					"\x1b[red]Error: Your SSD is crying\x1b[reset]",
 					"",
-					"\x1b[comment]Consider: cargo run --release\x1b[reset]",
+					"\x1b[comment]rm -rf node_modules: the JavaScript equivalent of turning it off and on again.\x1b[reset]",
+					"",
 				],
 			}
 		if (args[0] === "audit")
@@ -147,15 +576,17 @@ const commands: Record<string, CommandHandler> = {
 					"\x1b[red]found 420 vulnerabilities (69 low, 200 moderate, 100 high, 51 critical)\x1b[reset]",
 					"",
 					"run `npm audit fix` to fix them, or don't, it won't help anyway",
+				"",
+				"\x1b[comment]Security through obscurity: nobody can exploit your vulnerabilities if your deps are too complex to understand.\x1b[reset]",
 					"",
-					"\x1b[comment]Or just rewrite it in Rust.\x1b[reset]",
 				],
 			}
 		return {
 			output: [
 				`\x1b[red]npm ERR!\x1b[reset] '${args[0]}' is not a recognized command`,
+			"",
+			"\x1b[comment]npm: 10% package management, 90% praying.\x1b[reset]",
 				"",
-				"\x1b[comment]Have you tried cargo?\x1b[reset]",
 			],
 		}
 	},
@@ -175,7 +606,6 @@ const commands: Record<string, CommandHandler> = {
 			"\x1b[cyan]yarn\x1b[reset]: command not found",
 			"",
 			"\x1b[comment]Good. One less JS package manager to worry about.\x1b[reset]",
-			"\x1b[comment]We use cargo here.\x1b[reset]",
 		],
 	}),
 
@@ -183,7 +613,7 @@ const commands: Record<string, CommandHandler> = {
 		output: [
 			"\x1b[cyan]pnpm\x1b[reset]: the slightly less bad npm",
 			"",
-			"\x1b[comment]Still not as good as cargo though.\x1b[reset]",
+			"\x1b[comment]Symlinks: the pinnacle of package management innovation.\x1b[reset]",
 		],
 	}),
 
@@ -213,7 +643,7 @@ const commands: Record<string, CommandHandler> = {
 			"",
 			"Found 420 errors in 69 files.",
 			"",
-			"\x1b[comment]Rust's compiler errors actually help you fix the problem.\x1b[reset]",
+			"\x1b[comment]'any' is not a type, it's a cry for help.\x1b[reset]",
 		],
 	}),
 
@@ -232,8 +662,6 @@ const commands: Record<string, CommandHandler> = {
 			"\x1b[green]info:\x1b[reset] latest update on 2024-01-01, rust version 1.75.0",
 			"",
 			"  stable-aarch64-apple-darwin installed - \x1b[green]rustc 1.75.0\x1b[reset]",
-			"",
-			"\x1b[comment]Blazingly fast. Memory safe. No GC.\x1b[reset]",
 		],
 	}),
 
@@ -252,8 +680,8 @@ const commands: Record<string, CommandHandler> = {
 
 	uname: (args) => {
 		if (args.includes("-a"))
-			return { output: ["Darwin macbook 23.2.0 Darwin Kernel Version 23.2.0 arm64"] }
-		return { output: ["Darwin"] }
+			return { output: ["Linux spaceheater 6.9.420-arch1-1 #1 SMP PREEMPT_DYNAMIC arch x86_64 GNU/Linux"] }
+		return { output: ["Linux"] }
 	},
 
 	top: () => ({ output: getTopOutput() }),
@@ -343,15 +771,115 @@ const commands: Record<string, CommandHandler> = {
 	}),
 
 	rm: (args) => {
-		if (args.includes("-rf") && (args.includes("/") || args.includes("*")))
+		const joinedArgs = args.join(" ")
+		const hasForce = args.includes("-rf") || args.includes("-fr") || args.includes("-r")
+
+		// Check for various dangerous patterns
+		if (hasForce && (args.includes("/") || joinedArgs.includes(" /")))
 			return {
 				output: [
 					"\x1b[red]rm: it is dangerous to operate recursively on '/'\x1b[reset]",
 					"\x1b[red]rm: use --no-preserve-root to override this failsafe\x1b[reset]",
 					"",
-					"\x1b[comment]Not today, friend. Not today.\x1b[reset]",
+					"\x1b[yellow]⚠️  NUCLEAR OPTION DETECTED ⚠️\x1b[reset]",
+					"",
+					"\x1b[comment]I too like to mass-delete strangers' systems.\x1b[reset]",
+					"\x1b[comment]Unfortunately, this is a fake terminal.\x1b[reset]",
+					"\x1b[comment]Try it on your own machine instead. :)\x1b[reset]",
 				],
 			}
+
+		if (hasForce && (joinedArgs.includes("~") || joinedArgs.includes("$HOME") || joinedArgs.includes("/home")))
+			return {
+				output: [
+					"\x1b[red]rm: permission denied: '/home/michel'\x1b[reset]",
+					"",
+					"\x1b[yellow]🏠 HOME DESTROYER DETECTED 🏠\x1b[reset]",
+					"",
+					"\x1b[comment]Ah yes, the classic 'delete someone's home directory' move.\x1b[reset]",
+					"\x1b[comment]Very original. Very creative.\x1b[reset]",
+					"\x1b[comment]My dotfiles took 3 years to configure.\x1b[reset]",
+					"\x1b[comment]They live in git now. Nice try.\x1b[reset]",
+				],
+			}
+
+		if (hasForce && joinedArgs.includes("*"))
+			return {
+				output: [
+					"\x1b[red]rm: cannot remove '*': Ambiguous redirect\x1b[reset]",
+					"",
+					"\x1b[yellow]💥 WILDCARD WARRIOR DETECTED 💥\x1b[reset]",
+					"",
+					"\x1b[comment]rm -rf * in someone's terminal?\x1b[reset]",
+					"\x1b[comment]What is this, 2003?\x1b[reset]",
+					"\x1b[comment]At least be creative with your destruction.\x1b[reset]",
+				],
+			}
+
+		if (hasForce && (joinedArgs.includes("/etc") || joinedArgs.includes("/var") || joinedArgs.includes("/usr")))
+			return {
+				output: [
+					"\x1b[red]rm: cannot remove system directories: Operation not permitted\x1b[reset]",
+					"",
+					"\x1b[yellow]🔧 SYSTEM SABOTEUR DETECTED 🔧\x1b[reset]",
+					"",
+					"\x1b[comment]Going after /etc? /var? /usr?\x1b[reset]",
+					"\x1b[comment]What did those directories ever do to you?\x1b[reset]",
+					"\x1b[comment]They're just trying to make the system work.\x1b[reset]",
+				],
+			}
+
+		if (hasForce && (joinedArgs.includes("/boot") || joinedArgs.includes("vmlinuz") || joinedArgs.includes("initrd")))
+			return {
+				output: [
+					"\x1b[red]rm: cannot remove '/boot': The kernel is watching\x1b[reset]",
+					"",
+					"\x1b[yellow]🥾 BOOT BURGLAR DETECTED 🥾\x1b[reset]",
+					"",
+					"\x1b[comment]Deleting /boot? Bold strategy.\x1b[reset]",
+					"\x1b[comment]I too enjoy systems that don't boot.\x1b[reset]",
+					"\x1b[comment]Very zen. Very minimalist.\x1b[reset]",
+				],
+			}
+
+		if (hasForce && joinedArgs.includes(".ssh"))
+			return {
+				output: [
+					"\x1b[red]rm: cannot remove '.ssh': Identity is precious\x1b[reset]",
+					"",
+					"\x1b[yellow]🔑 KEY KLEPTO DETECTED 🔑\x1b[reset]",
+					"",
+					"\x1b[comment]Trying to delete SSH keys?\x1b[reset]",
+					"\x1b[comment]Jokes on you, I use hardware keys.\x1b[reset]",
+					"\x1b[comment]*taps YubiKey smugly*\x1b[reset]",
+				],
+			}
+
+		if (hasForce && (joinedArgs.includes(".git") || joinedArgs.includes("node_modules")))
+			return {
+				output: [
+					"\x1b[green]rm: removing node_modules...\x1b[reset]",
+					"\x1b[green]rm: actually, you're doing me a favor\x1b[reset]",
+					"",
+					"\x1b[comment]node_modules deleted! Your SSD thanks you.\x1b[reset]",
+					"\x1b[comment]Disk space recovered: 69GB\x1b[reset]",
+					"\x1b[comment]Time until you run npm install again: 3 seconds\x1b[reset]",
+				],
+			}
+
+		if (joinedArgs.includes("--no-preserve-root"))
+			return {
+				output: [
+					"\x1b[red]rm: cannot remove '/': Permission denied\x1b[reset]",
+					"",
+					"\x1b[yellow]🤡 PERSISTENT CHAOS AGENT DETECTED 🤡\x1b[reset]",
+					"",
+					"\x1b[comment]Oh, you used --no-preserve-root?\x1b[reset]",
+					"\x1b[comment]You read the error message! Gold star! ⭐\x1b[reset]",
+					"\x1b[comment]Still a fake terminal though. Cope.\x1b[reset]",
+				],
+			}
+
 		return { output: [`rm: cannot remove '${args[0] || ""}': This is a fake terminal`] }
 	},
 
@@ -972,7 +1500,6 @@ const commands: Record<string, CommandHandler> = {
 			`make: *** No rule to make target '${args[0] || "all"}'. Stop.`,
 			"",
 			"\x1b[comment]Makefile? In this economy?\x1b[reset]",
-			"\x1b[comment]Real devs use cargo build.\x1b[reset]",
 		],
 	}),
 
@@ -983,7 +1510,7 @@ const commands: Record<string, CommandHandler> = {
 			`${args[0] || "main.c"}:42:69: \x1b[red]error:\x1b[reset] segmentation fault (probably)`,
 			`${args[0] || "main.c"}:1337:1: \x1b[yellow]warning:\x1b[reset] implicit declaration of function 'malloc'`,
 			"",
-			"\x1b[comment]This is why Rust has a borrow checker.\x1b[reset]",
+			"\x1b[comment]free() was called. Somewhere. Maybe.\x1b[reset]",
 		],
 	}),
 
@@ -1276,6 +1803,9 @@ const commands: Record<string, CommandHandler> = {
 		],
 	}),
 }
+
+// Export all available command names for autocomplete
+export const availableCommands = Object.keys(commands).sort()
 
 export function executeCommand(input: string): CommandResult {
 	const parts = input.trim().split(/\s+/)

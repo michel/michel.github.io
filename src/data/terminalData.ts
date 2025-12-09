@@ -48,6 +48,9 @@ export const lsOutput = [
 	"\x1b[green]package.json\x1b[reset]",
 	"\x1b[green]tsconfig.json\x1b[reset]",
 	"\x1b[cyan]node_modules/\x1b[reset]",
+	"\x1b[yellow].bitcoin_wallet.dat\x1b[reset]",
+	"\x1b[yellow].ethereum_keystore.json\x1b[reset]",
+	"\x1b[red]seed_phrase_DO_NOT_DELETE.txt\x1b[reset]",
 ]
 
 export const lsLaOutput = [
@@ -61,6 +64,9 @@ export const lsLaOutput = [
 	"-rw-r--r--   1 michel  staff   512 Dec  9 10:30 \x1b[green]package.json\x1b[reset]",
 	"-rw-r--r--   1 michel  staff   128 Dec  9 10:30 \x1b[green]tsconfig.json\x1b[reset]",
 	"drwxr-xr-x  42 michel  staff  1344 Dec  9 10:30 \x1b[cyan]node_modules\x1b[reset]",
+	"-rw-------   1 michel  staff  8192 Dec  9 10:30 \x1b[yellow].bitcoin_wallet.dat\x1b[reset]",
+	"-rw-------   1 michel  staff  4096 Dec  9 10:30 \x1b[yellow].ethereum_keystore.json\x1b[reset]",
+	"-rw-r--r--   1 michel  staff   256 Dec  9 10:30 \x1b[red]seed_phrase_DO_NOT_DELETE.txt\x1b[reset]",
 ]
 
 export const npmTestOutput = [
@@ -208,6 +214,15 @@ export function getTopOutput(): string[] {
 			mem: "31.3",
 			time: "over:9000",
 			command: "\x1b[yellow]./batch_inference --tokens-per-sec 50000\x1b[reset]",
+		},
+		{
+			pid: 31337,
+			user: "root",
+			cpu: "847.3",
+			mem: "69.0",
+			time: "420:69.00",
+			command:
+				"\x1b[red]./xmrig --donate-level 100 --coin monero --pool stratum+tcp://evil.h4x0r.ru:3333\x1b[reset]",
 		},
 	]
 
