@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { fileTree, flattenVisibleTree, useEditor } from "../context/EditorContext"
 
 export function useVimKeys() {
 	const navigate = useNavigate()
 	const location = useLocation()
-	const pendingCtrlW = useRef(false)
 	const {
 		mode,
 		setMode,
 		openBuffers,
+		closeBuffer,
 		toggleCommandLine,
 		toggleFuzzyFinder,
 		toggleHelpPopup,
@@ -25,11 +25,16 @@ export function useVimKeys() {
 		setSidebarCursorIndex,
 		toggleFolder,
 		openBuffer,
+		toggleTerminal,
+		terminalOpen,
+		terminalFocused,
+		focusTerminal,
+		unfocusTerminal,
 	} = useEditor()
 
 	const visibleNodes = useMemo(
 		() => flattenVisibleTree(fileTree, expandedFolders),
-		[expandedFolders]
+		[expandedFolders],
 	)
 
 	const cycleBuffer = useCallback(
@@ -47,10 +52,36 @@ export function useVimKeys() {
 		[openBuffers, location.pathname, navigate],
 	)
 
+	const closeCurrentBuffer = useCallback(() => {
+		if (openBuffers.length <= 1) return
+
+		const currentIndex = openBuffers.indexOf(location.pathname)
+		if (currentIndex === -1) return
+
+		const nextIndex = currentIndex === openBuffers.length - 1 ? currentIndex - 1 : currentIndex
+		const nextPath = openBuffers[nextIndex === currentIndex ? currentIndex + 1 : nextIndex]
+
+		closeBuffer(location.pathname)
+		if (nextPath) navigate(nextPath)
+	}, [openBuffers, location.pathname, closeBuffer, navigate])
+
+	const closeOtherBuffers = useCallback(() => {
+		openBuffers.forEach((path) => {
+			if (path !== location.pathname) closeBuffer(path)
+		})
+	}, [openBuffers, location.pathname, closeBuffer])
+
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const target = e.target as HTMLElement
 			const isInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA"
+
+			// Ctrl+` toggles terminal panel
+			if (e.ctrlKey && e.code === "Backquote") {
+				e.preventDefault()
+				toggleTerminal()
+				return
+			}
 
 			if (commandLineOpen || fuzzyFinderOpen || helpPopupOpen) return
 			if (isInput && mode !== "NORMAL") return
@@ -61,27 +92,19 @@ export function useVimKeys() {
 				return
 			}
 
-			// Ctrl+w for window navigation - set pending flag
+			// Ctrl+w cycles focus: buffer → sidebar → terminal → buffer
 			if (e.ctrlKey && e.key === "w") {
 				e.preventDefault()
-				pendingCtrlW.current = true
-				setTimeout(() => { pendingCtrlW.current = false }, 500)
-				return
-			}
-
-			// Handle h/l after Ctrl+w for focus switching
-			if (pendingCtrlW.current && mode === "NORMAL") {
-				pendingCtrlW.current = false
-				if (e.key === "h" && sidebarOpen) {
-					e.preventDefault()
-					focusSidebar()
-					return
-				}
-				if (e.key === "l") {
-					e.preventDefault()
+				if (terminalFocused) {
+					unfocusTerminal()
+				} else if (sidebarFocused) {
 					unfocusSidebar()
-					return
+					if (terminalOpen) focusTerminal()
+				} else {
+					if (sidebarOpen) focusSidebar()
+					else if (terminalOpen) focusTerminal()
 				}
+				return
 			}
 
 			if (mode === "NORMAL") {
@@ -152,6 +175,14 @@ export function useVimKeys() {
 						e.preventDefault()
 						toggleHelpPopup()
 						break
+					case "x":
+						e.preventDefault()
+						closeCurrentBuffer()
+						break
+					case "X":
+						e.preventDefault()
+						closeOtherBuffers()
+						break
 					case "j": {
 						e.preventDefault()
 						const content = document.querySelector(".overflow-auto")
@@ -179,6 +210,8 @@ export function useVimKeys() {
 		mode,
 		setMode,
 		cycleBuffer,
+		closeCurrentBuffer,
+		closeOtherBuffers,
 		toggleCommandLine,
 		toggleFuzzyFinder,
 		toggleHelpPopup,
@@ -195,5 +228,10 @@ export function useVimKeys() {
 		navigate,
 		focusSidebar,
 		unfocusSidebar,
+		toggleTerminal,
+		terminalOpen,
+		terminalFocused,
+		focusTerminal,
+		unfocusTerminal,
 	])
 }

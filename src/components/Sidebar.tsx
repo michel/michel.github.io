@@ -74,7 +74,7 @@ function getNodeDepth(node: FileNode, tree: FileNode[], depth = 0): number {
 }
 
 export default function Sidebar() {
-	const [width, setWidth] = useState(256)
+	const [width, setWidth] = useState(320)
 	const [isResizing, setIsResizing] = useState(false)
 	const { sidebarCursorIndex, expandedFolders, toggleFolder, sidebarFocused } = useEditor()
 
@@ -91,7 +91,7 @@ export default function Sidebar() {
 			const newWidth = Math.max(150, Math.min(500, e.clientX))
 			setWidth(newWidth)
 		},
-		[isResizing]
+		[isResizing],
 	)
 
 	const handleMouseUp = useCallback(() => {
@@ -114,7 +114,9 @@ export default function Sidebar() {
 			className={`relative hidden flex-col border-r border-border bg-bg md:flex ${sidebarFocused ? "ring-1 ring-inset ring-magenta" : ""}`}
 			style={{ width }}
 		>
-			<div className="px-2 py-1 font-bold text-magenta" style={{ backgroundColor: "#191725" }}>re-invention</div>
+			<div className="px-2 py-1 font-bold text-magenta" style={{ backgroundColor: "#191725" }}>
+				re-invention
+			</div>
 			<div className="flex-1 space-y-0.5 overflow-y-auto px-2 py-1">
 				{visibleNodes.map((node, index) => (
 					<FileTreeNode
@@ -128,7 +130,7 @@ export default function Sidebar() {
 				))}
 			</div>
 			<div className="border-t border-border p-1 text-center text-comment">
-				{sidebarFocused ? '"j/k to navigate, Enter to select"' : '"Ctrl+w h to focus"'}
+				{sidebarFocused ? '"j/k nav, Enter select, ? help"' : '"Ctrl+w focus, ? help"'}
 			</div>
 			<div
 				className="absolute right-0 top-0 h-full w-1 cursor-col-resize hover:bg-magenta"

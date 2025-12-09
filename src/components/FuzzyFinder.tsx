@@ -21,6 +21,7 @@ export default function FuzzyFinder() {
 		inputRef.current?.focus()
 	}, [])
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: reset selection when query changes
 	useEffect(() => {
 		setSelectedIndex(0)
 	}, [query])

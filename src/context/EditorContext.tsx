@@ -17,7 +17,12 @@ export const fileTree: FileNode[] = [
 		path: "/posts",
 		type: "folder",
 		children: [
-			{ id: "rust", name: "learning_rust_the_hard_way.md", path: "/posts/learning-rust-the-hard-way", type: "file" },
+			{
+				id: "rust",
+				name: "learning_rust_the_hard_way.md",
+				path: "/posts/learning-rust-the-hard-way",
+				type: "file",
+			},
 		],
 	},
 	{ id: "home", name: "README.md", path: "/", type: "file" },
@@ -98,6 +103,8 @@ X.com: @micheldegraaf`,
 	},
 ]
 
+export type TmuxWindow = 0 | 1 | 2 | 3 | 4
+
 interface EditorState {
 	mode: VimMode
 	openBuffers: string[]
@@ -109,6 +116,14 @@ interface EditorState {
 	commandLineOpen: boolean
 	fuzzyFinderOpen: boolean
 	helpPopupOpen: boolean
+	terminalOpen: boolean
+	terminalFocused: boolean
+	activeTmuxWindow: TmuxWindow
+	matrixComplete: boolean
+	independenceComplete: boolean
+	jurassicComplete: boolean
+	snakeGameOpen: boolean
+	adventureGameOpen: boolean
 }
 
 interface EditorContextType extends EditorState {
@@ -128,6 +143,19 @@ interface EditorContextType extends EditorState {
 	closeCommandLine: () => void
 	toggleHelpPopup: () => void
 	closeHelpPopup: () => void
+	toggleTerminal: () => void
+	openTerminal: () => void
+	closeTerminal: () => void
+	focusTerminal: () => void
+	unfocusTerminal: () => void
+	setActiveTmuxWindow: (window: TmuxWindow) => void
+	setMatrixComplete: (complete: boolean) => void
+	setIndependenceComplete: (complete: boolean) => void
+	setJurassicComplete: (complete: boolean) => void
+	openSnakeGame: () => void
+	closeSnakeGame: () => void
+	openAdventureGame: () => void
+	closeAdventureGame: () => void
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -144,6 +172,14 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		commandLineOpen: false,
 		fuzzyFinderOpen: false,
 		helpPopupOpen: false,
+		terminalOpen: false,
+		terminalFocused: false,
+		activeTmuxWindow: 1,
+		matrixComplete: false,
+		independenceComplete: false,
+		jurassicComplete: false,
+		snakeGameOpen: false,
+		adventureGameOpen: false,
 	})
 
 	const setMode = useCallback((mode: VimMode) => {
@@ -225,6 +261,62 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		setState((s) => ({ ...s, helpPopupOpen: false }))
 	}, [])
 
+	const toggleTerminal = useCallback(() => {
+		setState((s) => ({
+			...s,
+			terminalOpen: !s.terminalOpen,
+			terminalFocused: !s.terminalOpen,
+		}))
+	}, [])
+
+	const openTerminal = useCallback(() => {
+		setState((s) => ({ ...s, terminalOpen: true, terminalFocused: true }))
+	}, [])
+
+	const closeTerminal = useCallback(() => {
+		setState((s) => ({ ...s, terminalOpen: false, terminalFocused: false }))
+	}, [])
+
+	const focusTerminal = useCallback(() => {
+		setState((s) => ({ ...s, terminalFocused: true }))
+	}, [])
+
+	const unfocusTerminal = useCallback(() => {
+		setState((s) => ({ ...s, terminalFocused: false }))
+	}, [])
+
+	const setActiveTmuxWindow = useCallback((window: TmuxWindow) => {
+		setState((s) => ({ ...s, activeTmuxWindow: window }))
+	}, [])
+
+	const setMatrixComplete = useCallback((complete: boolean) => {
+		setState((s) => ({ ...s, matrixComplete: complete }))
+	}, [])
+
+	const setIndependenceComplete = useCallback((complete: boolean) => {
+		setState((s) => ({ ...s, independenceComplete: complete }))
+	}, [])
+
+	const setJurassicComplete = useCallback((complete: boolean) => {
+		setState((s) => ({ ...s, jurassicComplete: complete }))
+	}, [])
+
+	const openSnakeGame = useCallback(() => {
+		setState((s) => ({ ...s, snakeGameOpen: true }))
+	}, [])
+
+	const closeSnakeGame = useCallback(() => {
+		setState((s) => ({ ...s, snakeGameOpen: false }))
+	}, [])
+
+	const openAdventureGame = useCallback(() => {
+		setState((s) => ({ ...s, adventureGameOpen: true }))
+	}, [])
+
+	const closeAdventureGame = useCallback(() => {
+		setState((s) => ({ ...s, adventureGameOpen: false }))
+	}, [])
+
 	return (
 		<EditorContext.Provider
 			value={{
@@ -245,6 +337,19 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 				closeCommandLine,
 				toggleHelpPopup,
 				closeHelpPopup,
+				toggleTerminal,
+				openTerminal,
+				closeTerminal,
+				focusTerminal,
+				unfocusTerminal,
+				setActiveTmuxWindow,
+				setMatrixComplete,
+				setIndependenceComplete,
+				setJurassicComplete,
+				openSnakeGame,
+				closeSnakeGame,
+				openAdventureGame,
+				closeAdventureGame,
 			}}
 		>
 			{children}

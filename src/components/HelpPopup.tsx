@@ -2,7 +2,10 @@ import { useEffect, useRef } from "react"
 import { useEditor } from "../context/EditorContext"
 
 const keybindings = [
-	{ key: "Ctrl+P", description: "Find files" },
+	{ key: "Ctrl+`", description: "Toggle terminal" },
+	{ key: "Ctrl+p", description: "Find files" },
+	{ key: "Ctrl+w", description: "Cycle focus" },
+	{ key: "Ctrl+j", description: "Focus terminal" },
 	{ key: "h", description: "Previous buffer" },
 	{ key: "j", description: "Scroll down" },
 	{ key: "k", description: "Scroll up" },

@@ -10,6 +10,7 @@ export default function TabLine() {
 	return (
 		<div className="flex select-none overflow-x-auto" style={{ backgroundColor: "#191725" }}>
 			<button
+				type="button"
 				className="flex items-center px-2 py-1 hover:bg-black md:hidden"
 				onClick={toggleMobileSidebar}
 			>
