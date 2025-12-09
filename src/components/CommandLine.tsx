@@ -6,7 +6,7 @@ export default function CommandLine() {
 	const [value, setValue] = useState("")
 	const inputRef = useRef<HTMLInputElement>(null)
 	const navigate = useNavigate()
-	const { commandLineOpen, closeCommandLine, openBuffer } = useEditor()
+	const { commandLineOpen, closeCommandLine, openBuffer, openTerminal, setActiveTmuxWindow, openSnakeGame, openAdventureGame } = useEditor()
 
 	useEffect(() => {
 		if (commandLineOpen) {
@@ -33,7 +33,7 @@ export default function CommandLine() {
 		const trimmed = cmd.trim()
 
 		// Autocomplete commands
-		const commands = ["write", "quit", "edit", "w", "q", "e", "wq"]
+		const commands = ["write", "quit", "edit", "w", "q", "e", "wq", "terminal", "term", "snake", "adventure"]
 		if (!trimmed.includes(" ")) {
 			const match = commands.find((c) => c.startsWith(trimmed) && c !== trimmed)
 			if (match) return match
@@ -42,7 +42,9 @@ export default function CommandLine() {
 		// Autocomplete filenames for :e command
 		if (trimmed.startsWith("e ")) {
 			const partial = trimmed.slice(2).trim().toLowerCase()
-			const match = allFiles.find((f) => f.name.toLowerCase().startsWith(partial) && f.name.toLowerCase() !== partial)
+			const match = allFiles.find(
+				(f) => f.name.toLowerCase().startsWith(partial) && f.name.toLowerCase() !== partial,
+			)
 			if (match) return `e ${match.name}`
 		}
 
@@ -57,8 +59,23 @@ export default function CommandLine() {
 			return
 		}
 
-		if (trimmed === "q") {
-			// Simulate quit
+		if (["q", "q!", "wq", "wq!", "x", "xa", "qa", "qa!"].includes(trimmed)) {
+			setActiveTmuxWindow(2)
+			return
+		}
+
+		if (trimmed === "terminal" || trimmed === "term") {
+			openTerminal()
+			return
+		}
+
+		if (trimmed === "snake") {
+			openSnakeGame()
+			return
+		}
+
+		if (trimmed === "adventure") {
+			openAdventureGame()
 			return
 		}
 

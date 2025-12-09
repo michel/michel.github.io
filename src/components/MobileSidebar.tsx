@@ -3,7 +3,11 @@ import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { type FileNode, fileTree, useEditor } from "../context/EditorContext"
 
-function FileTreeNode({ node, depth = 0, onSelect }: { node: FileNode; depth?: number; onSelect: () => void }) {
+function FileTreeNode({
+	node,
+	depth = 0,
+	onSelect,
+}: { node: FileNode; depth?: number; onSelect: () => void }) {
 	const [expanded, setExpanded] = useState(true)
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -71,7 +75,9 @@ export default function MobileSidebar() {
 						<FileTreeNode key={node.id} node={node} depth={0} onSelect={closeMobileSidebar} />
 					))}
 				</div>
-				<div className="border-t border-border p-1 text-center text-comment">"Press ? for help"</div>
+				<div className="border-t border-border p-1 text-center text-comment">
+					"Press ? for help"
+				</div>
 			</aside>
 		</div>
 	)
