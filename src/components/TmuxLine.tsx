@@ -3,6 +3,7 @@ import { useEditor, type TmuxWindow } from "../context/EditorContext"
 
 const ARROW_RIGHT = ""
 const ARROW_LEFT = ""
+const arrowClass = "text-[1.5rem] leading-none"
 
 interface WindowDef {
 	id: TmuxWindow
@@ -43,7 +44,7 @@ export default function TmuxLine() {
 			<div className="flex items-center">
 				{/* Session segment */}
 				<span className="bg-magenta px-2 py-0.5 font-bold text-bg">≋ michel</span>
-				<span className="bg-bg-panel text-magenta">{ARROW_RIGHT}</span>
+				<span className={`bg-bg-panel text-magenta ${arrowClass}`}>{ARROW_RIGHT}</span>
 
 				{/* Window segments */}
 				{windows.map((win, idx) => {
@@ -53,7 +54,7 @@ export default function TmuxLine() {
 					if (isActive) {
 						return (
 							<span key={win.id} className="flex items-center">
-								<span className="bg-cyan text-bg-panel">{ARROW_RIGHT}</span>
+								<span className={`bg-cyan text-bg-panel ${arrowClass}`}>{ARROW_RIGHT}</span>
 								<span
 									className="cursor-pointer bg-cyan px-2 py-0.5 font-bold text-bg hover:brightness-110"
 									onClick={() => setActiveTmuxWindow(win.id)}
@@ -61,9 +62,9 @@ export default function TmuxLine() {
 									{win.id}:{win.name}*
 								</span>
 								{isLast ? (
-									<span className="bg-bg-dark text-cyan">{ARROW_RIGHT}</span>
+									<span className={`bg-bg-dark text-cyan ${arrowClass}`}>{ARROW_RIGHT}</span>
 								) : (
-									<span className="bg-bg-panel text-cyan">{ARROW_RIGHT}</span>
+									<span className={`bg-bg-panel text-cyan ${arrowClass}`}>{ARROW_RIGHT}</span>
 								)}
 							</span>
 						)
@@ -77,7 +78,7 @@ export default function TmuxLine() {
 							>
 								{win.id}:{win.name}
 							</span>
-							{isLast && <span className="bg-bg-dark text-bg-panel">{ARROW_RIGHT}</span>}
+							{isLast && <span className={`bg-bg-dark text-bg-panel ${arrowClass}`}>{ARROW_RIGHT}</span>}
 						</span>
 					)
 				})}
@@ -86,27 +87,27 @@ export default function TmuxLine() {
 			{/* Right: Status segments */}
 			<div className="flex items-center">
 				{/* Git branch */}
-				<span className="bg-bg-dark text-green">{ARROW_LEFT}</span>
+				<span className={`bg-bg-dark text-green ${arrowClass}`}>{ARROW_LEFT}</span>
 				<span className="bg-green px-2 py-0.5 font-bold text-bg">⎇ main</span>
 
 				{/* CPU */}
-				<span className="bg-green text-yellow">{ARROW_LEFT}</span>
+				<span className={`bg-green text-yellow ${arrowClass}`}>{ARROW_LEFT}</span>
 				<span className="bg-yellow px-2 py-0.5 font-bold text-bg">◉ {cpu}%</span>
 
 				{/* Network */}
-				<span className="bg-yellow text-blue">{ARROW_LEFT}</span>
+				<span className={`bg-yellow text-blue ${arrowClass}`}>{ARROW_LEFT}</span>
 				<span className="bg-blue px-2 py-0.5 font-bold text-bg">◆</span>
 
 				{/* Time */}
-				<span className="bg-blue text-magenta">{ARROW_LEFT}</span>
+				<span className={`bg-blue text-magenta ${arrowClass}`}>{ARROW_LEFT}</span>
 				<span className="bg-magenta px-2 py-0.5 font-bold text-bg">◷ {time}</span>
 
 				{/* Date */}
-				<span className="bg-magenta text-cyan">{ARROW_LEFT}</span>
+				<span className={`bg-magenta text-cyan ${arrowClass}`}>{ARROW_LEFT}</span>
 				<span className="bg-cyan px-2 py-0.5 font-bold text-bg">◫ {date}</span>
 
 				{/* User */}
-				<span className="bg-cyan text-green">{ARROW_LEFT}</span>
+				<span className={`bg-cyan text-green ${arrowClass}`}>{ARROW_LEFT}</span>
 				<span className="bg-green px-2 py-0.5 font-bold text-bg">◈ michel</span>
 			</div>
 		</div>

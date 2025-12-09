@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from "react"
 import { Outlet } from "react-router-dom"
 import { useEditor } from "../context/EditorContext"
 import { useVimKeys } from "../hooks/useVimKeys"
@@ -19,6 +20,37 @@ import TmuxLine from "./TmuxLine"
 export default function Layout() {
 	useVimKeys()
 	const { sidebarOpen, fuzzyFinderOpen, helpPopupOpen, activeTmuxWindow, matrixComplete, independenceComplete, jurassicComplete, terminalOpen, snakeGameOpen, adventureGameOpen } = useEditor()
+	const [terminalHeight, setTerminalHeight] = useState(300)
+	const [isResizing, setIsResizing] = useState(false)
+
+	const handleMouseDown = useCallback((e: React.MouseEvent) => {
+		e.preventDefault()
+		setIsResizing(true)
+	}, [])
+
+	const handleMouseMove = useCallback(
+		(e: MouseEvent) => {
+			if (!isResizing) return
+			const newHeight = Math.max(100, Math.min(window.innerHeight - 200, window.innerHeight - e.clientY))
+			setTerminalHeight(newHeight)
+		},
+		[isResizing],
+	)
+
+	const handleMouseUp = useCallback(() => {
+		setIsResizing(false)
+	}, [])
+
+	useEffect(() => {
+		if (isResizing) {
+			document.addEventListener("mousemove", handleMouseMove)
+			document.addEventListener("mouseup", handleMouseUp)
+		}
+		return () => {
+			document.removeEventListener("mousemove", handleMouseMove)
+			document.removeEventListener("mouseup", handleMouseUp)
+		}
+	}, [isResizing, handleMouseMove, handleMouseUp])
 
 	return (
 		<div className="flex h-full flex-col outline-none">
@@ -40,7 +72,12 @@ export default function Layout() {
 						</main>
 					</div>
 					{terminalOpen && (
-						<div className="h-[40%] min-h-[200px] border-t border-[#4a4670] bg-bg-dark">
+						<div className="relative border-t border-[#4a4670] bg-bg-dark" style={{ height: terminalHeight }}>
+							<div
+								className="absolute left-0 top-0 h-1 w-full cursor-row-resize hover:bg-magenta"
+								onMouseDown={handleMouseDown}
+								style={{ backgroundColor: isResizing ? "var(--color-magenta)" : "transparent" }}
+							/>
 							<Terminal />
 						</div>
 					)}

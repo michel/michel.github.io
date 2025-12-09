@@ -41,6 +41,25 @@ export default function AdventureGame() {
 
 	const getCurrentRoom = () => rooms[gameState.currentRoom]
 
+	const getProcessedDescription = (description: string, inventory: string[]) => {
+		let processed = description
+
+		const itemPatterns: Record<string, RegExp> = {
+			phone: /Your PHONE is vibrating violently on the nightstand\.\n\n/,
+			"laptop bag": /Your LAPTOP BAG is by the DOOR\. /,
+			"2fa device": /There's a 2FA DEVICE on the counter you could TAKE\. You'll need that for VPN\.\n\n/,
+			coffee: /There's COFFEE in the corner with a sticky note: "EMERGENCY USE ONLY"\n/,
+		}
+
+		for (const [item, pattern] of Object.entries(itemPatterns)) {
+			if (inventory.includes(item)) {
+				processed = processed.replace(pattern, "")
+			}
+		}
+
+		return processed
+	}
+
 	const describeRoom = () => {
 		const room = getCurrentRoom()
 		if (!room) return
@@ -48,7 +67,7 @@ export default function AdventureGame() {
 		addOutput("")
 		addOutput(`═══ ${room.name.toUpperCase()} ═══`)
 		addOutput("")
-		addOutput(room.description)
+		addOutput(getProcessedDescription(room.description, gameState.inventory))
 
 		if (room.items && room.items.length > 0) {
 			const availableItems = room.items.filter((item) => !gameState.inventory.includes(item))
