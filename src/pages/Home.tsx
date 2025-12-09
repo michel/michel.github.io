@@ -45,15 +45,12 @@ export default function Home() {
 		"",
 		<span key="brand1" className="text-magenta">
 			{"       "}
-			<span className="font-bold">{"█▀▄ ██▀      █ █▄ █ █ █ ██▀ █▄ █ ▀█▀ █ █▀█ █▄ █"}</span>
-		</span>,
-		<span key="brand2" className="text-magenta">
-			{"       "}
-			<span className="font-bold">{"█▀▄ █▄▄  ▀▀  █ █ ▀█ ▀▄▀ █▄▄ █ ▀█  █  █ █▄█ █ ▀█"}</span>
+			<span className="font-bold"><pre>{`	█▀▄ ██▀      █ █▄ █ █ █ ██▀ █▄ █ ▀█▀ █ █▀█ █▄ █
+	█▀▄ █▄▄  ▀▀  █ █ ▀█ ▀▄▀ █▄▄ █ ▀█  █  █ █▄█ █ ▀█`}</pre></span>
 		</span>,
 		<span key="brand3">
 			{"       "}
-			<span className="text-fg">re-invention b.v.</span>
+			<span className="text-fg">&nbsp;&nbsp;&nbsp;&nbsp;re-invention b.v.</span>
 			{"                         "}
 			<span className="text-yellow">v1337</span>
 		</span>,
@@ -68,19 +65,29 @@ export default function Home() {
 			{"// Use h/j/k/l to navigate if you're cool."}
 		</span>,
 		"",
+		<span key="cat-status">
+			<span className="text-green">~</span> <span className="text-magenta">cat status.rs</span>
+		</span>,
+		"",
 		<span key="const">
-			<span className="text-blue">const</span> <span className="text-cyan">status</span> = {"{"}
+			<span className="text-blue">let</span> <span className="text-cyan">status</span> = <span className="text-yellow">Status</span> {"{"}
 		</span>,
 		<span key="role">
-			{"  "}role: <span className="text-green">"Tech Lead"</span>,
+			{"    "}role: <span className="text-green">"Tech Lead"</span>,
 		</span>,
 		<span key="loc">
-			{"  "}loc: <span className="text-green">"NL"</span>,
+			{"    "}loc: <span className="text-green">"NL"</span>,
+		</span>,
+		<span key="remote">
+			{"    "}remote: <span className="text-orange">true</span>,
+		</span>,
+		<span key="hybrid">
+			{"    "}hybrid: <span className="text-orange">true</span>,
 		</span>,
 		<span key="open">
-			{"  "}open_for_work: <span className="text-orange">true</span>
+			{"    "}open_for_work: <span className="text-orange">true</span>,
 		</span>,
-		<span key="close">{"}"}</span>,
+		<span key="close">{"}"}<span className="text-fg">;</span></span>,
 		"",
 		"",
 		<span key="prompt" className="text-cyan">
