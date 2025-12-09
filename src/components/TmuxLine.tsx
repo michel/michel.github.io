@@ -38,7 +38,7 @@ export default function TmuxLine() {
 	const date = now.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })
 
 	return (
-		<div className="flex h-6 select-none items-center justify-between bg-bg-dark font-mono text-xs">
+		<div className="flex h-6 select-none items-center justify-between bg-bg-dark font-mono text-sm">
 			{/* Left: Session + Windows */}
 			<div className="flex items-center">
 				{/* Session segment */}

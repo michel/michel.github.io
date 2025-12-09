@@ -212,6 +212,30 @@ export default function AdventureGame() {
 					return
 				}
 
+				// Special case: use phone
+				if (target === "phone") {
+					if (gameState.inventory.includes("phone")) {
+						const messages = [
+							"#incidents: @here anyone know what's happening?",
+							"#incidents: CEO has joined the channel",
+							"#incidents: PM: can we get an ETA?",
+							"#incidents: CTO: let's schedule a post-mortem",
+							"#incidents: intern: sorry I think this might be my fault",
+							"PagerDuty: CRITICAL - Database CPU at 100%",
+							"PagerDuty: CRITICAL - API response time > 30s",
+							"Missed call from: Your Manager (3)",
+						]
+						const randomMessages = messages.sort(() => Math.random() - 0.5).slice(0, 3)
+						addOutput("You check your phone:")
+						randomMessages.forEach((msg) => addOutput(`  ${msg}`))
+						addOutput("")
+						addOutput("You put the phone away. Some things are better left unread.")
+					} else {
+						addOutput("You don't have your phone.")
+					}
+					return
+				}
+
 				// Special case: use coffee
 				if (target === "coffee") {
 					if (!gameState.inventory.includes("coffee")) {
@@ -342,10 +366,10 @@ export default function AdventureGame() {
 	}
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+		<div className="fixed inset-0 z-50 flex items-center justify-center">
 			<div
 				ref={containerRef}
-				className="flex h-[80vh] w-[800px] max-w-[90vw] flex-col rounded-lg border border-[#4a4670] bg-bg-dark font-mono text-sm"
+				className="flex h-[80vh] w-[800px] max-w-[90vw] flex-col rounded-lg border border-[#4a4670] bg-bg-dark/95 font-mono text-sm backdrop-blur-sm"
 			>
 				<div
 					ref={outputRef}

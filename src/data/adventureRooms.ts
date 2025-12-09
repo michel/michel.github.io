@@ -13,14 +13,15 @@ export const rooms: Record<string, Room> = {
 	bedroom: {
 		id: "bedroom",
 		name: "Your Bedroom",
-		description: `It's 3:17 AM. Your phone is vibrating violently on the nightstand.
+		description: `It's 3:17 AM. Your PHONE is vibrating violently on the nightstand.
 
 The PagerDuty alert reads: "CRITICAL: Production database CPU at 100%"
 
 Slack notifications are piling up. You see 47 unread messages from #incidents.
 
-Your laptop bag is by the DOOR. The BATHROOM is to the east.`,
+Your LAPTOP BAG is by the DOOR. The BATHROOM is to the east.`,
 		exits: { door: "hallway", east: "bathroom", bathroom: "bathroom" },
+		items: ["phone", "laptop bag"],
 	},
 	bathroom: {
 		id: "bathroom",
@@ -28,7 +29,7 @@ Your laptop bag is by the DOOR. The BATHROOM is to the east.`,
 		description: `The bathroom. You look at yourself in the mirror.
 You look tired. You ARE tired.
 
-There's a 2FA DEVICE on the counter. You'll need that for VPN.
+There's a 2FA DEVICE on the counter you could TAKE. You'll need that for VPN.
 
 The BEDROOM is to the west.`,
 		exits: { west: "bedroom", bedroom: "bedroom" },
@@ -49,10 +50,10 @@ A Slack message pings: "hey are you awake? site is down"`,
 		name: "Home Office",
 		description: `Your home office. Three monitors stare at you judgmentally.
 
-Your LAPTOP is on the desk, lid closed. There's a COFFEE MACHINE in the corner.
-The coffee machine has a sticky note: "EMERGENCY USE ONLY"
+Your LAPTOP is on the desk, lid closed. You can USE it to connect to VPN.
+There's COFFEE in the corner with a sticky note: "EMERGENCY USE ONLY"
 
-The HALLWAY is to the south. Type 'use laptop' to connect.`,
+The HALLWAY is to the south.`,
 		exits: { south: "hallway", hallway: "hallway" },
 		items: ["coffee"],
 	},
@@ -179,8 +180,10 @@ Type 'quit' to exit the adventure.`,
 
 export const itemDescriptions: Record<string, string> = {
 	"2fa device": "A small hardware token that generates one-time passwords. Essential for VPN access.",
-	coffee:
-		"A cup of emergency coffee. The sticky note said 'EMERGENCY USE ONLY'. This counts.",
+	coffee: "A cup of emergency coffee. The sticky note said 'EMERGENCY USE ONLY'. This counts.",
+	phone: "247 unread Slack messages. 12 PagerDuty alerts. 3 missed calls from your manager. You silence it and shove it in your pocket.",
+	"laptop bag": "Contains a tangle of cables, old conference badges, and the faint smell of desperation. You grab it.",
+	laptop: "A MacBook Pro with 47 Chrome tabs open. The fans are already spinning up in anticipation of the debugging ahead.",
 }
 
 export const startRoom = "bedroom"
