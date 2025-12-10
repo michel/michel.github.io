@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
-import { useEditor } from "../context/EditorContext"
 import * as THREE from "three"
+import { useEditor } from "../context/EditorContext"
 
 const COLORS = {
 	dirColor: 0x6c5ce7,
@@ -134,7 +134,12 @@ export default function JurassicTerminal() {
 		scene.background = new THREE.Color(0x050510)
 		scene.fog = new THREE.FogExp2(0x050510, 0.002)
 
-		const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000)
+		const camera = new THREE.PerspectiveCamera(
+			60,
+			container.clientWidth / container.clientHeight,
+			0.1,
+			1000,
+		)
 		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
 		renderer.setSize(container.clientWidth, container.clientHeight)
 		renderer.setPixelRatio(window.devicePixelRatio)
@@ -159,7 +164,11 @@ export default function JurassicTerminal() {
 			wireframe: false,
 			shininess: 100,
 		})
-		const dirEdgeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 })
+		const dirEdgeMaterial = new THREE.LineBasicMaterial({
+			color: 0xffffff,
+			transparent: true,
+			opacity: 0.3,
+		})
 		const fileMaterial = new THREE.MeshPhongMaterial({ color: COLORS.fileColor, shininess: 80 })
 		const lineMaterial = new THREE.LineBasicMaterial({ color: COLORS.lineColor })
 
@@ -168,7 +177,7 @@ export default function JurassicTerminal() {
 			parentMesh: THREE.Mesh | null = null,
 			depth = 0,
 			offsetX = 0,
-			offsetZ = 0
+			offsetZ = 0,
 		) {
 			const boxSize = node.type === "dir" ? 10 : 4
 			const height = node.type === "dir" ? 2 : (node.size ?? 2) * 2
@@ -195,7 +204,9 @@ export default function JurassicTerminal() {
 			const userData: MeshUserData = {
 				name: node.name,
 				type: node.type,
-				path: parentMesh ? (parentMesh.userData as MeshUserData).path + "/" + node.name : "/" + node.name,
+				path: parentMesh
+					? `${(parentMesh.userData as MeshUserData).path}/${node.name}`
+					: `/${node.name}`,
 				isTarget: node.isTarget,
 				originalColor: material.color.getHex(),
 			}
@@ -259,7 +270,7 @@ export default function JurassicTerminal() {
 
 			const userData = mesh.userData as MeshUserData
 			setCurrentPath(userData.path)
-			log("Accessing: " + userData.name)
+			log(`Accessing: ${userData.name}`)
 
 			if (userData.isTarget) {
 				setSysStatus("ACCESS GRANTED")
@@ -336,7 +347,9 @@ export default function JurassicTerminal() {
 			}
 
 			camera.position.lerp(targetPosition, 0.05)
-			const currentLook = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).add(camera.position)
+			const currentLook = new THREE.Vector3(0, 0, -1)
+				.applyQuaternion(camera.quaternion)
+				.add(camera.position)
 			currentLook.lerp(targetLookAt, 0.05)
 			camera.lookAt(currentLook)
 
@@ -353,7 +366,7 @@ export default function JurassicTerminal() {
 			renderer.dispose()
 			container.removeChild(renderer.domElement)
 		}
-	}, [setActiveTmuxWindow, setJurassicComplete])
+	}, [setActiveTmuxWindow, setJurassicComplete, log])
 
 	return (
 		<div className="relative h-full w-full overflow-hidden bg-[#050510]">

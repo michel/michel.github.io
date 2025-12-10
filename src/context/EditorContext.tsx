@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useCallback, useContext, useState } from "react"
+import { createContext, type ReactNode, useCallback, useContext, useState } from "react"
 
 export type VimMode = "NORMAL" | "INSERT" | "VISUAL" | "COMMAND"
 
@@ -94,12 +94,14 @@ DESCRIPTION
 		name: "contact_card.vcf",
 		path: "/contact",
 		preview: `Email: michel@re-invention.nl
-Phone: +31 (0)6 36 42 74 07
-Web: re-invention.nl
+phone: +31 (0)6 36 42 74 07
+web: re-invention.nl
 
--- Socials --
-Github: github.com/michel
-X.com: @micheldegraaf`,
+hithub: github.com/michel
+x.com: @micheldegraaf
+linkedIn: linkedin.com/in/micheldegraaf
+soundcloud: soundcloud.com/herrgraaf
+`,
 	},
 ]
 
@@ -124,6 +126,8 @@ interface EditorState {
 	jurassicComplete: boolean
 	snakeGameOpen: boolean
 	adventureGameOpen: boolean
+	cursorLine: number
+	lineCount: number
 }
 
 interface EditorContextType extends EditorState {
@@ -156,6 +160,9 @@ interface EditorContextType extends EditorState {
 	closeSnakeGame: () => void
 	openAdventureGame: () => void
 	closeAdventureGame: () => void
+	setCursorLine: (line: number) => void
+	setLineCount: (count: number) => void
+	moveCursor: (direction: "up" | "down") => void
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -180,6 +187,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		jurassicComplete: false,
 		snakeGameOpen: false,
 		adventureGameOpen: false,
+		cursorLine: 0,
+		lineCount: 0,
 	})
 
 	const setMode = useCallback((mode: VimMode) => {
@@ -317,6 +326,21 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		setState((s) => ({ ...s, adventureGameOpen: false }))
 	}, [])
 
+	const setCursorLine = useCallback((line: number) => {
+		setState((s) => ({ ...s, cursorLine: Math.max(0, Math.min(line, s.lineCount - 1)) }))
+	}, [])
+
+	const setLineCount = useCallback((count: number) => {
+		setState((s) => ({ ...s, lineCount: count, cursorLine: Math.min(s.cursorLine, count - 1) }))
+	}, [])
+
+	const moveCursor = useCallback((direction: "up" | "down") => {
+		setState((s) => {
+			const newLine = direction === "down" ? s.cursorLine + 1 : s.cursorLine - 1
+			return { ...s, cursorLine: Math.max(0, Math.min(newLine, s.lineCount - 1)) }
+		})
+	}, [])
+
 	return (
 		<EditorContext.Provider
 			value={{
@@ -350,6 +374,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 				closeSnakeGame,
 				openAdventureGame,
 				closeAdventureGame,
+				setCursorLine,
+				setLineCount,
+				moveCursor,
 			}}
 		>
 			{children}

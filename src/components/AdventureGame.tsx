@@ -47,7 +47,8 @@ export default function AdventureGame() {
 		const itemPatterns: Record<string, RegExp> = {
 			phone: /Your PHONE is vibrating violently on the nightstand\.\n\n/,
 			"laptop bag": /Your LAPTOP BAG is by the DOOR\. /,
-			"2fa device": /There's a 2FA DEVICE on the counter you could TAKE\. You'll need that for VPN\.\n\n/,
+			"2fa device":
+				/There's a 2FA DEVICE on the counter you could TAKE\. You'll need that for VPN\.\n\n/,
 			coffee: /There's COFFEE in the corner with a sticky note: "EMERGENCY USE ONLY"\n/,
 		}
 
@@ -94,11 +95,11 @@ export default function AdventureGame() {
 		if (outputRef.current) {
 			outputRef.current.scrollTop = outputRef.current.scrollHeight
 		}
-	}, [output])
+	}, [])
 
 	useEffect(() => {
 		inputRef.current?.focus()
-	}, [output])
+	}, [])
 
 	const processCommand = (cmd: string) => {
 		const trimmed = cmd.trim().toLowerCase()
@@ -246,7 +247,7 @@ export default function AdventureGame() {
 						]
 						const randomMessages = messages.sort(() => Math.random() - 0.5).slice(0, 3)
 						addOutput("You check your phone:")
-						randomMessages.forEach((msg) => addOutput(`  ${msg}`))
+						for (const msg of randomMessages) addOutput(`  ${msg}`)
 						addOutput("")
 						addOutput("You put the phone away. Some things are better left unread.")
 					} else {
@@ -272,7 +273,9 @@ export default function AdventureGame() {
 						}
 						return
 					}
-					addOutput("You've already had your emergency coffee. Any more and you'll vibrate through walls.")
+					addOutput(
+						"You've already had your emergency coffee. Any more and you'll vibrate through walls.",
+					)
 					return
 				}
 
@@ -291,7 +294,11 @@ export default function AdventureGame() {
 			}
 
 			case "ssh": {
-				if (gameState.currentRoom !== "vpn_connected" && gameState.currentRoom !== "prod_web" && gameState.currentRoom !== "prod_db") {
+				if (
+					gameState.currentRoom !== "vpn_connected" &&
+					gameState.currentRoom !== "prod_web" &&
+					gameState.currentRoom !== "prod_db"
+				) {
 					addOutput("You need to be connected to VPN first.")
 					return
 				}
@@ -323,7 +330,14 @@ export default function AdventureGame() {
 			}
 
 			case "kill": {
-				if (target === "1339" && gameState.currentRoom === "processlist") {
+				if (gameState.currentRoom !== "processlist") {
+					addOutput("Kill what process?")
+					return
+				}
+
+				const pid = target.replace(/^-9\s+/, "").replace(/\s+-9$/, "")
+
+				if (pid === "1339") {
 					setGameState((prev) => ({
 						...prev,
 						currentRoom: "victory",
@@ -332,7 +346,30 @@ export default function AdventureGame() {
 					setTimeout(() => describeRoom(), 0)
 					return
 				}
-				addOutput("Kill what process?")
+
+				if (pid === "1337") {
+					addOutput("Process 1337 is locked waiting on 1339. Kill the source, not the victim.")
+					return
+				}
+
+				if (pid === "1338") {
+					addOutput("Process 1338 is also locked. There's one process causing all this...")
+					return
+				}
+
+				if (["query", "cron", "intern"].includes(pid)) {
+					addOutput("You need to specify the process ID. Check the processlist for the PID.")
+					return
+				}
+
+				if (["mysql", "postgresql", "postgres", "database", "db"].includes(pid)) {
+					addOutput(
+						"That would kill the whole database server. Just kill the runaway query by its PID.",
+					)
+					return
+				}
+
+				addOutput("Unknown process. Type 'look' to see running queries.")
 				return
 			}
 
@@ -411,14 +448,13 @@ export default function AdventureGame() {
 						onChange={(e) => setInput(e.target.value)}
 						onKeyDown={handleKeyDown}
 						className="ml-2 flex-1 bg-transparent text-green outline-none"
-						autoFocus
 					/>
 				</div>
 
 				<div className="border-t border-[#4a4670] p-2 text-xs text-comment">
 					<span className="text-magenta">ESC</span> to quit •{" "}
-					<span className="text-magenta">help</span> for commands •{" "}
-					Inventory: {gameState.inventory.length === 0 ? "empty" : gameState.inventory.join(", ")}
+					<span className="text-magenta">help</span> for commands • Inventory:{" "}
+					{gameState.inventory.length === 0 ? "empty" : gameState.inventory.join(", ")}
 				</div>
 			</div>
 		</div>

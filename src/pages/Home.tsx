@@ -38,7 +38,6 @@ const articles = [
 export default function Home() {
 	usePageTitle()
 	const lines = [
-		// biome-ignore lint/suspicious/noArrayIndexKey: logo lines are static, index is appropriate key
 		...logoLines.map((line, i) => (
 			<span key={`logo-${i}`} className="whitespace-pre font-bold text-magenta">
 				{line}
@@ -47,8 +46,10 @@ export default function Home() {
 		"",
 		<span key="brand1" className="text-magenta">
 			{"       "}
-			<span className="font-bold"><pre>{`	█▀▄ ██▀      █ █▄ █ █ █ ██▀ █▄ █ ▀█▀ █ █▀█ █▄ █
-	█▀▄ █▄▄  ▀▀  █ █ ▀█ ▀▄▀ █▄▄ █ ▀█  █  █ █▄█ █ ▀█`}</pre></span>
+			<span className="font-bold">
+				<pre>{`	█▀▄ ██▀      █ █▄ █ █ █ ██▀ █▄ █ ▀█▀ █ █▀█ █▄ █
+	█▀▄ █▄▄  ▀▀  █ █ ▀█ ▀▄▀ █▄▄ █ ▀█  █  █ █▄█ █ ▀█`}</pre>
+			</span>
 		</span>,
 		<span key="brand3">
 			{"       "}
@@ -72,7 +73,8 @@ export default function Home() {
 		</span>,
 		"",
 		<span key="const">
-			<span className="text-blue">let</span> <span className="text-cyan">status</span> = <span className="text-yellow">Status</span> {"{"}
+			<span className="text-blue">let</span> <span className="text-cyan">status</span> ={" "}
+			<span className="text-yellow">Status</span> {"{"}
 		</span>,
 		<span key="role">
 			&nbsp;&nbsp;role: <span className="text-green">"Tech Lead"</span>,
@@ -89,11 +91,14 @@ export default function Home() {
 		<span key="open">
 			&nbsp;&nbsp;open_for_work: <span className="text-orange">true</span>,
 		</span>,
-		<span key="close">{"}"}<span className="text-fg">;</span></span>,
+		<span key="close">
+			{"}"}
+			<span className="text-fg">;</span>
+		</span>,
 		"",
 		"",
 		<span key="prompt" className="text-cyan">
-			michel@spaceheater
+			michel@spaceheater:
 		</span>,
 		<span key="cmd">
 			<span className="text-green">~</span> <span className="text-magenta">ls -la posts/</span>

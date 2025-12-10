@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react"
-import { Outlet } from "react-router-dom"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { Outlet, useLocation } from "react-router-dom"
 import { useEditor } from "../context/EditorContext"
 import { useVimKeys } from "../hooks/useVimKeys"
 import AdventureGame from "./AdventureGame"
@@ -19,7 +19,20 @@ import TmuxLine from "./TmuxLine"
 
 export default function Layout() {
 	useVimKeys()
-	const { sidebarOpen, fuzzyFinderOpen, helpPopupOpen, activeTmuxWindow, matrixComplete, independenceComplete, jurassicComplete, terminalOpen, snakeGameOpen, adventureGameOpen } = useEditor()
+	const location = useLocation()
+	const mainContentRef = useRef<HTMLDivElement>(null)
+	const {
+		sidebarOpen,
+		fuzzyFinderOpen,
+		helpPopupOpen,
+		activeTmuxWindow,
+		matrixComplete,
+		independenceComplete,
+		jurassicComplete,
+		terminalOpen,
+		snakeGameOpen,
+		adventureGameOpen,
+	} = useEditor()
 	const [terminalHeight, setTerminalHeight] = useState(300)
 	const [isResizing, setIsResizing] = useState(false)
 
@@ -31,7 +44,10 @@ export default function Layout() {
 	const handleMouseMove = useCallback(
 		(e: MouseEvent) => {
 			if (!isResizing) return
-			const newHeight = Math.max(100, Math.min(window.innerHeight - 200, window.innerHeight - e.clientY))
+			const newHeight = Math.max(
+				100,
+				Math.min(window.innerHeight - 200, window.innerHeight - e.clientY),
+			)
 			setTerminalHeight(newHeight)
 		},
 		[isResizing],
@@ -52,6 +68,11 @@ export default function Layout() {
 		}
 	}, [isResizing, handleMouseMove, handleMouseUp])
 
+	// Scroll to top on route change
+	useEffect(() => {
+		if (mainContentRef.current) mainContentRef.current.scrollTop = 0
+	}, [location.pathname])
+
 	return (
 		<div className="flex h-full flex-col outline-none">
 			{fuzzyFinderOpen && <FuzzyFinder />}
@@ -66,13 +87,16 @@ export default function Layout() {
 						{sidebarOpen && <Sidebar />}
 						<main className="relative flex min-w-0 flex-1 flex-col bg-bg">
 							<TabLine />
-							<div className="relative flex-1 overflow-auto p-4 outline-none">
+							<div ref={mainContentRef} className="relative flex-1 overflow-auto p-4 outline-none">
 								<Outlet />
 							</div>
 						</main>
 					</div>
 					{terminalOpen && (
-						<div className="relative border-t border-[#4a4670] bg-bg-dark" style={{ height: terminalHeight }}>
+						<div
+							className="relative border-t border-[#4a4670] bg-bg-dark"
+							style={{ height: terminalHeight }}
+						>
 							<div
 								className="absolute left-0 top-0 h-1 w-full cursor-row-resize hover:bg-magenta"
 								onMouseDown={handleMouseDown}

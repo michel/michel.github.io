@@ -88,16 +88,8 @@ export default function IndependenceTerminal() {
 					{line}
 				</div>
 			))}
-			{showProgress && (
-				<div className="text-green">
-					{progressBar()}
-				</div>
-			)}
-			{showFinal && (
-				<div className="mt-2 text-green font-bold">
-					HAVE A NICE DAY
-				</div>
-			)}
+			{showProgress && <div className="text-green">{progressBar()}</div>}
+			{showFinal && <div className="mt-2 text-green font-bold">HAVE A NICE DAY</div>}
 			{!showFinal && lines.length > 0 && (
 				<span className="mt-2 inline-block h-4 w-2 animate-pulse bg-green" />
 			)}

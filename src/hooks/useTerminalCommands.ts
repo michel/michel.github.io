@@ -189,7 +189,7 @@ export const hackerFiles: Record<string, string[]> = {
 		"\x1b[red]SECURITY ALERT: Private key accessed!\x1b[reset]",
 		"\x1b[comment]Just kidding. It's base64 for 'nice try'.\x1b[reset]",
 	],
-	"id_ed25519": [
+	id_ed25519: [
 		"-----BEGIN OPENSSH PRIVATE KEY-----",
 		"b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW",
 		"QyNTUxOQAAACBzb21lLWZha2UtZWQyNTUxOS1rZXktbmljZS10cnkAAAA=",
@@ -198,7 +198,7 @@ export const hackerFiles: Record<string, string[]> = {
 		"\x1b[cyan]Ooh, ed25519! Someone knows their crypto.\x1b[reset]",
 		"\x1b[comment]Still fake though. I use hardware keys.\x1b[reset]",
 	],
-	"known_hosts": [
+	known_hosts: [
 		"github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl",
 		"gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf",
 		"|1|h4ck3rm4n=|n1c3try= ssh-rsa AAAAB3NzaC1yc2EAAAA...",
@@ -261,18 +261,18 @@ export const hackerFiles: Record<string, string[]> = {
 		'" Last modified: 3 years ago',
 		"",
 		"set nocompatible",
-		"set nocompatible  \" just to be sure",
+		'set nocompatible  " just to be sure',
 		"",
-		"\" Plugins (I need all 47 of them)",
+		'" Plugins (I need all 47 of them)',
 		"call plug#begin('~/.vim/plugged')",
 		"Plug 'tpope/vim-sensible'  \" ironic",
 		"Plug 'tpope/vim-fugitive'",
-		"\" ... 42 more plugins ...",
+		'" ... 42 more plugins ...',
 		"call plug#end()",
 		"",
-		"\" The forbidden remaps",
+		'" The forbidden remaps',
 		"nnoremap ; :",
-		"nnoremap : ;  \" wait what",
+		'nnoremap : ;  " wait what',
 		"",
 		"\x1b[comment]This vimrc has been passed down for generations.\x1b[reset]",
 	],
@@ -351,7 +351,7 @@ export const hackerFiles: Record<string, string[]> = {
 		"\x1b[comment]This file is 420,000 lines long.\x1b[reset]",
 		"\x1b[comment]For a hello world app.\x1b[reset]",
 	],
-	"Dockerfile": [
+	Dockerfile: [
 		"# Dockerfile - A Study in Pain",
 		"FROM node:latest  # living dangerously",
 		"COPY . .",
@@ -576,16 +576,16 @@ const commands: Record<string, CommandHandler> = {
 					"\x1b[red]found 420 vulnerabilities (69 low, 200 moderate, 100 high, 51 critical)\x1b[reset]",
 					"",
 					"run `npm audit fix` to fix them, or don't, it won't help anyway",
-				"",
-				"\x1b[comment]Security through obscurity: nobody can exploit your vulnerabilities if your deps are too complex to understand.\x1b[reset]",
+					"",
+					"\x1b[comment]Security through obscurity: nobody can exploit your vulnerabilities if your deps are too complex to understand.\x1b[reset]",
 					"",
 				],
 			}
 		return {
 			output: [
 				`\x1b[red]npm ERR!\x1b[reset] '${args[0]}' is not a recognized command`,
-			"",
-			"\x1b[comment]npm: 10% package management, 90% praying.\x1b[reset]",
+				"",
+				"\x1b[comment]npm: 10% package management, 90% praying.\x1b[reset]",
 				"",
 			],
 		}
@@ -680,7 +680,9 @@ const commands: Record<string, CommandHandler> = {
 
 	uname: (args) => {
 		if (args.includes("-a"))
-			return { output: ["Linux spaceheater 6.9.420-arch1-1 #1 SMP PREEMPT_DYNAMIC arch x86_64 GNU/Linux"] }
+			return {
+				output: ["Linux spaceheater 6.9.420-arch1-1 #1 SMP PREEMPT_DYNAMIC arch x86_64 GNU/Linux"],
+			}
 		return { output: ["Linux"] }
 	},
 
@@ -789,7 +791,10 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasForce && (joinedArgs.includes("~") || joinedArgs.includes("$HOME") || joinedArgs.includes("/home")))
+		if (
+			hasForce &&
+			(joinedArgs.includes("~") || joinedArgs.includes("$HOME") || joinedArgs.includes("/home"))
+		)
 			return {
 				output: [
 					"\x1b[red]rm: permission denied: '/home/michel'\x1b[reset]",
@@ -816,7 +821,10 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasForce && (joinedArgs.includes("/etc") || joinedArgs.includes("/var") || joinedArgs.includes("/usr")))
+		if (
+			hasForce &&
+			(joinedArgs.includes("/etc") || joinedArgs.includes("/var") || joinedArgs.includes("/usr"))
+		)
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove system directories: Operation not permitted\x1b[reset]",
@@ -829,7 +837,12 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasForce && (joinedArgs.includes("/boot") || joinedArgs.includes("vmlinuz") || joinedArgs.includes("initrd")))
+		if (
+			hasForce &&
+			(joinedArgs.includes("/boot") ||
+				joinedArgs.includes("vmlinuz") ||
+				joinedArgs.includes("initrd"))
+		)
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove '/boot': The kernel is watching\x1b[reset]",
@@ -1468,7 +1481,7 @@ const commands: Record<string, CommandHandler> = {
 
 	wc: (args) => ({
 		output: [
-			"    1337    31337   420420 " + (args[args.length - 1] || "file"),
+			`    1337    31337   420420 ${args[args.length - 1] || "file"}`,
 			"",
 			"\x1b[comment]That's a lot of words. Too bad none of them are documentation.\x1b[reset]",
 		],
@@ -1635,7 +1648,7 @@ const commands: Record<string, CommandHandler> = {
 					"Plan: 420 to add, 69 to change, 1337 to destroy.",
 					"",
 					"\x1b[red]WARNING: This will destroy 1337 resources.\x1b[reset]",
-					'\x1b[comment]"It\'s fine, it\'s just staging" - famous last words\x1b[reset]',
+					"\x1b[comment]\"It's fine, it's just staging\" - famous last words\x1b[reset]",
 				],
 			}
 		if (args[0] === "apply")

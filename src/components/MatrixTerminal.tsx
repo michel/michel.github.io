@@ -61,9 +61,7 @@ export default function MatrixTerminal() {
 					{line}
 				</div>
 			))}
-			{showRabbit && (
-				<pre className="mt-4 whitespace-pre text-green">{rabbit}</pre>
-			)}
+			{showRabbit && <pre className="mt-4 whitespace-pre text-green">{rabbit}</pre>}
 			{!showRabbit && lines.length > 0 && (
 				<span className="mt-2 inline-block h-4 w-2 animate-pulse bg-green" />
 			)}

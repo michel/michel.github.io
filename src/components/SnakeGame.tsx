@@ -180,7 +180,7 @@ export default function SnakeGame() {
 		const lines: string[] = []
 
 		// Top border
-		lines.push("┌" + "─".repeat(GRID_WIDTH) + "┐")
+		lines.push(`┌${"─".repeat(GRID_WIDTH)}┐`)
 
 		const snakeHead = snake[0]
 		for (let y = 0; y < GRID_HEIGHT; y++) {
@@ -200,7 +200,7 @@ export default function SnakeGame() {
 		}
 
 		// Bottom border
-		lines.push("└" + "─".repeat(GRID_WIDTH) + "┘")
+		lines.push(`└${"─".repeat(GRID_WIDTH)}┘`)
 
 		return lines
 	}
@@ -211,7 +211,6 @@ export default function SnakeGame() {
 		<div className="fixed inset-0 z-50 flex items-center justify-center">
 			<div
 				ref={containerRef}
-				tabIndex={0}
 				onKeyDown={handleKeyDown}
 				className="rounded-lg border border-[#4a4670] bg-bg-dark p-4 outline-none"
 			>
@@ -224,11 +223,35 @@ export default function SnakeGame() {
 					{grid.map((line, i) => (
 						<div key={i}>
 							{line.split("").map((char, j) => {
-								if (char === "█") return <span key={j} className="text-cyan">{char}</span>
-								if (char === "▓") return <span key={j} className="text-cyan/70">{char}</span>
-								if (char === "◆") return <span key={j} className="text-magenta">{char}</span>
-								if ("┌┐└┘─│".includes(char)) return <span key={j} className="text-comment">{char}</span>
-								return <span key={j} className="text-fg">{char}</span>
+								if (char === "█")
+									return (
+										<span key={j} className="text-cyan">
+											{char}
+										</span>
+									)
+								if (char === "▓")
+									return (
+										<span key={j} className="text-cyan/70">
+											{char}
+										</span>
+									)
+								if (char === "◆")
+									return (
+										<span key={j} className="text-magenta">
+											{char}
+										</span>
+									)
+								if ("┌┐└┘─│".includes(char))
+									return (
+										<span key={j} className="text-comment">
+											{char}
+										</span>
+									)
+								return (
+									<span key={j} className="text-fg">
+										{char}
+									</span>
+								)
 							})}
 						</div>
 					))}

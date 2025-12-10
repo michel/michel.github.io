@@ -26,21 +26,19 @@ function FileTreeNode({
 
 	if (node.type === "folder") {
 		return (
-			<>
-				<div
-					className={`flex cursor-pointer items-center gap-1 py-0.5 hover:bg-black ${cursorClass}`}
-					style={{ paddingLeft }}
-					onClick={() => onToggle(node.id)}
-				>
-					{isExpanded ? (
-						<ChevronDown className="h-3 w-3 text-blue" />
-					) : (
-						<ChevronRight className="h-3 w-3 text-blue" />
-					)}
-					<FolderClosed className="h-3 w-3 text-yellow" />
-					<span className="text-fg">{node.name}</span>
-				</div>
-			</>
+			<div
+				className={`flex cursor-pointer items-center gap-1 py-0.5 hover:bg-black ${cursorClass}`}
+				style={{ paddingLeft }}
+				onClick={() => onToggle(node.id)}
+			>
+				{isExpanded ? (
+					<ChevronDown className="h-3 w-3 text-blue" />
+				) : (
+					<ChevronRight className="h-3 w-3 text-blue" />
+				)}
+				<FolderClosed className="h-3 w-3 text-yellow" />
+				<span className="text-fg">{node.name}</span>
+			</div>
 		)
 	}
 

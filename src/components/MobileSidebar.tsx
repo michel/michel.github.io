@@ -7,7 +7,11 @@ function FileTreeNode({
 	node,
 	depth = 0,
 	onSelect,
-}: { node: FileNode; depth?: number; onSelect: () => void }) {
+}: {
+	node: FileNode
+	depth?: number
+	onSelect: () => void
+}) {
 	const [expanded, setExpanded] = useState(true)
 	const navigate = useNavigate()
 	const location = useLocation()

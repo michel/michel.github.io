@@ -26,9 +26,9 @@ function parseColoredText(text: string): React.ReactNode[] {
 	// biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally matching ANSI escape sequences
 	const regex = /\x1b\[(\w+)\](.*?)(?=\x1b\[|$)/g
 	let lastIndex = 0
-	let match: RegExpExecArray | null = null
+	let match: RegExpExecArray | null = regex.exec(text)
 
-	while ((match = regex.exec(text)) !== null) {
+	while (match !== null) {
 		if (match.index > lastIndex)
 			parts.push(<span key={lastIndex}>{text.slice(lastIndex, match.index)}</span>)
 
@@ -41,6 +41,7 @@ function parseColoredText(text: string): React.ReactNode[] {
 			</span>,
 		)
 		lastIndex = regex.lastIndex
+		match = regex.exec(text)
 	}
 
 	if (lastIndex < text.length) parts.push(<span key={lastIndex}>{text.slice(lastIndex)}</span>)
@@ -48,12 +49,14 @@ function parseColoredText(text: string): React.ReactNode[] {
 	return parts.length > 0 ? parts : [text]
 }
 
-
 const generateId = () =>
-	typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)
+	typeof crypto !== "undefined" && crypto.randomUUID
+		? crypto.randomUUID()
+		: Math.random().toString(36).slice(2)
 
 export default function Terminal() {
-	const { terminalFocused, focusTerminal, unfocusTerminal, closeTerminal, setActiveTmuxWindow } = useEditor()
+	const { terminalFocused, focusTerminal, unfocusTerminal, closeTerminal, setActiveTmuxWindow } =
+		useEditor()
 	const [history, setHistory] = useState<TerminalLine[]>(() => {
 		// Run neofetch on initial mount
 		const result = executeCommand("neofetch")
@@ -76,7 +79,7 @@ export default function Terminal() {
 
 	useEffect(() => {
 		if (containerRef.current) containerRef.current.scrollTop = containerRef.current.scrollHeight
-	}, [history])
+	}, [])
 
 	const addLine = (type: "input" | "output", content: string) => {
 		setHistory((h) => [...h, { id: generateId(), type, content }])
@@ -106,7 +109,7 @@ export default function Terminal() {
 	// Reset tab index when input changes
 	useEffect(() => {
 		setTabIndex(0)
-	}, [input])
+	}, [])
 
 	// Current suggestion based on tab index
 	const suggestion = matches[tabIndex % Math.max(1, matches.length)] ?? null
@@ -239,7 +242,6 @@ export default function Terminal() {
 							onKeyDown={handleKeyDown}
 							onFocus={focusTerminal}
 							className="absolute inset-0 w-full bg-transparent text-fg caret-transparent outline-none"
-							autoFocus={terminalFocused}
 						/>
 						<span className="text-fg">{input}</span>
 						<span className="text-comment">{suggestion?.slice(input.length)}</span>

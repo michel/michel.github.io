@@ -38,10 +38,9 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		</span>,
 		"",
 		<span key="intro2">
-			So I picked something close to my heart:{" "}
-			<span className="text-blue font-bold">Soulseek</span>, the underground music sharing network
-			that's been running since the early 2000s, and I've been using it to pirate music for my DJ
-			sets.
+			So I picked something close to my heart: <span className="text-blue font-bold">Soulseek</span>
+			, the underground music sharing network that's been running since the early 2000s, and I've
+			been using it to pirate music for my DJ sets.
 		</span>,
 		"",
 		<Lightbox
@@ -106,9 +105,9 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		<span key="b3">• Zlib decompression (following the official RFC)</span>,
 		<span key="b4">• Custom logger/log levels & buffering</span>,
 		<span key="b5">
-			• Speed-ran through trying and building different concurrency models: naive threads per
-			peer, to thread pools, to a homegrown actor system and making steps to migrate to a reactor
-			event loop (epoll/kqueue)
+			• Speed-ran through trying and building different concurrency models: naive threads per peer,
+			to thread pools, to a homegrown actor system and making steps to migrate to a reactor event
+			loop (epoll/kqueue)
 		</span>,
 		"",
 		<Lightbox
@@ -129,8 +128,8 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		"",
 		<span key="p5">
 			Am I done? Not even close. My code is riddled with .clone() calls. The multi-threading is
-			naive. The design doesn't gracefully handle tens of thousands of peer connections yet, and
-			you can't even share files, making it a very incomplete client.
+			naive. The design doesn't gracefully handle tens of thousands of peer connections yet, and you
+			can't even share files, making it a very incomplete client.
 		</span>,
 		"",
 		<span key="p6">But searching and downloading works, and that's a milestone!</span>,
