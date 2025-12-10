@@ -46,7 +46,7 @@ export const allFiles = [
 		name: "README.md",
 		path: "/",
 		preview: `# Welcome to the system.
-// Press <Space>f to fuzzy search files.
+// Press <Ctrl>+p to fuzzy search files.
 // Use h/j/k/l to navigate if you're cool.
 
 const status = {

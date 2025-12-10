@@ -56,7 +56,7 @@ export default function Home() {
 			# Welcome to the system.
 		</span>,
 		<span key="hint1" className="text-comment">
-			{"// Press <Space>f to fuzzy search files."}
+			{"// Press <Ctrl>+p to fuzzy search files."}
 		</span>,
 		<span key="hint2" className="text-comment">
 			{"// Use h/j/k/l to navigate if you're cool."}
