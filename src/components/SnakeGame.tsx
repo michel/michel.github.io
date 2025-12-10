@@ -211,6 +211,7 @@ export default function SnakeGame() {
 		<div className="fixed inset-0 z-50 flex items-center justify-center">
 			<div
 				ref={containerRef}
+				tabIndex={0}
 				onKeyDown={handleKeyDown}
 				className="rounded-lg border border-[#4a4670] bg-bg-dark p-4 outline-none"
 			>

@@ -98,7 +98,7 @@ export default function AdventureGame() {
 		if (outputRef.current) {
 			outputRef.current.scrollTop = outputRef.current.scrollHeight
 		}
-	}, [])
+	}, [output])
 
 	useEffect(() => {
 		inputRef.current?.focus()
@@ -432,7 +432,7 @@ export default function AdventureGame() {
 			>
 				<div
 					ref={outputRef}
-					className="flex-1 overflow-y-auto p-4 text-green"
+					className="flex-1 select-text overflow-y-auto p-4 text-green"
 					style={{ whiteSpace: "pre-wrap" }}
 				>
 					{output.map((line, i) => (
