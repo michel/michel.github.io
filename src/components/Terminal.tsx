@@ -79,7 +79,7 @@ export default function Terminal() {
 
 	useEffect(() => {
 		if (containerRef.current) containerRef.current.scrollTop = containerRef.current.scrollHeight
-	}, [])
+	}, [history])
 
 	const addLine = (type: "input" | "output", content: string) => {
 		setHistory((h) => [...h, { id: generateId(), type, content }])
