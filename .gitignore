@@ -2,3 +2,5 @@
 dist
 docs/plans
 node_modules
+
+.env
