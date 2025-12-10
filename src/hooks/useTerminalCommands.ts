@@ -14,7 +14,33 @@ import {
 	generateLsLaOutput,
 	getPathCompletions,
 	toDisplayPath,
+	getDirectoryContents,
 } from "../data/filesystem"
+
+function parseRmFlags(args: string[]) {
+	const flags = { recursive: false, force: false, verbose: false, interactive: false, dir: false }
+	const targets: string[] = []
+
+	for (const arg of args) {
+		if (arg === "--recursive" || arg === "-R") flags.recursive = true
+		else if (arg === "--force") flags.force = true
+		else if (arg === "--verbose") flags.verbose = true
+		else if (arg === "--interactive") flags.interactive = true
+		else if (arg === "--dir") flags.dir = true
+		else if (arg === "--no-preserve-root") continue
+		else if (arg.startsWith("-") && !arg.startsWith("--")) {
+			for (const char of arg.slice(1)) {
+				if (char === "r") flags.recursive = true
+				else if (char === "f") flags.force = true
+				else if (char === "v") flags.verbose = true
+				else if (char === "i") flags.interactive = true
+				else if (char === "d") flags.dir = true
+			}
+		} else targets.push(arg)
+	}
+
+	return { ...flags, targets }
+}
 
 export interface CommandResult {
 	output: string[]
@@ -376,12 +402,13 @@ const commands: Record<string, CommandHandler> = {
 		],
 	}),
 
-	rm: (args) => {
+	rm: (args, cwd) => {
 		const joinedArgs = args.join(" ")
-		const hasForce = args.includes("-rf") || args.includes("-fr") || args.includes("-r")
+		const { recursive, force, verbose, interactive, dir, targets } = parseRmFlags(args)
+		const hasRecursive = recursive || dir
 
-		// Check for various dangerous patterns
-		if (hasForce && (args.includes("/") || joinedArgs.includes(" /")))
+		// Easter eggs for dangerous patterns
+		if (hasRecursive && (args.includes("/") || joinedArgs.includes(" /")))
 			return {
 				output: [
 					"\x1b[red]rm: it is dangerous to operate recursively on '/'\x1b[reset]",
@@ -395,10 +422,7 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (
-			hasForce &&
-			(joinedArgs.includes("~") || joinedArgs.includes("$HOME") || joinedArgs.includes("/home"))
-		)
+		if (hasRecursive && (joinedArgs.includes("~") || joinedArgs.includes("$HOME") || joinedArgs.includes("/home")))
 			return {
 				output: [
 					"\x1b[red]rm: permission denied: '/home/michel'\x1b[reset]",
@@ -412,7 +436,7 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasForce && joinedArgs.includes("*"))
+		if (hasRecursive && joinedArgs.includes("*"))
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove '*': Ambiguous redirect\x1b[reset]",
@@ -425,10 +449,7 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (
-			hasForce &&
-			(joinedArgs.includes("/etc") || joinedArgs.includes("/var") || joinedArgs.includes("/usr"))
-		)
+		if (hasRecursive && (joinedArgs.includes("/etc") || joinedArgs.includes("/var") || joinedArgs.includes("/usr")))
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove system directories: Operation not permitted\x1b[reset]",
@@ -441,12 +462,7 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (
-			hasForce &&
-			(joinedArgs.includes("/boot") ||
-				joinedArgs.includes("vmlinuz") ||
-				joinedArgs.includes("initrd"))
-		)
+		if (hasRecursive && (joinedArgs.includes("/boot") || joinedArgs.includes("vmlinuz") || joinedArgs.includes("initrd")))
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove '/boot': The kernel is watching\x1b[reset]",
@@ -459,7 +475,7 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasForce && joinedArgs.includes(".ssh"))
+		if (hasRecursive && joinedArgs.includes(".ssh"))
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove '.ssh': Identity is precious\x1b[reset]",
@@ -472,7 +488,7 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasForce && (joinedArgs.includes(".git") || joinedArgs.includes("node_modules")))
+		if (hasRecursive && (joinedArgs.includes(".git") || joinedArgs.includes("node_modules")))
 			return {
 				output: [
 					"\x1b[green]rm: removing node_modules...\x1b[reset]",
@@ -497,7 +513,40 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		return { output: [`rm: cannot remove '${args[0] || ""}': This is a fake terminal`] }
+		// No targets provided
+		if (targets.length === 0)
+			return { output: ["rm: missing operand", "Try 'rm --help' for more information."] }
+
+		const output: string[] = []
+
+		for (const target of targets) {
+			const resolved = resolvePath(target, cwd)
+
+			if (!pathExists(resolved)) {
+				if (!force) output.push(`rm: cannot remove '${target}': No such file or directory`)
+				continue
+			}
+
+			if (isDirectory(resolved)) {
+				if (!recursive && !dir) {
+					output.push(`rm: cannot remove '${target}': Is a directory`)
+					continue
+				}
+				if (dir && !recursive) {
+					const contents = getDirectoryContents(resolved)
+					if (contents.length > 0) {
+						output.push(`rm: cannot remove '${target}': Directory not empty`)
+						continue
+					}
+				}
+			}
+
+			if (interactive) output.push(`rm: remove ${isDirectory(resolved) ? "directory" : "regular file"} '${target}'? y`)
+			if (verbose) output.push(`removed '${target}'`)
+			output.push(`rm: cannot remove '${target}': Read-only file system`)
+		}
+
+		return { output: output.length > 0 ? output : ["rm: cannot remove: Read-only file system"] }
 	},
 
 	sl: () => ({
