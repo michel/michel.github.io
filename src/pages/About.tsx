@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import Buffer from "../components/Buffer"
+import { usePageTitle } from "../hooks/usePageTitle"
 
 const ManEntry = ({
 	id,
@@ -32,6 +33,7 @@ const ManEntry = ({
 ]
 
 export default function About() {
+	usePageTitle("About")
 	const lines: ReactNode[] = [
 		<h1 key="title" className="text-2xl font-bold text-fg">
 			MICHEL(1)

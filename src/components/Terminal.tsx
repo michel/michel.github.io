@@ -49,13 +49,16 @@ function parseColoredText(text: string): React.ReactNode[] {
 }
 
 
+const generateId = () =>
+	typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)
+
 export default function Terminal() {
 	const { terminalFocused, focusTerminal, unfocusTerminal, closeTerminal, setActiveTmuxWindow } = useEditor()
 	const [history, setHistory] = useState<TerminalLine[]>(() => {
 		// Run neofetch on initial mount
 		const result = executeCommand("neofetch")
 		return result.output.map((content) => ({
-			id: crypto.randomUUID(),
+			id: generateId(),
 			type: "output" as const,
 			content,
 		}))
@@ -76,7 +79,7 @@ export default function Terminal() {
 	}, [history])
 
 	const addLine = (type: "input" | "output", content: string) => {
-		setHistory((h) => [...h, { id: crypto.randomUUID(), type, content }])
+		setHistory((h) => [...h, { id: generateId(), type, content }])
 	}
 
 	// Fish-style autocomplete: get all matching commands or files

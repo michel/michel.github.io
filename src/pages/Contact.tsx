@@ -1,4 +1,7 @@
+import { usePageTitle } from "../hooks/usePageTitle"
+
 export default function Contact() {
+	usePageTitle("Contact")
 	return (
 		<div className="flex h-full flex-col items-center justify-center text-center">
 			<pre className="mb-4 font-bold text-magenta">
