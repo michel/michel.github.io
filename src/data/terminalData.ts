@@ -216,7 +216,7 @@ export function getTopOutput(): string[] {
 			command: "\x1b[yellow]./batch_inference --tokens-per-sec 50000\x1b[reset]",
 		},
 		{
-			pid: 31337,
+			pid: 31338,
 			user: "root",
 			cpu: "847.3",
 			mem: "69.0",
