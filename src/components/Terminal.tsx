@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useEditor } from "../context/EditorContext"
-import { availableCommands, executeCommand, hackerFileNames } from "../hooks/useTerminalCommands"
+import { availableCommands, executeCommand, getPathCompletions, toDisplayPath } from "../hooks/useTerminalCommands"
 
 interface TerminalLine {
 	id: string
 	type: "input" | "output"
 	content: string
+	cwd?: string
 }
 
 const colorMap: Record<string, string> = {
@@ -57,9 +58,10 @@ const generateId = () =>
 export default function Terminal() {
 	const { terminalFocused, focusTerminal, unfocusTerminal, closeTerminal, setActiveTmuxWindow } =
 		useEditor()
+	const [currentDirectory, setCurrentDirectory] = useState('/home/michel/blog')
 	const [history, setHistory] = useState<TerminalLine[]>(() => {
 		// Run neofetch on initial mount
-		const result = executeCommand("neofetch")
+		const result = executeCommand("neofetch", '/home/michel/blog')
 		return result.output.map((content) => ({
 			id: generateId(),
 			type: "output" as const,
@@ -81,8 +83,8 @@ export default function Terminal() {
 		if (containerRef.current) containerRef.current.scrollTop = containerRef.current.scrollHeight
 	}, [history])
 
-	const addLine = (type: "input" | "output", content: string) => {
-		setHistory((h) => [...h, { id: generateId(), type, content }])
+	const addLine = (type: "input" | "output", content: string, cwd?: string) => {
+		setHistory((h) => [...h, { id: generateId(), type, content, cwd }])
 	}
 
 	// Fish-style autocomplete: get all matching commands or files
@@ -91,20 +93,20 @@ export default function Terminal() {
 		const trimmed = input.trim()
 		const lower = trimmed.toLowerCase()
 
-		// Check if we're completing a file argument for cat
-		if (lower.startsWith("cat ")) {
-			const fileArg = trimmed.slice(4) // Everything after "cat "
-			if (!fileArg) return hackerFileNames.map((f) => `cat ${f}`)
-			const fileLower = fileArg.toLowerCase()
-			return hackerFileNames
-				.filter((f) => f.toLowerCase().startsWith(fileLower) && f.toLowerCase() !== fileLower)
-				.map((f) => `cat ${f}`)
+		// Check if we're completing a file argument for cat or cd
+		if (lower.startsWith("cat ") || lower.startsWith("cd ")) {
+			const cmd = lower.split(" ")[0] ?? ""
+			const pathArg = trimmed.slice(cmd.length + 1)
+			const completions = getPathCompletions(pathArg, currentDirectory)
+			return completions
+				.filter(c => c.toLowerCase() !== pathArg.toLowerCase())
+				.map(c => `${cmd} ${c}`)
 		}
 
 		// Only match the command part (first word) if no space
 		if (lower.includes(" ")) return []
 		return availableCommands.filter((c) => c.startsWith(lower) && c !== lower)
-	}, [input])
+	}, [input, currentDirectory])
 
 	// Reset tab index when input changes
 	useEffect(() => {
@@ -121,21 +123,25 @@ export default function Terminal() {
 
 	const handleSubmit = () => {
 		if (!input.trim()) {
-			addLine("input", "")
+			addLine("input", "", currentDirectory)
 			return
 		}
 
-		addLine("input", input)
+		addLine("input", input, currentDirectory)
 		setCommandHistory((h) => [...h, input])
 		setHistoryIndex(-1)
 
-		const result = executeCommand(input)
+		const result = executeCommand(input, currentDirectory)
 		if (result.clear) {
 			setHistory([])
 		} else {
 			for (const line of result.output) {
 				addLine("output", line)
 			}
+		}
+
+		if (result.newDirectory) {
+			setCurrentDirectory(result.newDirectory)
 		}
 
 		if (result.closeTerminal) {
@@ -160,7 +166,7 @@ export default function Terminal() {
 		} else if (e.key === "Escape") {
 			unfocusTerminal()
 		} else if (e.ctrlKey && e.key === "c") {
-			addLine("input", `${input}^C`)
+			addLine("input", `${input}^C`, currentDirectory)
 			setInput("")
 		} else if (e.ctrlKey && e.key === "l") {
 			setHistory([])
@@ -217,9 +223,9 @@ export default function Terminal() {
 					<div key={line.id} className="whitespace-pre break-all">
 						{line.type === "input" ? (
 							<>
-								<span className="text-green">michel@spaceheater</span>
+								<span className="text-green">michel@archlinux</span>
 								<span className="text-fg">:</span>
-								<span className="text-cyan">~/src/michel</span>
+								<span className="text-cyan">{toDisplayPath(line.cwd ?? "/home/michel/blog")}</span>
 								<span className="text-fg">$ {line.content}</span>
 							</>
 						) : (
@@ -229,9 +235,9 @@ export default function Terminal() {
 				))}
 
 				<div className="flex whitespace-pre-wrap break-all">
-					<span className="text-green">michel@spaceheater</span>
+					<span className="text-green">michel@archlinux</span>
 					<span className="text-fg">:</span>
-					<span className="text-cyan">~/src/michel</span>
+					<span className="text-cyan">{toDisplayPath(currentDirectory)}</span>
 					<span className="text-fg">$ </span>
 					<div className="relative flex-1">
 						<input

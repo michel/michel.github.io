@@ -4,6 +4,7 @@ import { itemDescriptions, rooms, startRoom } from "../data/adventureRooms"
 
 interface GameState {
 	currentRoom: string
+	previousRoom: string | null
 	inventory: string[]
 	flags: Set<string>
 	history: string[]
@@ -11,14 +12,17 @@ interface GameState {
 
 const HELP_TEXT = `Available commands:
   look          - Examine your surroundings
-  go <dir>      - Move in a direction (north, south, east, west, etc.)
+  go <dir>      - Move in a direction (or just type the exit name)
+  back          - Return to the previous room
   take <item>   - Pick up an item
-  use <item>    - Use an item from your inventory
+  use <item>    - Use an item
+  examine <item>- Look at an item closely
   inventory     - Check what you're carrying
   help          - Show this help message
   quit          - Exit the adventure
 
-Shortcuts: n/s/e/w for directions, i for inventory, l for look`
+Shortcuts: n/s/e/w for directions, i for inventory, l for look, x for examine
+Tip: Type exit names directly (e.g., 'door', 'bathroom') to move`
 
 export default function AdventureGame() {
 	const { closeAdventureGame } = useEditor()
@@ -29,6 +33,7 @@ export default function AdventureGame() {
 	const [input, setInput] = useState("")
 	const [gameState, setGameState] = useState<GameState>({
 		currentRoom: startRoom,
+		previousRoom: null,
 		inventory: [],
 		flags: new Set(),
 		history: [],
@@ -41,6 +46,14 @@ export default function AdventureGame() {
 	}
 
 	const getCurrentRoom = () => rooms[gameState.currentRoom]
+
+	const goToRoom = (roomId: string) => {
+		setGameState((prev) => ({
+			...prev,
+			currentRoom: roomId,
+			previousRoom: prev.currentRoom,
+		}))
+	}
 
 	const getProcessedDescription = (description: string, inventory: string[]) => {
 		let processed = description
@@ -78,6 +91,12 @@ export default function AdventureGame() {
 				addOutput(`You can see: ${availableItems.join(", ")}`)
 			}
 		}
+
+		const exitNames = Object.keys(room.exits)
+		if (exitNames.length > 0) {
+			addOutput("")
+			addOutput(`Exits: ${exitNames.join(", ")}`)
+		}
 	}
 
 	useEffect(() => {
@@ -101,6 +120,12 @@ export default function AdventureGame() {
 	}, [output])
 
 	useEffect(() => {
+		if (!initializedRef.current) return
+		describeRoom()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [gameState.currentRoom])
+
+	useEffect(() => {
 		inputRef.current?.focus()
 	}, [])
 
@@ -117,7 +142,17 @@ export default function AdventureGame() {
 
 		const parts = trimmed.split(" ")
 		const action = parts[0]
-		const target = parts.slice(1).join(" ")
+		const rawTarget = parts.slice(1).join(" ")
+
+		// Item aliases for flexible matching
+		const itemAliases: Record<string, string> = {
+			"2fa": "2fa device",
+			device: "2fa device",
+			token: "2fa device",
+			bag: "laptop bag",
+			laptopbag: "laptop bag",
+		}
+		const target = itemAliases[rawTarget] || rawTarget
 
 		switch (action) {
 			case "quit":
@@ -139,7 +174,7 @@ export default function AdventureGame() {
 			case "inventory":
 			case "i":
 				if (gameState.inventory.length === 0) {
-					addOutput("Your pockets are empty. Just your phone and its endless notifications.")
+					addOutput("You're not carrying anything.")
 				} else {
 					addOutput("You are carrying:")
 					gameState.inventory.forEach((item) => {
@@ -172,8 +207,7 @@ export default function AdventureGame() {
 					return
 				}
 
-				setGameState((prev) => ({ ...prev, currentRoom: nextRoomId }))
-				setTimeout(() => describeRoom(), 0)
+				goToRoom(nextRoomId)
 				return
 			}
 
@@ -213,8 +247,7 @@ export default function AdventureGame() {
 				// Special case: use laptop
 				if (target === "laptop" && gameState.currentRoom === "office") {
 					addOutput("You open the laptop and start the VPN client...")
-					setGameState((prev) => ({ ...prev, currentRoom: "vpn" }))
-					setTimeout(() => describeRoom(), 0)
+					goToRoom("vpn")
 					return
 				}
 
@@ -229,9 +262,9 @@ export default function AdventureGame() {
 					setGameState((prev) => ({
 						...prev,
 						currentRoom: "vpn_connected",
+						previousRoom: prev.currentRoom,
 						flags: new Set([...prev.flags, "vpn_connected"]),
 					}))
-					setTimeout(() => describeRoom(), 0)
 					return
 				}
 
@@ -307,14 +340,12 @@ export default function AdventureGame() {
 				}
 
 				if (target === "web" || target === "prod-web-01") {
-					setGameState((prev) => ({ ...prev, currentRoom: "prod_web" }))
-					setTimeout(() => describeRoom(), 0)
+					goToRoom("prod_web")
 					return
 				}
 
 				if (target === "db" || target === "prod-db-01") {
-					setGameState((prev) => ({ ...prev, currentRoom: "prod_db" }))
-					setTimeout(() => describeRoom(), 0)
+					goToRoom("prod_db")
 					return
 				}
 
@@ -324,8 +355,7 @@ export default function AdventureGame() {
 
 			case "show": {
 				if (target === "processlist" && gameState.currentRoom === "prod_db") {
-					setGameState((prev) => ({ ...prev, currentRoom: "processlist" }))
-					setTimeout(() => describeRoom(), 0)
+					goToRoom("processlist")
 					return
 				}
 				addOutput("Show what?")
@@ -344,9 +374,9 @@ export default function AdventureGame() {
 					setGameState((prev) => ({
 						...prev,
 						currentRoom: "victory",
+						previousRoom: prev.currentRoom,
 						flags: new Set([...prev.flags, "victory"]),
 					}))
-					setTimeout(() => describeRoom(), 0)
 					return
 				}
 
@@ -380,10 +410,9 @@ export default function AdventureGame() {
 			case "back": {
 				const room = getCurrentRoom()
 				if (!room) return
-				const backRoom = room.exits.back || room.exits.disconnect
+				const backRoom = room.exits.back || room.exits.disconnect || gameState.previousRoom
 				if (backRoom) {
-					setGameState((prev) => ({ ...prev, currentRoom: backRoom }))
-					setTimeout(() => describeRoom(), 0)
+					goToRoom(backRoom)
 				} else {
 					addOutput("You can't go back from here.")
 				}
@@ -405,8 +434,16 @@ export default function AdventureGame() {
 				return
 			}
 
-			default:
+			default: {
+				// Check if the command is an exit name
+				const room = getCurrentRoom()
+				const exitDest = action ? room?.exits[action] : undefined
+				if (exitDest) {
+					goToRoom(exitDest)
+					return
+				}
 				addOutput(`I don't understand "${action}". Type 'help' for commands.`)
+			}
 		}
 	}
 
