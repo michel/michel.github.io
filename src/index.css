@@ -38,10 +38,34 @@ body {
 	background-color: var(--color-bg);
 	color: var(--color-fg);
 	font-family: var(--font-mono);
-	font-size: 14px;
+	font-size: 11px;
 	line-height: 1.4;
 	overflow: hidden;
 	user-select: none;
+}
+
+@media (min-width: 768px) {
+	body {
+		font-size: 14px;
+	}
+}
+
+:root {
+	--tab-arrow-outer: 9px;
+	--tab-arrow-inner: 7px;
+	--tab-arrow-left: 5px;
+	--tab-arrow-left-lg: 6px;
+	--tab-arrow-inset: 1px;
+}
+
+@media (min-width: 768px) {
+	:root {
+		--tab-arrow-outer: 14px;
+		--tab-arrow-inner: 12px;
+		--tab-arrow-left: 8px;
+		--tab-arrow-left-lg: 9px;
+		--tab-arrow-inset: 2px;
+	}
 }
 
 ::-webkit-scrollbar {

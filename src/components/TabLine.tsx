@@ -37,9 +37,9 @@ export default function TabLine() {
 							<div
 								className="h-0 w-0"
 								style={{
-									borderTop: "14px solid transparent",
-									borderBottom: "14px solid transparent",
-									borderLeft: "8px solid var(--color-magenta)",
+									borderTop: "var(--tab-arrow-outer) solid transparent",
+									borderBottom: "var(--tab-arrow-outer) solid transparent",
+									borderLeft: "var(--tab-arrow-left) solid var(--color-magenta)",
 								}}
 							/>
 						) : isNextActive ? (
@@ -47,17 +47,18 @@ export default function TabLine() {
 								<div
 									className="h-0 w-0"
 									style={{
-										borderTop: "14px solid transparent",
-										borderBottom: "14px solid transparent",
+										borderTop: "var(--tab-arrow-outer) solid transparent",
+										borderBottom: "var(--tab-arrow-outer) solid transparent",
 										borderLeft: "0px solid var(--color-magenta)",
 									}}
 								/>
 								<div
-									className="absolute left-0 top-[2px] h-0 w-0"
+									className="absolute left-0 h-0 w-0"
 									style={{
-										borderTop: "12px solid transparent",
-										borderBottom: "12px solid transparent",
-										borderLeft: "6px solid #191725",
+										top: "var(--tab-arrow-inset)",
+										borderTop: "var(--tab-arrow-inner) solid transparent",
+										borderBottom: "var(--tab-arrow-inner) solid transparent",
+										borderLeft: "var(--tab-arrow-left) solid #191725",
 									}}
 								/>
 							</div>
@@ -66,17 +67,18 @@ export default function TabLine() {
 								<div
 									className="h-0 w-0"
 									style={{
-										borderTop: "14px solid transparent",
-										borderBottom: "14px solid transparent",
-										borderLeft: "9px solid var(--color-magenta)",
+										borderTop: "var(--tab-arrow-outer) solid transparent",
+										borderBottom: "var(--tab-arrow-outer) solid transparent",
+										borderLeft: "var(--tab-arrow-left-lg) solid var(--color-magenta)",
 									}}
 								/>
 								<div
-									className="absolute left-0 top-[2px] h-0 w-0"
+									className="absolute left-0 h-0 w-0"
 									style={{
-										borderTop: "12px solid transparent",
-										borderBottom: "12px solid transparent",
-										borderLeft: "8px solid #191725",
+										top: "var(--tab-arrow-inset)",
+										borderTop: "var(--tab-arrow-inner) solid transparent",
+										borderBottom: "var(--tab-arrow-inner) solid transparent",
+										borderLeft: "var(--tab-arrow-left) solid #191725",
 									}}
 								/>
 							</div>
