@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { useEditor } from "../context/EditorContext"
 
@@ -122,9 +122,9 @@ export default function JurassicTerminal() {
 	const [statusColor, setStatusColor] = useState("#ff0055")
 	const [modal, setModal] = useState<{ show: boolean; success: boolean } | null>(null)
 
-	const log = (msg: string) => {
+	const log = useCallback((msg: string) => {
 		setConsoleLines((prev) => [`> ${msg}`, ...prev.slice(0, 4)])
-	}
+	}, [])
 
 	useEffect(() => {
 		if (!containerRef.current) return
