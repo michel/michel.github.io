@@ -179,11 +179,15 @@ Type 'quit' to exit the adventure.`,
 }
 
 export const itemDescriptions: Record<string, string> = {
-	"2fa device": "A small hardware token that generates one-time passwords. Essential for VPN access.",
+	"2fa device":
+		"A small hardware token that generates one-time passwords. Essential for VPN access.",
 	coffee: "A cup of emergency coffee. The sticky note said 'EMERGENCY USE ONLY'. This counts.",
-	phone: "247 unread Slack messages. 12 PagerDuty alerts. 3 missed calls from your manager. You silence it and shove it in your pocket.",
-	"laptop bag": "Contains a tangle of cables, old conference badges, and the faint smell of desperation. You grab it.",
-	laptop: "A MacBook Pro with 47 Chrome tabs open. The fans are already spinning up in anticipation of the debugging ahead.",
+	phone:
+		"247 unread Slack messages. 12 PagerDuty alerts. 3 missed calls from your manager. You silence it and shove it in your pocket.",
+	"laptop bag":
+		"Contains a tangle of cables, old conference badges, and the faint smell of desperation. You grab it.",
+	laptop:
+		"A MacBook Pro with 47 Chrome tabs open. The fans are already spinning up in anticipation of the debugging ahead.",
 }
 
 export const startRoom = "bedroom"

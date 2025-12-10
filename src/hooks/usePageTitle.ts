@@ -5,6 +5,8 @@ const BASE_TITLE = "michel@re-invention:~"
 export function usePageTitle(title?: string) {
 	useEffect(() => {
 		document.title = title ? `${title} | ${BASE_TITLE}` : BASE_TITLE
-		return () => { document.title = BASE_TITLE }
+		return () => {
+			document.title = BASE_TITLE
+		}
 	}, [title])
 }

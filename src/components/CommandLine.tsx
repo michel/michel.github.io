@@ -19,7 +19,16 @@ export default function CommandLine() {
 	const [selectedIndex, setSelectedIndex] = useState(0)
 	const inputRef = useRef<HTMLInputElement>(null)
 	const navigate = useNavigate()
-	const { commandLineOpen, closeCommandLine, openBuffer, openTerminal, setActiveTmuxWindow, openSnakeGame, openAdventureGame, toggleHelpPopup } = useEditor()
+	const {
+		commandLineOpen,
+		closeCommandLine,
+		openBuffer,
+		openTerminal,
+		setActiveTmuxWindow,
+		openSnakeGame,
+		openAdventureGame,
+		toggleHelpPopup,
+	} = useEditor()
 
 	useEffect(() => {
 		if (commandLineOpen) {
@@ -37,7 +46,7 @@ export default function CommandLine() {
 
 	useEffect(() => {
 		setSelectedIndex(0)
-	}, [value])
+	}, [])
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		e.stopPropagation()
@@ -121,7 +130,7 @@ export default function CommandLine() {
 
 	if (!commandLineOpen) return null
 
-	const showDropdown = matches.length > 0 || (value.trim() === "")
+	const showDropdown = matches.length > 0 || value.trim() === ""
 	const displayItems = value.trim() === "" ? commandList : matches
 
 	return (

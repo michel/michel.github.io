@@ -32,6 +32,7 @@ export function useVimKeys() {
 		unfocusTerminal,
 		adventureGameOpen,
 		snakeGameOpen,
+		moveCursor,
 	} = useEditor()
 
 	const visibleNodes = useMemo(
@@ -85,7 +86,8 @@ export function useVimKeys() {
 				return
 			}
 
-			if (commandLineOpen || fuzzyFinderOpen || helpPopupOpen || adventureGameOpen || snakeGameOpen) return
+			if (commandLineOpen || fuzzyFinderOpen || helpPopupOpen || adventureGameOpen || snakeGameOpen)
+				return
 			if (isInput && mode !== "NORMAL") return
 
 			if (e.ctrlKey && e.key === "p") {
@@ -165,13 +167,10 @@ export function useVimKeys() {
 						e.preventDefault()
 						toggleCommandLine()
 						break
-					case "h":
+					case "Tab":
 						e.preventDefault()
-						cycleBuffer(-1)
-						break
-					case "l":
-						e.preventDefault()
-						cycleBuffer(1)
+						if (e.shiftKey) cycleBuffer(-1)
+						else cycleBuffer(1)
 						break
 					case "?":
 						e.preventDefault()
@@ -185,18 +184,16 @@ export function useVimKeys() {
 						e.preventDefault()
 						closeOtherBuffers()
 						break
-					case "j": {
+					case "j":
+					case "ArrowDown":
 						e.preventDefault()
-						const content = document.querySelector(".overflow-auto")
-						content?.scrollBy({ top: 100, behavior: "smooth" })
+						moveCursor("down")
 						break
-					}
-					case "k": {
+					case "k":
+					case "ArrowUp":
 						e.preventDefault()
-						const content = document.querySelector(".overflow-auto")
-						content?.scrollBy({ top: -100, behavior: "smooth" })
+						moveCursor("up")
 						break
-					}
 				}
 			} else if (mode === "INSERT" || mode === "VISUAL") {
 				if (e.key === "Escape") {
@@ -237,5 +234,6 @@ export function useVimKeys() {
 		terminalFocused,
 		focusTerminal,
 		unfocusTerminal,
+		moveCursor,
 	])
 }
