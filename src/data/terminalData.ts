@@ -10,7 +10,7 @@ export function getNeofetchOutput(): string[] {
 	const gpuUtil = Math.floor(Math.random() * 20) + 78
 
 	return [
-		`\x1b[green]                         -=:        :=                  \x1b[reset]\x1b[cyan]michel@inference-node-01\x1b[reset]`,
+		`\x1b[green]                         -=:        :=                  \x1b[reset]\x1b[cyan]michel@spaceheater\x1b[reset]`,
 		`\x1b[green]                       -++=.        :=.                 \x1b[reset]\x1b[cyan]----------------------------------------\x1b[reset]`,
 		`\x1b[green]                     .=+++++:        .=:                \x1b[reset]\x1b[cyan]OS\x1b[reset]: Arch Linux x86_64 \x1b[comment](btw)\x1b[reset]`,
 		`\x1b[green]                    .=+++++++-        .=:               \x1b[reset]\x1b[cyan]Host\x1b[reset]: NVIDIA DGX H100 \x1b[comment](640GB HBM3)\x1b[reset]`,
