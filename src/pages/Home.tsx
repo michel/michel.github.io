@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import Buffer from "../components/Buffer"
+import { content } from "../data/content"
 import { usePageTitle } from "../hooks/usePageTitle"
 
 const logoLines = [
@@ -27,13 +28,6 @@ const logoLines = [
 	"     :==============================================.",
 ]
 
-const articles = [
-	{
-		slug: "learning-rust-the-hard-way",
-		title: "learning_rust_the_hard_way.md",
-		date: "2024-12-01",
-	},
-]
 
 export default function Home() {
 	usePageTitle()
@@ -101,14 +95,14 @@ export default function Home() {
 			michel@spaceheater:
 		</span>,
 		<span key="cmd">
-			<span className="text-green">~</span> <span className="text-magenta">ls -la posts/</span>
+			<span className="text-green">~</span> <span className="text-magenta">ls -la ~/</span>
 		</span>,
 		"",
-		<span key="total" className="text-comment">{`total ${articles.length}`}</span>,
-		...articles.map((article) => (
-			<Link key={article.slug} to={`/posts/${article.slug}`} className="hover:bg-selection block">
-				<span className="text-comment">-rw-r--r-- michel staff {article.date} </span>
-				<span className="text-cyan">{article.title}</span>
+		<span key="total" className="text-comment">{`total ${content.length}`}</span>,
+		...content.map((item) => (
+			<Link key={item.slug} to={item.path} className="hover:bg-selection block">
+				<span className="text-comment">-rw-r--r-- michel staff {item.date} </span>
+				<span className="text-cyan">{item.title}</span>
 			</Link>
 		)),
 	]

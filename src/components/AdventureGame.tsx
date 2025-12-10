@@ -34,6 +34,7 @@ export default function AdventureGame() {
 		history: [],
 	})
 	const [output, setOutput] = useState<string[]>([])
+	const initializedRef = useRef(false)
 
 	const addOutput = (text: string) => {
 		setOutput((prev) => [...prev, text])
@@ -80,6 +81,8 @@ export default function AdventureGame() {
 	}
 
 	useEffect(() => {
+		if (initializedRef.current) return
+		initializedRef.current = true
 		containerRef.current?.focus()
 		addOutput("╔════════════════════════════════════════╗")
 		addOutput("║     PRODUCTION IS DOWN: A NIGHTMARE    ║")

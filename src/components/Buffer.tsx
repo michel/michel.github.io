@@ -51,7 +51,7 @@ export default function Buffer({ lines }: BufferProps) {
 	return (
 		<div ref={containerRef} className="h-full relative overflow-hidden">
 			{/* Gutter - fixed position, doesn't scroll */}
-			<div className="absolute top-0 bottom-0 left-0 w-[2rem]">
+			<div className="absolute top-0 bottom-0 left-0 w-[1.5rem]">
 				{Array.from({ length: gutterLineCount }, (_, i) => (
 					<div key={i} className="text-right pr-2 text-comment opacity-50 select-none">
 						{i + 1}
@@ -60,10 +60,10 @@ export default function Buffer({ lines }: BufferProps) {
 			</div>
 
 			{/* Content - scrolls independently */}
-			<div ref={contentRef} className="h-full overflow-auto ml-[2rem]" style={{ maxWidth: "80ch" }}>
+			<div ref={contentRef} className="h-full overflow-auto ml-[1.5rem]" style={{ maxWidth: "80ch" }}>
 				<div
 					className="absolute top-0 bottom-0 bg-border opacity-30 hidden md:block"
-					style={{ left: "calc(2rem + 80ch)", width: "1ch" }}
+					style={{ left: "calc(1.5rem + 80ch)", width: "1ch" }}
 				/>
 				{lines.map((line, i) => (
 					<div

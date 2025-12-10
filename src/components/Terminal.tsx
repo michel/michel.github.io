@@ -241,7 +241,8 @@ export default function Terminal() {
 							onChange={(e) => setInput(e.target.value)}
 							onKeyDown={handleKeyDown}
 							onFocus={focusTerminal}
-							className="absolute inset-0 w-full bg-transparent text-fg caret-transparent outline-none"
+							className="absolute inset-0 w-full bg-transparent text-transparent caret-transparent outline-none"
+							style={{ fontSize: '16px' }}
 						/>
 						<span className="text-fg">{input}</span>
 						<span className="text-comment">{suggestion?.slice(input.length)}</span>
