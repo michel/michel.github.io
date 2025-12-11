@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useEditor } from "../context/EditorContext"
-import { availableCommands, executeCommand, getPathCompletions, toDisplayPath } from "../hooks/useTerminalCommands"
+import {
+	availableCommands,
+	executeCommand,
+	getPathCompletions,
+	toDisplayPath,
+} from "../hooks/useTerminalCommands"
 
 interface TerminalLine {
 	id: string
@@ -58,10 +63,10 @@ const generateId = () =>
 export default function Terminal() {
 	const { terminalFocused, focusTerminal, unfocusTerminal, closeTerminal, setActiveTmuxWindow } =
 		useEditor()
-	const [currentDirectory, setCurrentDirectory] = useState('/home/michel/blog')
+	const [currentDirectory, setCurrentDirectory] = useState("/home/michel/blog")
 	const [history, setHistory] = useState<TerminalLine[]>(() => {
 		// Run neofetch on initial mount
-		const result = executeCommand("neofetch", '/home/michel/blog')
+		const result = executeCommand("neofetch", "/home/michel/blog")
 		return result.output.map((content) => ({
 			id: generateId(),
 			type: "output" as const,
@@ -99,8 +104,8 @@ export default function Terminal() {
 			const pathArg = trimmed.slice(cmd.length + 1)
 			const completions = getPathCompletions(pathArg, currentDirectory)
 			return completions
-				.filter(c => c.toLowerCase() !== pathArg.toLowerCase())
-				.map(c => `${cmd} ${c}`)
+				.filter((c) => c.toLowerCase() !== pathArg.toLowerCase())
+				.map((c) => `${cmd} ${c}`)
 		}
 
 		// Only match the command part (first word) if no space
@@ -248,7 +253,7 @@ export default function Terminal() {
 							onKeyDown={handleKeyDown}
 							onFocus={focusTerminal}
 							className="absolute inset-0 w-full bg-transparent text-transparent caret-transparent outline-none"
-							style={{ fontSize: '16px' }}
+							style={{ fontSize: "16px" }}
 						/>
 						<span className="text-fg">{input}</span>
 						<span className="text-comment">{suggestion?.slice(input.length)}</span>

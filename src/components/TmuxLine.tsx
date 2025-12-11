@@ -12,6 +12,7 @@ const windows: WindowDef[] = [
 	{ id: 2, name: "zsh" },
 	{ id: 3, name: "fish:id4" },
 	{ id: 4, name: "sh:jp-unix" },
+	{ id: 5, name: "ssh:colossus" },
 ]
 
 export default function TmuxLine() {

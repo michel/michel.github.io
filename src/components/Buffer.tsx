@@ -60,7 +60,11 @@ export default function Buffer({ lines }: BufferProps) {
 			</div>
 
 			{/* Content - scrolls independently */}
-			<div ref={contentRef} className="h-full overflow-auto ml-[1.5rem]" style={{ maxWidth: "80ch" }}>
+			<div
+				ref={contentRef}
+				className="h-full overflow-auto ml-[1.5rem]"
+				style={{ maxWidth: "80ch" }}
+			>
 				<div
 					className="absolute top-0 bottom-0 bg-border opacity-30 hidden md:block"
 					style={{ left: "calc(1.5rem + 80ch)", width: "1ch" }}

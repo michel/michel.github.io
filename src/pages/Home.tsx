@@ -28,7 +28,6 @@ const logoLines = [
 	"     :==============================================.",
 ]
 
-
 export default function Home() {
 	usePageTitle()
 	const lines = [

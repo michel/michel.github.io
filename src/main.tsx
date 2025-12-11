@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")!).render(
 			apiKey="phc_Xiya7U8hHyMIzYg6YCQ8ZJEN3dnfCNTyIRJWr1mdO1J"
 			options={{
 				api_host: "https://eu.i.posthog.com",
-				defaults: '2025-05-24',
+				defaults: "2025-05-24",
 				capture_exceptions: true,
 				debug: import.meta.env.MODE === "development",
 			}}
