@@ -105,7 +105,7 @@ soundcloud: soundcloud.com/herrgraaf
 	},
 ]
 
-export type TmuxWindow = 0 | 1 | 2 | 3 | 4 | 5
+export type TmuxWindow = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 interface EditorState {
 	mode: VimMode
@@ -124,6 +124,7 @@ interface EditorState {
 	matrixComplete: boolean
 	independenceComplete: boolean
 	jurassicComplete: boolean
+	gladosComplete: boolean
 	snakeGameOpen: boolean
 	adventureGameOpen: boolean
 	cursorLine: number
@@ -156,6 +157,7 @@ interface EditorContextType extends EditorState {
 	setMatrixComplete: (complete: boolean) => void
 	setIndependenceComplete: (complete: boolean) => void
 	setJurassicComplete: (complete: boolean) => void
+	setGladosComplete: (complete: boolean) => void
 	openSnakeGame: () => void
 	closeSnakeGame: () => void
 	openAdventureGame: () => void
@@ -185,6 +187,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		matrixComplete: false,
 		independenceComplete: false,
 		jurassicComplete: false,
+		gladosComplete: false,
 		snakeGameOpen: false,
 		adventureGameOpen: false,
 		cursorLine: 0,
@@ -310,6 +313,10 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		setState((s) => ({ ...s, jurassicComplete: complete }))
 	}, [])
 
+	const setGladosComplete = useCallback((complete: boolean) => {
+		setState((s) => ({ ...s, gladosComplete: complete }))
+	}, [])
+
 	const openSnakeGame = useCallback(() => {
 		setState((s) => ({ ...s, snakeGameOpen: true }))
 	}, [])
@@ -370,6 +377,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 				setMatrixComplete,
 				setIndependenceComplete,
 				setJurassicComplete,
+				setGladosComplete,
 				openSnakeGame,
 				closeSnakeGame,
 				openAdventureGame,

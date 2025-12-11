@@ -6,6 +6,7 @@ import AdventureGame from "./AdventureGame"
 import ColossusTerminal from "./ColossusTerminal"
 import CommandLine from "./CommandLine"
 import FuzzyFinder from "./FuzzyFinder"
+import GladosTerminal from "./GladosTerminal"
 import HelpPopup from "./HelpPopup"
 import IndependenceTerminal from "./IndependenceTerminal"
 import JurassicTerminal from "./JurassicTerminal"
@@ -30,6 +31,7 @@ export default function Layout() {
 		matrixComplete,
 		independenceComplete,
 		jurassicComplete,
+		gladosComplete,
 		terminalOpen,
 		snakeGameOpen,
 		adventureGameOpen,
@@ -122,6 +124,10 @@ export default function Layout() {
 			) : activeTmuxWindow === 5 ? (
 				<div className="flex min-h-0 flex-1 overflow-hidden">
 					<ColossusTerminal />
+				</div>
+			) : activeTmuxWindow === 6 && !gladosComplete ? (
+				<div className="flex min-h-0 flex-1 overflow-hidden">
+					<GladosTerminal />
 				</div>
 			) : (
 				<div className="flex min-h-0 flex-1 overflow-hidden bg-bg-dark">
