@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom"
 import { useEditor } from "../context/EditorContext"
 import { useVimKeys } from "../hooks/useVimKeys"
 import AdventureGame from "./AdventureGame"
+import ColossusTerminal from "./ColossusTerminal"
 import CommandLine from "./CommandLine"
 import FuzzyFinder from "./FuzzyFinder"
 import HelpPopup from "./HelpPopup"
@@ -117,6 +118,10 @@ export default function Layout() {
 			) : activeTmuxWindow === 4 && !jurassicComplete ? (
 				<div className="flex min-h-0 flex-1 overflow-hidden">
 					<JurassicTerminal />
+				</div>
+			) : activeTmuxWindow === 5 ? (
+				<div className="flex min-h-0 flex-1 overflow-hidden">
+					<ColossusTerminal />
 				</div>
 			) : (
 				<div className="flex min-h-0 flex-1 overflow-hidden bg-bg-dark">

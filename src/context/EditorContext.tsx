@@ -105,7 +105,7 @@ soundcloud: soundcloud.com/herrgraaf
 	},
 ]
 
-export type TmuxWindow = 0 | 1 | 2 | 3 | 4
+export type TmuxWindow = 0 | 1 | 2 | 3 | 4 | 5
 
 interface EditorState {
 	mode: VimMode

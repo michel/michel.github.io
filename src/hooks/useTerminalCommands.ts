@@ -1,21 +1,16 @@
 import { allFiles } from "../context/EditorContext"
 import {
-	cowsay,
-	getNeofetchOutput,
-	getTopOutput,
-	npmTestOutput,
-} from "../data/terminalData"
-import {
-	resolvePath,
-	pathExists,
-	isDirectory,
-	getFileContent,
-	generateLsOutput,
 	generateLsLaOutput,
-	getPathCompletions,
-	toDisplayPath,
+	generateLsOutput,
 	getDirectoryContents,
+	getFileContent,
+	getPathCompletions,
+	isDirectory,
+	pathExists,
+	resolvePath,
+	toDisplayPath,
 } from "../data/filesystem"
+import { cowsay, getNeofetchOutput, getTopOutput, npmTestOutput } from "../data/terminalData"
 
 function parseRmFlags(args: string[]) {
 	const flags = { recursive: false, force: false, verbose: false, interactive: false, dir: false }
@@ -56,18 +51,17 @@ const commands: Record<string, CommandHandler> = {
 	neofetch: () => ({ output: getNeofetchOutput() }),
 
 	ls: (args, cwd) => {
-		const showAll = args.includes('-a') || args.includes('-la') || args.includes('-al')
-		const showLong = args.includes('-l') || args.includes('-la') || args.includes('-al')
+		const showAll = args.includes("-a") || args.includes("-la") || args.includes("-al")
+		const showLong = args.includes("-l") || args.includes("-la") || args.includes("-al")
 
 		// Get target directory (last non-flag arg, or cwd)
-		const targetArg = args.filter(a => !a.startsWith('-')).pop()
+		const targetArg = args.filter((a) => !a.startsWith("-")).pop()
 		const targetPath = targetArg ? resolvePath(targetArg, cwd) : cwd
 
 		if (!pathExists(targetPath))
 			return { output: [`ls: cannot access '${targetArg}': No such file or directory`] }
 
-		if (!isDirectory(targetPath))
-			return { output: [targetArg ?? ''] }
+		if (!isDirectory(targetPath)) return { output: [targetArg ?? ""] }
 
 		if (showLong) return { output: generateLsLaOutput(targetPath) }
 		return { output: generateLsOutput(targetPath, showAll) }
@@ -75,26 +69,26 @@ const commands: Record<string, CommandHandler> = {
 
 	cat: (args, cwd) => {
 		const filename = args[0]
-		if (!filename) return { output: ['cat: missing operand'] }
+		if (!filename) return { output: ["cat: missing operand"] }
 
 		const targetPath = resolvePath(filename, cwd)
 
 		if (!pathExists(targetPath)) {
 			// Fallback to allFiles for blog content
 			const file = allFiles.find(
-				f => f.name === filename ||
+				(f) =>
+					f.name === filename ||
 					f.name.includes(filename) ||
-					filename.includes(f.name.replace('.md', ''))
+					filename.includes(f.name.replace(".md", "")),
 			)
-			if (file) return { output: file.preview.split('\n') }
+			if (file) return { output: file.preview.split("\n") }
 			return { output: [`cat: ${filename}: No such file or directory`] }
 		}
 
-		if (isDirectory(targetPath))
-			return { output: [`cat: ${filename}: Is a directory`] }
+		if (isDirectory(targetPath)) return { output: [`cat: ${filename}: Is a directory`] }
 
 		const content = getFileContent(targetPath)
-		return { output: content ?? [''] }
+		return { output: content ?? [""] }
 	},
 
 	clear: () => ({ output: [], clear: true }),
@@ -422,7 +416,10 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasRecursive && (joinedArgs.includes("~") || joinedArgs.includes("$HOME") || joinedArgs.includes("/home")))
+		if (
+			hasRecursive &&
+			(joinedArgs.includes("~") || joinedArgs.includes("$HOME") || joinedArgs.includes("/home"))
+		)
 			return {
 				output: [
 					"\x1b[red]rm: permission denied: '/home/michel'\x1b[reset]",
@@ -449,7 +446,10 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasRecursive && (joinedArgs.includes("/etc") || joinedArgs.includes("/var") || joinedArgs.includes("/usr")))
+		if (
+			hasRecursive &&
+			(joinedArgs.includes("/etc") || joinedArgs.includes("/var") || joinedArgs.includes("/usr"))
+		)
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove system directories: Operation not permitted\x1b[reset]",
@@ -462,7 +462,12 @@ const commands: Record<string, CommandHandler> = {
 				],
 			}
 
-		if (hasRecursive && (joinedArgs.includes("/boot") || joinedArgs.includes("vmlinuz") || joinedArgs.includes("initrd")))
+		if (
+			hasRecursive &&
+			(joinedArgs.includes("/boot") ||
+				joinedArgs.includes("vmlinuz") ||
+				joinedArgs.includes("initrd"))
+		)
 			return {
 				output: [
 					"\x1b[red]rm: cannot remove '/boot': The kernel is watching\x1b[reset]",
@@ -541,7 +546,10 @@ const commands: Record<string, CommandHandler> = {
 				}
 			}
 
-			if (interactive) output.push(`rm: remove ${isDirectory(resolved) ? "directory" : "regular file"} '${target}'? y`)
+			if (interactive)
+				output.push(
+					`rm: remove ${isDirectory(resolved) ? "directory" : "regular file"} '${target}'? y`,
+				)
 			if (verbose) output.push(`removed '${target}'`)
 			output.push(`rm: cannot remove '${target}': Read-only file system`)
 		}
@@ -636,23 +644,23 @@ const commands: Record<string, CommandHandler> = {
 
 	cd: (args, cwd) => {
 		// No args = go home
-		if (!args[0]) return { output: [], newDirectory: '/home/michel' }
+		if (!args[0]) return { output: [], newDirectory: "/home/michel" }
 
 		const target = resolvePath(args[0], cwd)
 
-		if (!pathExists(target))
-			return { output: [`cd: ${args[0]}: No such file or directory`] }
+		if (!pathExists(target)) return { output: [`cd: ${args[0]}: No such file or directory`] }
 
-		if (!isDirectory(target))
-			return { output: [`cd: ${args[0]}: Not a directory`] }
+		if (!isDirectory(target)) return { output: [`cd: ${args[0]}: Not a directory`] }
 
 		// Easter egg for /root
-		if (target === '/root')
-			return { output: [
-				`cd: ${args[0]}: Permission denied`,
-				'',
-				'\x1b[comment]Nice try, but you\'re not root. I use Arch btw.\x1b[reset]'
-			]}
+		if (target === "/root")
+			return {
+				output: [
+					`cd: ${args[0]}: Permission denied`,
+					"",
+					"\x1b[comment]Nice try, but you're not root. I use Arch btw.\x1b[reset]",
+				],
+			}
 
 		return { output: [], newDirectory: target }
 	},
@@ -1490,7 +1498,7 @@ export const availableCommands = Object.keys(commands).sort()
 // Re-export for Terminal autocomplete
 export { getPathCompletions, toDisplayPath }
 
-export function executeCommand(input: string, cwd: string = '/home/michel/blog'): CommandResult {
+export function executeCommand(input: string, cwd: string = "/home/michel/blog"): CommandResult {
 	const parts = input.trim().split(/\s+/)
 	const cmd = (parts[0] ?? "").toLowerCase()
 	const args = parts.slice(1)
