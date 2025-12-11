@@ -33,6 +33,7 @@ export function useVimKeys() {
 		adventureGameOpen,
 		snakeGameOpen,
 		moveCursor,
+		activeTmuxWindow,
 	} = useEditor()
 
 	const visibleNodes = useMemo(
@@ -86,7 +87,14 @@ export function useVimKeys() {
 				return
 			}
 
-			if (commandLineOpen || fuzzyFinderOpen || helpPopupOpen || adventureGameOpen || snakeGameOpen)
+			if (
+				commandLineOpen ||
+				fuzzyFinderOpen ||
+				helpPopupOpen ||
+				adventureGameOpen ||
+				snakeGameOpen ||
+				activeTmuxWindow !== 1
+			)
 				return
 			if (isInput && mode !== "NORMAL") return
 
@@ -235,5 +243,6 @@ export function useVimKeys() {
 		focusTerminal,
 		unfocusTerminal,
 		moveCursor,
+		activeTmuxWindow,
 	])
 }
