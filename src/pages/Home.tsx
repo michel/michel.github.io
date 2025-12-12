@@ -1,8 +1,20 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Buffer from "../components/Buffer"
 import { useEditor } from "../context/EditorContext"
 import { content } from "../data/content"
 import { usePageTitle } from "../hooks/usePageTitle"
+
+const useIsMobile = () => {
+	const [isMobile, setIsMobile] = useState(false)
+	useEffect(() => {
+		const check = () => setIsMobile(window.innerWidth < 768)
+		check()
+		window.addEventListener("resize", check)
+		return () => window.removeEventListener("resize", check)
+	}, [])
+	return isMobile
+}
 
 const logoLines = [
 	"                        -=:        :=",
@@ -42,6 +54,7 @@ const Line = ({ children }: { children: React.ReactNode }) => (
 
 const InfoBox = () => {
 	const { queueTerminalCommand } = useEditor()
+	const isMobile = useIsMobile()
 
 	const Cmd = ({ cmd, desc }: { cmd: string; desc: string }) => (
 		<Line>
@@ -54,6 +67,13 @@ const InfoBox = () => {
 	return (
 		<div className="font-mono" style={{ width: `${BOX_CHARS + 2}ch` }}>
 			<div className="text-green font-bold">╔{"═".repeat(BOX_CHARS)}╗</div>
+			{isMobile && (
+				<>
+					<Line> </Line>
+					<Line>  <span className="text-orange font-bold">For the best experience, use a desktop/laptop</span></Line>
+					<Line>  <span className="text-orange font-bold">with a keyboard.</span></Line>
+				</>
+			)}
 			<Line>  <span className="text-cyan font-bold">What am I looking at?</span></Line>
 			<Line> </Line>
 			<Line>  This website simulates a <span className="text-yellow">terminal</span> + <a href="https://github.com/neovim/neovim" target="_blank" rel="noopener noreferrer" className="text-yellow hover:underline">nvim</a> + <a href="https://github.com/tmux/tmux" target="_blank" rel="noopener noreferrer" className="text-yellow hover:underline">tmux</a> setup.</Line>
