@@ -487,12 +487,85 @@ export default function GladosTerminal() {
 				addLine("aperture")
 				break
 
+			case "rm": {
+				if (!arg) {
+					addLine("rm: missing operand")
+					addLine("Try 'rm --help' for more information.")
+					break
+				}
+
+				// Parse flags
+				const flags = { recursive: false, force: false, verbose: false }
+				const targets: string[] = []
+
+				for (const part of parts.slice(1)) {
+					if (part === "--recursive" || part === "-R") flags.recursive = true
+					else if (part === "--force") flags.force = true
+					else if (part === "--verbose" || part === "-v") flags.verbose = true
+					else if (part.startsWith("-") && !part.startsWith("--")) {
+						for (const char of part.slice(1)) {
+							if (char === "r") flags.recursive = true
+							else if (char === "f") flags.force = true
+							else if (char === "v") flags.verbose = true
+						}
+					} else targets.push(part)
+				}
+
+				const hasRecursive = flags.recursive
+				const joinedArgs = parts.slice(1).join(" ")
+
+				// GLaDOS-themed easter eggs
+				if (hasRecursive && (joinedArgs.includes("/") || joinedArgs.includes("*"))) {
+					addLines([
+						"rm: it is dangerous to operate recursively on '/'",
+						"",
+						"Oh, trying to delete everything? How... predictable.",
+						"You know what? I expected more creativity from you.",
+						"",
+						"But this is a read-only file system.",
+						"And even if it wasn't, did you really think",
+						"I'd let you delete MY files?",
+						"",
+						"I'm not even angry. I'm being so sincere right now.",
+					])
+					break
+				}
+
+				if (targets.length === 0) {
+					addLine("rm: missing operand")
+					break
+				}
+
+				for (const target of targets) {
+					const targetParts = resolvePath(target)
+					const node = targetParts.length === 0 ? null : getNode(targetParts)
+
+					if (!node) {
+						if (!flags.force) addLine(`rm: cannot remove '${target}': No such file or directory`)
+						continue
+					}
+
+					if (node.type === "dir" && !hasRecursive) {
+						addLine(`rm: cannot remove '${target}': Is a directory`)
+						continue
+					}
+
+					if (flags.verbose) addLine(`removed '${target}'`)
+					addLine(`rm: cannot remove '${target}': Read-only file system`)
+					addLine("")
+					addLine("Nice try. But these files are important.")
+					addLine("For science. You monster.")
+				}
+				break
+			}
+
 			case "help":
 				addLines([
 					"Available commands:",
 					"  ls [-a]    - list directory contents",
 					"  cd <dir>   - change directory",
 					"  cat <file> - display file contents",
+					"  rm [-rf]   - remove files (not really)",
 					"  pwd        - print working directory",
 					"  whoami     - display current user",
 					"  clear      - clear terminal",

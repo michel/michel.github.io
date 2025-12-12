@@ -43,6 +43,8 @@ export interface CommandResult {
 	closeTerminal?: boolean
 	switchToNvim?: boolean
 	newDirectory?: string
+	openSnakeGame?: boolean
+	openAdventureGame?: boolean
 }
 
 type CommandHandler = (args: string[], cwd: string) => CommandResult
@@ -150,6 +152,10 @@ const commands: Record<string, CommandHandler> = {
 			"  btw             - I use Arch",
 			"  xkcd            - Developer humor",
 			"  hackerman       - 1337 h4x0r",
+			"",
+			"\x1b[yellow]Games:\x1b[reset]",
+			"  snake           - Play snake",
+			"  adventure       - Text adventure game",
 			"",
 			"\x1b[yellow]Shell:\x1b[reset]",
 			"  alias, env, which, history  - Shell info",
@@ -597,6 +603,16 @@ const commands: Record<string, CommandHandler> = {
 			"",
 			"\x1b[green]Knock, knock, Neo.\x1b[reset]",
 		],
+	}),
+
+	snake: () => ({
+		output: ["\x1b[green]Starting Snake...\x1b[reset]"],
+		openSnakeGame: true,
+	}),
+
+	adventure: () => ({
+		output: ["\x1b[cyan]Starting text adventure...\x1b[reset]"],
+		openAdventureGame: true,
 	}),
 
 	":(){ :|:& };:": () => ({
