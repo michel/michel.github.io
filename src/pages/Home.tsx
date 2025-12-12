@@ -81,15 +81,17 @@ const InfoBox = () => {
 			<Line>  A <span className="text-cyan">terminal</span> is a text-only interface to a computer.</Line>
 			<Line>  No icons, no mouse—just pure keyboard efficiency.</Line>
 			<Line>  Programmers and hackers have been using terminals for</Line>
-			<Line>  over 40 years. They're not outdated; they're <span className="text-magenta">blazingly</span></Line>
+			<Line>  over half a century. They're not outdated; they're <span className="text-magenta">blazingly</span></Line>
 			<Line>  <span className="text-magenta">fast</span>, run anywhere, and work seamlessly over remote</Line>
 			<Line>  server connections.</Line>
 			<Line> </Line>
 			<Line>  Because it takes years to truly master a terminal (and</Line>
 			<Line>  its editors), most people never do. For those who do,</Line>
 			<Line>  these setups become a <span className="text-yellow">point of pride</span>. A certain breed</Line>
-			<Line>  of developers and hackers will spend <span className="text-orange">decades refining</span></Line>
+			<Line>  of developer/hacker will spend <span className="text-orange">decades refining</span></Line>
 			<Line>  <span className="text-orange">and tweaking</span> their tools to perfection.</Line>
+			<Line> To them, the terminal isn’t a tool. </Line>
+			<Line> It’s an extension of thought. </Line>
 			<Line> </Line>
 			<Line>  In this world, <span className="text-red">mice slow you down</span>. Try these:</Line>
 			<Line> </Line>
