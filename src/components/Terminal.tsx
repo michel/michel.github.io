@@ -61,8 +61,17 @@ const generateId = () =>
 		: Math.random().toString(36).slice(2)
 
 export default function Terminal() {
-	const { terminalFocused, focusTerminal, unfocusTerminal, closeTerminal, setActiveTmuxWindow } =
-		useEditor()
+	const {
+		terminalFocused,
+		focusTerminal,
+		unfocusTerminal,
+		closeTerminal,
+		setActiveTmuxWindow,
+		pendingTerminalCommand,
+		clearPendingCommand,
+		openSnakeGame,
+		openAdventureGame,
+	} = useEditor()
 	const [currentDirectory, setCurrentDirectory] = useState("/home/michel/blog")
 	const [history, setHistory] = useState<TerminalLine[]>(() => {
 		// Run neofetch on initial mount
@@ -87,6 +96,19 @@ export default function Terminal() {
 	useEffect(() => {
 		if (containerRef.current) containerRef.current.scrollTop = containerRef.current.scrollHeight
 	}, [history])
+
+	useEffect(() => {
+		if (!pendingTerminalCommand) return
+		const result = executeCommand(pendingTerminalCommand, currentDirectory)
+		setHistory((h) => [
+			...h,
+			{ id: generateId(), type: "input", content: pendingTerminalCommand, cwd: currentDirectory },
+			...result.output.map((content) => ({ id: generateId(), type: "output" as const, content })),
+		])
+		setCommandHistory((h) => [...h, pendingTerminalCommand])
+		if (result.newDirectory) setCurrentDirectory(result.newDirectory)
+		clearPendingCommand()
+	}, [pendingTerminalCommand, currentDirectory, clearPendingCommand])
 
 	const addLine = (type: "input" | "output", content: string, cwd?: string) => {
 		setHistory((h) => [...h, { id: generateId(), type, content, cwd }])
@@ -155,6 +177,14 @@ export default function Terminal() {
 
 		if (result.switchToNvim) {
 			setTimeout(() => setActiveTmuxWindow(1), 500)
+		}
+
+		if (result.openSnakeGame) {
+			setTimeout(() => openSnakeGame(), 300)
+		}
+
+		if (result.openAdventureGame) {
+			setTimeout(() => openAdventureGame(), 300)
 		}
 
 		setInput("")

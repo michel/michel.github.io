@@ -36,7 +36,9 @@ export default function Layout() {
 		snakeGameOpen,
 		adventureGameOpen,
 	} = useEditor()
-	const [terminalHeight, setTerminalHeight] = useState(300)
+	const [terminalHeight, setTerminalHeight] = useState(() =>
+		typeof window !== "undefined" ? Math.floor(window.innerHeight * 0.4) : 300,
+	)
 	const [isResizing, setIsResizing] = useState(false)
 
 	const handleMouseDown = useCallback((e: React.MouseEvent) => {

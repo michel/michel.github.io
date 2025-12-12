@@ -703,6 +703,18 @@ export const filesystem: Record<string, FSEntry> = {
 			"\x1b[comment]Don't store backup codes in plaintext.\x1b[reset]",
 		],
 	},
+	"/home/michel/status.rs": {
+		type: "file",
+		content: [
+			"\x1b[keyword]let\x1b[reset] status = \x1b[cyan]Status\x1b[reset] {",
+			"    role: \x1b[green]\"Tech Lead\"\x1b[reset],",
+			"    loc: \x1b[green]\"NL\"\x1b[reset],",
+			"    remote: \x1b[yellow]true\x1b[reset],",
+			"    hybrid: \x1b[yellow]true\x1b[reset],",
+			"    open_for_work: \x1b[yellow]true\x1b[reset],",
+			"};",
+		],
+	},
 	"/home/michel/.metamask": { type: "dir" },
 
 	// /home/michel/blog - THE STARTING DIRECTORY

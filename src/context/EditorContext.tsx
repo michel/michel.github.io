@@ -129,6 +129,7 @@ interface EditorState {
 	adventureGameOpen: boolean
 	cursorLine: number
 	lineCount: number
+	pendingTerminalCommand: string | null
 }
 
 interface EditorContextType extends EditorState {
@@ -165,6 +166,8 @@ interface EditorContextType extends EditorState {
 	setCursorLine: (line: number) => void
 	setLineCount: (count: number) => void
 	moveCursor: (direction: "up" | "down") => void
+	queueTerminalCommand: (cmd: string) => void
+	clearPendingCommand: () => void
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -192,6 +195,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		adventureGameOpen: false,
 		cursorLine: 0,
 		lineCount: 0,
+		pendingTerminalCommand: null,
 	})
 
 	const setMode = useCallback((mode: VimMode) => {
@@ -348,6 +352,19 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		})
 	}, [])
 
+	const queueTerminalCommand = useCallback((cmd: string) => {
+		setState((s) => ({
+			...s,
+			terminalOpen: true,
+			terminalFocused: true,
+			pendingTerminalCommand: cmd,
+		}))
+	}, [])
+
+	const clearPendingCommand = useCallback(() => {
+		setState((s) => ({ ...s, pendingTerminalCommand: null }))
+	}, [])
+
 	return (
 		<EditorContext.Provider
 			value={{
@@ -385,6 +402,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 				setCursorLine,
 				setLineCount,
 				moveCursor,
+				queueTerminalCommand,
+				clearPendingCommand,
 			}}
 		>
 			{children}
