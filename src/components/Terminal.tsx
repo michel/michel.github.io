@@ -263,7 +263,7 @@ export default function Terminal() {
 					<div key={line.id} className="whitespace-pre break-all">
 						{line.type === "input" ? (
 							<>
-								<span className="text-green">michel@archlinux</span>
+								<span className="text-green">michel@spaceheater</span>
 								<span className="text-fg">:</span>
 								<span className="text-cyan">{toDisplayPath(line.cwd ?? "/home/michel/blog")}</span>
 								<span className="text-fg">$ {line.content}</span>
@@ -275,7 +275,7 @@ export default function Terminal() {
 				))}
 
 				<div className="flex whitespace-pre-wrap break-all">
-					<span className="text-green">michel@archlinux</span>
+					<span className="text-green">michel@spaceheater</span>
 					<span className="text-fg">:</span>
 					<span className="text-cyan">{toDisplayPath(currentDirectory)}</span>
 					<span className="text-fg">$ </span>
