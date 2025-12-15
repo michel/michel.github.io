@@ -121,7 +121,12 @@ export default function Terminal() {
 		const lower = trimmed.toLowerCase()
 
 		// Check if we're completing a file argument for cat, less, more, or cd
-		if (lower.startsWith("cat ") || lower.startsWith("cd ") || lower.startsWith("less ") || lower.startsWith("more ")) {
+		if (
+			lower.startsWith("cat ") ||
+			lower.startsWith("cd ") ||
+			lower.startsWith("less ") ||
+			lower.startsWith("more ")
+		) {
 			const cmd = lower.split(" ")[0] ?? ""
 			const pathArg = trimmed.slice(cmd.length + 1)
 			const completions = getPathCompletions(pathArg, currentDirectory)
