@@ -1,4 +1,4 @@
-import { allFiles } from "../context/EditorContext"
+import { getFileByName, getFileByTerminalPath } from "../data/files"
 import {
 	generateLsLaOutput,
 	generateLsOutput,
@@ -76,14 +76,9 @@ const commands: Record<string, CommandHandler> = {
 		const targetPath = resolvePath(filename, cwd)
 
 		if (!pathExists(targetPath)) {
-			// Fallback to allFiles for blog content
-			const file = allFiles.find(
-				(f) =>
-					f.name === filename ||
-					f.name.includes(filename) ||
-					filename.includes(f.name.replace(".md", "")),
-			)
-			if (file) return { output: file.preview.split("\n") }
+			// Fallback to unified file lookup for blog content
+			const file = getFileByTerminalPath(targetPath) ?? getFileByName(filename)
+			if (file) return { output: file.content }
 			return { output: [`cat: ${filename}: No such file or directory`] }
 		}
 
