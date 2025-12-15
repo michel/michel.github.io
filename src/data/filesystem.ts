@@ -1,10 +1,18 @@
 // Virtual filesystem for the terminal simulator
 // Simulates a minimal Arch Linux system with /home/michel/blog as the starting directory
 
+import { files, type FileId } from "./files"
+
 export interface FSEntry {
 	type: "file" | "dir"
 	content?: string[] // for files
 }
+
+// Helper to create file entry from unified lookup
+const fromLookup = (id: FileId): FSEntry => ({
+	type: "file",
+	content: [...files[id].content],
+})
 
 // Flat map filesystem - paths as keys
 export const filesystem: Record<string, FSEntry> = {
@@ -719,37 +727,7 @@ export const filesystem: Record<string, FSEntry> = {
 
 	// /home/michel/blog - THE STARTING DIRECTORY
 	"/home/michel/blog": { type: "dir" },
-	"/home/michel/blog/README.md": {
-		type: "file",
-		content: [
-			"# Michel's Blog",
-			"",
-			"Welcome to the source code of my personal website.",
-			"",
-			"## Tech Stack",
-			"- React (yes, I know)",
-			"- TypeScript (the good parts)",
-			"- Vite (blazingly fast, they say)",
-			"- TailwindCSS (utility-first cope)",
-			"",
-			"## Running locally",
-			"npm install  # get coffee",
-			"npm run dev  # pray",
-			"",
-			"## Philosophy",
-			"This site is designed to look like a terminal because:",
-			"1. I miss the 90s",
-			"2. Recruiters love gimmicks",
-			"3. I use Arch btw",
-			"",
-			"## Easter Eggs",
-			"Try: cat /etc/passwd",
-			"Try: sudo rm -rf /",
-			"Try: hackerman",
-			"",
-			"\x1b[comment]Good luck finding them all.\x1b[reset]",
-		],
-	},
+	"/home/michel/blog/README.md": fromLookup("home"),
 	"/home/michel/blog/package.json": {
 		type: "file",
 		content: [
@@ -874,33 +852,9 @@ export const filesystem: Record<string, FSEntry> = {
 	},
 	"/home/michel/blog/node_modules": { type: "dir" },
 	"/home/michel/blog/posts": { type: "dir" },
-	"/home/michel/blog/posts/learning-rust.md": {
-		type: "file",
-		content: [
-			"# Learning Rust the Hard Way",
-			"",
-			"*Published: December 4, 2024*",
-			"",
-			"## Day 1",
-			"Installed Rust. Cargo is nice.",
-			"",
-			"## Day 2",
-			"The borrow checker yelled at me.",
-			"",
-			"## Day 3",
-			"The borrow checker is still yelling.",
-			"",
-			"## Day 30",
-			"I finally understand lifetimes.",
-			"Just kidding, nobody understands lifetimes.",
-			"",
-			"## Day 90",
-			"Rewrote everything in Rust.",
-			"It's 10x faster and I'm 10x more confused.",
-			"",
-			"\x1b[comment]I use Rust btw. Almost as cool as Arch btw.\x1b[reset]",
-		],
-	},
+	"/home/michel/blog/posts/learning-rust.md": fromLookup("rust"),
+	"/home/michel/blog/about_michel.man": fromLookup("cv"),
+	"/home/michel/blog/contact_card.vcf": fromLookup("contact"),
 	"/home/michel/blog/src": { type: "dir" },
 	"/home/michel/blog/src/main.tsx": {
 		type: "file",

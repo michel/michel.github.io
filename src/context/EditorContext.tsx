@@ -1,4 +1,5 @@
 import { createContext, type ReactNode, useCallback, useContext, useState } from "react"
+import { files, type FileId, getPreview } from "../data/files"
 
 export type VimMode = "NORMAL" | "INSERT" | "VISUAL" | "COMMAND"
 
@@ -10,6 +11,7 @@ export interface FileNode {
 	children?: FileNode[]
 }
 
+// File tree derived from unified lookup table
 export const fileTree: FileNode[] = [
 	{
 		id: "posts",
@@ -18,16 +20,16 @@ export const fileTree: FileNode[] = [
 		type: "folder",
 		children: [
 			{
-				id: "rust",
-				name: "learning_rust_the_hard_way.md",
-				path: "/posts/learning-rust-the-hard-way",
+				id: files.rust.id,
+				name: files.rust.name,
+				path: files.rust.path,
 				type: "file",
 			},
 		],
 	},
-	{ id: "home", name: "README.md", path: "/", type: "file" },
-	{ id: "cv", name: "about_michel.man", path: "/about", type: "file" },
-	{ id: "contact", name: "contact_card.vcf", path: "/contact", type: "file" },
+	{ id: files.home.id, name: files.home.name, path: files.home.path, type: "file" },
+	{ id: files.cv.id, name: files.cv.name, path: files.cv.path, type: "file" },
+	{ id: files.contact.id, name: files.contact.name, path: files.contact.path, type: "file" },
 ]
 
 export function flattenVisibleTree(nodes: FileNode[], expandedFolders: Set<string>): FileNode[] {
@@ -40,70 +42,13 @@ export function flattenVisibleTree(nodes: FileNode[], expandedFolders: Set<strin
 	return result
 }
 
-export const allFiles = [
-	{
-		id: "home",
-		name: "README.md",
-		path: "/",
-		preview: `# Welcome to the system.
-// Press <Ctrl>+p to fuzzy search files.
-// Use h/j/k/l to navigate if you're cool.
-
-const status = {
-  role: "Tech Lead",
-  loc: "NL",
-  open_for_work: true
-}`,
-	},
-	{
-		id: "rust",
-		name: "learning_rust_the_hard_way.md",
-		path: "/posts/learning-rust-the-hard-way",
-		preview: `---
-title: "Learning Rust the Hard Way"
-date: "2025-12-04"
----
-
-# Learning Rust the hard way: reverse engineering
-# a 2000s P2P protocol
-
-I wanted to really learn Rust. Not tutorials.
-Not toy projects. Real systems programming.
-
-So I picked Soulseek, the underground music
-sharing network from the early 2000s.`,
-	},
-	{
-		id: "cv",
-		name: "about_michel.man",
-		path: "/about",
-		preview: `MICHEL(1)              General Commands Manual
-
-NAME
-    Michel de Graaf - Tech Lead / Software Engineer
-
-SYNOPSIS
-    michel [--role tech_lead] [--exp 22_years]
-
-DESCRIPTION
-    Tech lead with 22+ years of experience designing
-    and building complete systems from the ground up.`,
-	},
-	{
-		id: "contact",
-		name: "contact_card.vcf",
-		path: "/contact",
-		preview: `Email: michel@re-invention.nl
-phone: +31 (0)6 36 42 74 07
-web: re-invention.nl
-
-hithub: github.com/michel
-x.com: @micheldegraaf
-linkedIn: linkedin.com/in/micheldegraaf
-soundcloud: soundcloud.com/herrgraaf
-`,
-	},
-]
+// All files derived from unified lookup table
+export const allFiles = Object.values(files).map((f) => ({
+	id: f.id,
+	name: f.name,
+	path: f.path,
+	preview: getPreview(f.id as FileId),
+}))
 
 export type TmuxWindow = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
