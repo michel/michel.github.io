@@ -34,6 +34,7 @@ export function useVimKeys() {
 		snakeGameOpen,
 		moveCursor,
 		activeTmuxWindow,
+		setActiveTmuxWindow,
 	} = useEditor()
 
 	const visibleNodes = useMemo(
@@ -84,6 +85,13 @@ export function useVimKeys() {
 			if (e.ctrlKey && e.code === "Backquote") {
 				e.preventDefault()
 				toggleTerminal()
+				return
+			}
+
+			// Alt+0 through Alt+6 switches tmux windows
+			if (e.altKey && e.key >= "0" && e.key <= "6") {
+				e.preventDefault()
+				setActiveTmuxWindow(Number.parseInt(e.key) as 0 | 1 | 2 | 3 | 4 | 5 | 6)
 				return
 			}
 
@@ -244,5 +252,6 @@ export function useVimKeys() {
 		unfocusTerminal,
 		moveCursor,
 		activeTmuxWindow,
+		setActiveTmuxWindow,
 	])
 }
