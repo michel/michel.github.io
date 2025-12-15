@@ -262,7 +262,7 @@ export const filesystem: Record<string, FSEntry> = {
 		content: [
 			"",
 			" \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510",
-			" \u2502  \x1b[cyan]Welcome to archbtw\x1b[reset]                           \u2502",
+			" \u2502  \x1b[cyan]Welcome to spaceheater\x1b[reset]                           \u2502",
 			" \u2502                                               \u2502",
 			" \u2502  Kernel: 6.9.420-arch1-1-BLAZINGLY-FAST       \u2502",
 			" \u2502  Uptime: 1337 days                            \u2502",
@@ -277,7 +277,7 @@ export const filesystem: Record<string, FSEntry> = {
 			"",
 		],
 	},
-	"/etc/hostname": { type: "file", content: ["archbtw"] },
+	"/etc/hostname": { type: "file", content: ["spaceheater"] },
 	"/etc/os-release": {
 		type: "file",
 		content: [
@@ -298,7 +298,7 @@ export const filesystem: Record<string, FSEntry> = {
 	"/proc/version": {
 		type: "file",
 		content: [
-			"Linux version 6.9.420-arch1-1-BLAZINGLY-FAST (michel@archbtw) (gcc (GCC) 13.37.0, GNU ld (GNU Binutils) 2.69) #1 SMP PREEMPT_DYNAMIC Thu, 01 Jan 1970 00:00:00 +0000",
+			"Linux version 6.9.420-arch1-1-BLAZINGLY-FAST (michel@spaceheater) (gcc (GCC) 13.37.0, GNU ld (GNU Binutils) 2.69) #1 SMP PREEMPT_DYNAMIC Thu, 01 Jan 1970 00:00:00 +0000",
 			"",
 			"\x1b[comment]Custom kernel compiled by hand. As the gods intended.\x1b[reset]",
 		],
@@ -362,17 +362,17 @@ export const filesystem: Record<string, FSEntry> = {
 	"/var/log/auth.log": {
 		type: "file",
 		content: [
-			"Dec  9 03:14:15 archbtw sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
-			"Dec  9 03:14:16 archbtw sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
-			"Dec  9 03:14:17 archbtw sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
-			"Dec  9 03:14:18 archbtw sshd[1337]: Connection closed by 192.168.1.100 port 22 [preauth]",
-			"Dec  9 03:14:19 archbtw sshd[1338]: Accepted publickey for michel from 127.0.0.1 port 31337 ssh2",
-			"Dec  9 03:14:20 archbtw sshd[1339]: Failed password for admin from 45.227.255.206 port 52341 ssh2",
-			"Dec  9 03:14:21 archbtw sshd[1339]: Failed password for admin from 45.227.255.206 port 52341 ssh2",
-			"Dec  9 03:14:22 archbtw sshd[1340]: Invalid user postgres from 185.234.219.42 port 43721",
-			"Dec  9 03:14:23 archbtw sshd[1341]: Invalid user oracle from 89.248.167.131 port 38291",
-			"Dec  9 03:14:24 archbtw sshd[1342]: Invalid user test from 171.25.193.78 port 29182",
-			"Dec  9 03:14:25 archbtw sudo: hackerman : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/bash",
+			"Dec  9 03:14:15 spaceheater sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
+			"Dec  9 03:14:16 spaceheater sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
+			"Dec  9 03:14:17 spaceheater sshd[1337]: Failed password for root from 192.168.1.100 port 22 ssh2",
+			"Dec  9 03:14:18 spaceheater sshd[1337]: Connection closed by 192.168.1.100 port 22 [preauth]",
+			"Dec  9 03:14:19 spaceheater sshd[1338]: Accepted publickey for michel from 127.0.0.1 port 31337 ssh2",
+			"Dec  9 03:14:20 spaceheater sshd[1339]: Failed password for admin from 45.227.255.206 port 52341 ssh2",
+			"Dec  9 03:14:21 spaceheater sshd[1339]: Failed password for admin from 45.227.255.206 port 52341 ssh2",
+			"Dec  9 03:14:22 spaceheater sshd[1340]: Invalid user postgres from 185.234.219.42 port 43721",
+			"Dec  9 03:14:23 spaceheater sshd[1341]: Invalid user oracle from 89.248.167.131 port 38291",
+			"Dec  9 03:14:24 spaceheater sshd[1342]: Invalid user test from 171.25.193.78 port 29182",
+			"Dec  9 03:14:25 spaceheater sudo: hackerman : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/bash",
 			"",
 			"\x1b[red]Lots of failed attempts. Good thing I use SSH keys.\x1b[reset]",
 			"\x1b[comment]Also good thing this isn't real.\x1b[reset]",
@@ -396,12 +396,12 @@ export const filesystem: Record<string, FSEntry> = {
 	"/var/log/syslog": {
 		type: "file",
 		content: [
-			"Dec  9 00:00:00 archbtw systemd[1]: Started Daily man-db regeneration.",
-			"Dec  9 00:00:01 archbtw systemd[1]: man-db.service: Succeeded.",
-			"Dec  9 03:00:00 archbtw systemd[1]: Starting Daily npm install...",
-			"Dec  9 03:45:00 archbtw npm[1337]: added 31337 packages in 45m",
-			"Dec  9 03:45:01 archbtw npm[1337]: found 420 vulnerabilities",
-			"Dec  9 03:45:02 archbtw systemd[1]: npm-install.service: This is fine.",
+			"Dec  9 00:00:00 spaceheater systemd[1]: Started Daily man-db regeneration.",
+			"Dec  9 00:00:01 spaceheater systemd[1]: man-db.service: Succeeded.",
+			"Dec  9 03:00:00 spaceheater systemd[1]: Starting Daily npm install...",
+			"Dec  9 03:45:00 spaceheater npm[1337]: added 31337 packages in 45m",
+			"Dec  9 03:45:01 spaceheater npm[1337]: found 420 vulnerabilities",
+			"Dec  9 03:45:02 spaceheater systemd[1]: npm-install.service: This is fine.",
 			"",
 			"\x1b[comment]45 minutes for npm install. New record!\x1b[reset]",
 		],
@@ -505,7 +505,7 @@ export const filesystem: Record<string, FSEntry> = {
 		content: [
 			"[user]",
 			"    name = Michel",
-			"    email = michel@archbtw.local",
+			"    email = michel@spaceheater.local",
 			"[core]",
 			"    editor = nvim",
 			"    pager = delta",
@@ -563,7 +563,7 @@ export const filesystem: Record<string, FSEntry> = {
 	"/home/michel/.ssh/authorized_keys": {
 		type: "file",
 		content: [
-			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... michel@archbtw",
+			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... michel@spaceheater",
 			"ssh-rsa AAAAB3NzaC1yc2EAAAA... hackerman@dev-null",
 			"",
 			"\x1b[comment]Only the finest public keys are authorized here.\x1b[reset]",

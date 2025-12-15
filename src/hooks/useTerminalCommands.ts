@@ -786,7 +786,7 @@ const commands: Record<string, CommandHandler> = {
 		}
 	},
 
-	hostname: () => ({ output: ["archbtw"] }),
+	hostname: () => ({ output: ["spaceheater"] }),
 
 	id: () => ({
 		output: [
