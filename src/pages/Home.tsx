@@ -72,6 +72,7 @@ const InfoBox = () => {
 					<Line> </Line>
 					<Line>  <span className="text-orange font-bold">For the best experience, use a desktop/laptop</span></Line>
 					<Line>  <span className="text-orange font-bold">with a keyboard.</span></Line>
+					<Line> </Line>
 				</>
 			)}
 			<Line>  <span className="text-cyan font-bold">What am I looking at?</span></Line>
@@ -134,10 +135,6 @@ export default function Home() {
 			<span className="text-fg">&nbsp;&nbsp;&nbsp;&nbsp;re-invention b.v.</span>
 			{"                         "}
 			<span className="text-yellow">v1337</span>
-		</span>,
-		"",
-		<span key="welcome" className="text-magenta">
-			# Welcome to the system.
 		</span>,
 		"",
 		<InfoBox key="readme-box" />,
