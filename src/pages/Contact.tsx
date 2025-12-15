@@ -44,7 +44,7 @@ export default function Contact() {
 				</div>
 				<br />
 				<div>
-					<span className="text-comment">-- Socials --</span>
+					<span className="text-comment">{"//  Socials "}</span>
 				</div>
 				<div className="grid grid-cols-[auto_auto] gap-x-6">
 					<span>
