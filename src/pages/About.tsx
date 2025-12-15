@@ -24,7 +24,7 @@ const ManEntry = ({
 	</div>,
 	...(tech
 		? [
-				<div key={`${id}-tech`} className="text-cyan text-xs">
+				<div key={`${id}-tech`} className="text-cyan">
 					[ {tech.join(", ")} ]
 				</div>,
 			]
@@ -38,7 +38,7 @@ export default function About() {
 		<h1 key="title" className="text-2xl font-bold text-fg">
 			MICHEL(1)
 		</h1>,
-		<div key="subtitle" className="text-comment uppercase text-sm">
+		<div key="subtitle" className="text-comment uppercase">
 			General Commands Manual
 		</div>,
 		"",

@@ -29,7 +29,7 @@ export default function Lightbox({ src, alt }: LightboxProps) {
 					onClick={() => setIsOpen(true)}
 					className="max-w-full cursor-pointer rounded border border-border transition-opacity hover:opacity-80"
 				/>
-				<span className="text-comment text-sm">{`// ${alt}`}</span>
+				<span className="text-comment">{`// ${alt}`}</span>
 			</div>
 
 			{isOpen && (

@@ -253,7 +253,7 @@ export default function Terminal() {
 
 	return (
 		<div className="flex h-full flex-col bg-bg-dark" onClick={handleClick}>
-			<div ref={containerRef} className="flex-1 overflow-auto p-2 font-mono text-sm">
+			<div ref={containerRef} className="flex-1 overflow-auto p-2 font-mono">
 				{history.map((line) => (
 					<div key={line.id} className="whitespace-pre break-all">
 						{line.type === "input" ? (
