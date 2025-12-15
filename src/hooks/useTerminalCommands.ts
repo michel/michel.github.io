@@ -93,6 +93,26 @@ const commands: Record<string, CommandHandler> = {
 		return { output: content ?? [""] }
 	},
 
+	less: (args, cwd) => {
+		const filename = args[0]
+		if (!filename) return { output: ["Missing filename"] }
+		const targetPath = resolvePath(filename, cwd)
+		if (!pathExists(targetPath)) return { output: [`less: ${filename}: No such file or directory`] }
+		if (isDirectory(targetPath)) return { output: [`less: ${filename}: Is a directory`] }
+		const content = getFileContent(targetPath)
+		return { output: content ?? ["(empty file)"] }
+	},
+
+	more: (args, cwd) => {
+		const filename = args[0]
+		if (!filename) return { output: ["Missing filename"] }
+		const targetPath = resolvePath(filename, cwd)
+		if (!pathExists(targetPath)) return { output: [`more: ${filename}: No such file or directory`] }
+		if (isDirectory(targetPath)) return { output: [`more: ${filename}: Is a directory`] }
+		const content = getFileContent(targetPath)
+		return { output: content ?? ["(empty file)"] }
+	},
+
 	clear: () => ({ output: [], clear: true }),
 
 	help: () => ({

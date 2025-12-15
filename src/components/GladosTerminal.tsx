@@ -461,18 +461,20 @@ export default function GladosTerminal() {
 				break
 			}
 
-			case "cat": {
+			case "cat":
+			case "less":
+			case "more": {
 				if (!arg) {
-					addLine("cat: missing file operand")
+					addLine(`${command}: missing file operand`)
 					break
 				}
 				const targetParts = resolvePath(arg)
 				const node = getNode(targetParts)
 
 				if (!node) {
-					addLine(`cat: ${arg}: No such file or directory`)
+					addLine(`${command}: ${arg}: No such file or directory`)
 				} else if (node.type === "dir") {
-					addLine(`cat: ${arg}: Is a directory`)
+					addLine(`${command}: ${arg}: Is a directory`)
 				} else {
 					addLines((node.content || "").split("\n"))
 				}
@@ -565,6 +567,8 @@ export default function GladosTerminal() {
 					"  ls [-a]    - list directory contents",
 					"  cd <dir>   - change directory",
 					"  cat <file> - display file contents",
+					"  less <file> - view file contents",
+					"  more <file> - view file contents",
 					"  rm [-rf]   - remove files (not really)",
 					"  pwd        - print working directory",
 					"  whoami     - display current user",
