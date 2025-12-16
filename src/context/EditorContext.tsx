@@ -66,6 +66,7 @@ interface EditorState {
 	terminalOpen: boolean
 	terminalFocused: boolean
 	activeTmuxWindow: TmuxWindow
+	tmuxPrefixActive: boolean
 	matrixComplete: boolean
 	independenceComplete: boolean
 	jurassicComplete: boolean
@@ -100,6 +101,7 @@ interface EditorContextType extends EditorState {
 	focusTerminal: () => void
 	unfocusTerminal: () => void
 	setActiveTmuxWindow: (window: TmuxWindow) => void
+	setTmuxPrefixActive: (active: boolean) => void
 	setMatrixComplete: (complete: boolean) => void
 	setIndependenceComplete: (complete: boolean) => void
 	setJurassicComplete: (complete: boolean) => void
@@ -132,6 +134,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		terminalOpen: false,
 		terminalFocused: false,
 		activeTmuxWindow: 1,
+		tmuxPrefixActive: false,
 		matrixComplete: false,
 		independenceComplete: false,
 		jurassicComplete: false,
@@ -250,6 +253,10 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		setState((s) => ({ ...s, activeTmuxWindow: window }))
 	}, [])
 
+	const setTmuxPrefixActive = useCallback((active: boolean) => {
+		setState((s) => ({ ...s, tmuxPrefixActive: active }))
+	}, [])
+
 	const setMatrixComplete = useCallback((complete: boolean) => {
 		setState((s) => ({ ...s, matrixComplete: complete }))
 	}, [])
@@ -336,6 +343,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 				focusTerminal,
 				unfocusTerminal,
 				setActiveTmuxWindow,
+				setTmuxPrefixActive,
 				setMatrixComplete,
 				setIndependenceComplete,
 				setJurassicComplete,
