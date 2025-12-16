@@ -1549,5 +1549,5 @@ export function executeCommand(input: string, cwd: string = "/home/michel/blog")
 	const handler = commands[cmd]
 	if (handler) return handler(args, cwd)
 
-	return { output: [`zsh: command not found: ${cmd}`] }
+	return { output: [`fish: command not found: ${cmd}`] }
 }
