@@ -1407,11 +1407,21 @@ const commands: Record<string, CommandHandler> = {
 		],
 	}),
 
+	compgen: (args) => {
+		if (args.includes("-a"))
+			return { output: ["ll", "please", "yolo", "fuck", "vim", "python", "node"] }
+		if (args.includes("-c")) {
+			const binaries = ["cowsay", "sl", "lolcat", "vim", "nvim", "git", "curl", "wget", "htop", "tmux", "ssh", "rsync", "tar", "gzip", "make", "gcc", "fish", "python3", "node", "npm", "cargo", "rustc"]
+			return { output: [...Object.keys(commands), ...binaries].sort() }
+		}
+		return { output: ["compgen: usage: compgen [-a] [-c]"] }
+	},
+
 	env: () => ({
 		output: [
 			"USER=michel",
 			"HOME=/Users/michel",
-			"SHELL=/bin/zsh",
+			"SHELL=/usr/bin/fish",
 			"EDITOR=nvim",
 			"LANG=en_US.UTF-8",
 			"PATH=/usr/local/bin:/usr/bin:/bin:~/.cargo/bin",

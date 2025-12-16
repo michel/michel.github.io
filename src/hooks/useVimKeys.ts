@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { fileTree, flattenVisibleTree, useEditor } from "../context/EditorContext"
 
@@ -35,12 +35,16 @@ export function useVimKeys() {
 		moveCursor,
 		activeTmuxWindow,
 		setActiveTmuxWindow,
+		tmuxPrefixActive,
+		setTmuxPrefixActive,
 	} = useEditor()
 
 	const visibleNodes = useMemo(
 		() => flattenVisibleTree(fileTree, expandedFolders),
 		[expandedFolders],
 	)
+
+	const prefixTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const cycleBuffer = useCallback(
 		(direction: 1 | -1) => {
@@ -88,11 +92,28 @@ export function useVimKeys() {
 				return
 			}
 
-			// Alt+0 through Alt+6 switches tmux windows
-			if (e.altKey && e.key >= "0" && e.key <= "6") {
+			// Ctrl+a activates tmux prefix mode
+			if (e.ctrlKey && e.key === "a") {
 				e.preventDefault()
+				if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
+				setTmuxPrefixActive(true)
+				prefixTimeoutRef.current = setTimeout(() => setTmuxPrefixActive(false), 500)
+				return
+			}
+
+			// When tmux prefix is active, 0-9 switches windows
+			if (tmuxPrefixActive && e.key >= "0" && e.key <= "6") {
+				e.preventDefault()
+				if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
+				setTmuxPrefixActive(false)
 				setActiveTmuxWindow(Number.parseInt(e.key) as 0 | 1 | 2 | 3 | 4 | 5 | 6)
 				return
+			}
+
+			// Any other key cancels tmux prefix mode
+			if (tmuxPrefixActive) {
+				if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
+				setTmuxPrefixActive(false)
 			}
 
 			if (
@@ -253,5 +274,7 @@ export function useVimKeys() {
 		moveCursor,
 		activeTmuxWindow,
 		setActiveTmuxWindow,
+		tmuxPrefixActive,
+		setTmuxPrefixActive,
 	])
 }
