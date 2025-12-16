@@ -275,7 +275,7 @@ export const filesystem: Record<string, FSEntry> = {
 			" \u2502  Kernel: 6.9.420-arch1-1-BLAZINGLY-FAST       \u2502",
 			" \u2502  Uptime: 1337 days                            \u2502",
 			" \u2502  Packages: 420 (pacman)                       \u2502",
-			" \u2502  Shell: zsh 5.9                               \u2502",
+			" \u2502  Shell: fish v1337                            \u2502",
 			" \u2502                                               \u2502",
 			" \u2502  \x1b[red]Remember: rm -rf / is not a valid\x1b[reset]           \u2502",
 			" \u2502  \x1b[red]troubleshooting step.\x1b[reset]                       \u2502",

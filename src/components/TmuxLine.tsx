@@ -9,7 +9,7 @@ interface WindowDef {
 const windows: WindowDef[] = [
 	{ id: 0, name: "neo" },
 	{ id: 1, name: "nvim" },
-	{ id: 2, name: "zsh" },
+	{ id: 2, name: "fish" },
 	{ id: 3, name: "fish:id4" },
 	{ id: 4, name: "sh:jp-unix" },
 	{ id: 5, name: "ssh:colossus" },
