@@ -1,5 +1,6 @@
 import { createContext, type ReactNode, useCallback, useContext, useState } from "react"
 import { type FileId, files, getPreview } from "../data/files"
+import { applyTheme, getStoredTheme, storeTheme, themeNames } from "../data/themes"
 
 export type VimMode = "NORMAL" | "INSERT" | "VISUAL" | "COMMAND"
 
@@ -76,6 +77,7 @@ interface EditorState {
 	cursorLine: number
 	lineCount: number
 	pendingTerminalCommand: string | null
+	theme: string
 }
 
 interface EditorContextType extends EditorState {
@@ -115,35 +117,41 @@ interface EditorContextType extends EditorState {
 	moveCursor: (direction: "up" | "down") => void
 	queueTerminalCommand: (cmd: string) => void
 	clearPendingCommand: () => void
+	setTheme: (themeName: string) => void
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
 
 export function EditorProvider({ children }: { children: ReactNode }) {
-	const [state, setState] = useState<EditorState>({
-		mode: "NORMAL",
-		openBuffers: ["/"],
-		sidebarOpen: true,
-		sidebarFocused: false,
-		sidebarCursorIndex: 0,
-		expandedFolders: new Set(["posts"]),
-		mobileSidebarOpen: false,
-		commandLineOpen: false,
-		fuzzyFinderOpen: false,
-		helpPopupOpen: false,
-		terminalOpen: false,
-		terminalFocused: false,
-		activeTmuxWindow: 1,
-		tmuxPrefixActive: false,
-		matrixComplete: false,
-		independenceComplete: false,
-		jurassicComplete: false,
-		gladosComplete: false,
-		snakeGameOpen: false,
-		adventureGameOpen: false,
-		cursorLine: 0,
-		lineCount: 0,
-		pendingTerminalCommand: null,
+	const [state, setState] = useState<EditorState>(() => {
+		const storedTheme = getStoredTheme()
+		applyTheme(storedTheme)
+		return {
+			mode: "NORMAL",
+			openBuffers: ["/"],
+			sidebarOpen: true,
+			sidebarFocused: false,
+			sidebarCursorIndex: 0,
+			expandedFolders: new Set(["posts"]),
+			mobileSidebarOpen: false,
+			commandLineOpen: false,
+			fuzzyFinderOpen: false,
+			helpPopupOpen: false,
+			terminalOpen: false,
+			terminalFocused: false,
+			activeTmuxWindow: 1,
+			tmuxPrefixActive: false,
+			matrixComplete: false,
+			independenceComplete: false,
+			jurassicComplete: false,
+			gladosComplete: false,
+			snakeGameOpen: false,
+			adventureGameOpen: false,
+			cursorLine: 0,
+			lineCount: 0,
+			pendingTerminalCommand: null,
+			theme: storedTheme,
+		}
 	})
 
 	const setMode = useCallback((mode: VimMode) => {
@@ -317,6 +325,14 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 		setState((s) => ({ ...s, pendingTerminalCommand: null }))
 	}, [])
 
+	const setTheme = useCallback((themeName: string) => {
+		if (themeNames.includes(themeName)) {
+			applyTheme(themeName)
+			storeTheme(themeName)
+			setState((s) => ({ ...s, theme: themeName }))
+		}
+	}, [])
+
 	return (
 		<EditorContext.Provider
 			value={{
@@ -357,6 +373,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 				moveCursor,
 				queueTerminalCommand,
 				clearPendingCommand,
+				setTheme,
 			}}
 		>
 			{children}

@@ -10,7 +10,9 @@ import {
 	resolvePath,
 	toDisplayPath,
 } from "../data/filesystem"
+import { manPageNames, manPages } from "../data/manPages"
 import { cowsay, getNeofetchOutput, getTopOutput, npmTestOutput } from "../data/terminalData"
+import { getAllTips } from "../data/tips"
 
 function parseRmFlags(args: string[]) {
 	const flags = { recursive: false, force: false, verbose: false, interactive: false, dir: false }
@@ -658,20 +660,30 @@ const commands: Record<string, CommandHandler> = {
 		],
 	}),
 
-	man: (args) => ({
-		output: [
-			`\x1b[yellow]${args[0] || "man"}(1)\x1b[reset]                   User Commands`,
-			"",
-			"\x1b[cyan]NAME\x1b[reset]",
-			`       ${args[0] || "man"} - this is a fake terminal, no manual available`,
-			"",
-			"\x1b[cyan]DESCRIPTION\x1b[reset]",
-			"       You're in a simulated terminal environment.",
-			"       Try 'help' for available commands.",
-			"",
-			"\x1b[comment]Press 'q' to exit... just kidding, there's nothing to exit.\x1b[reset]",
-		],
-	}),
+	man: (args) => {
+		const topic = args[0]?.toLowerCase()
+		if (!topic) {
+			return {
+				output: [
+					"What manual page do you want?",
+					"",
+					"\x1b[cyan]Available pages:\x1b[reset]",
+					...manPageNames.map((name) => `  man ${name}`),
+				],
+			}
+		}
+		const page = manPages[topic]
+		if (!page) {
+			return {
+				output: [
+					`No manual entry for ${topic}`,
+					"",
+					`Try: ${manPageNames.map((n) => `man ${n}`).join(", ")}`,
+				],
+			}
+		}
+		return { output: page.content }
+	},
 
 	cd: (args, cwd) => {
 		// No args = go home
@@ -752,6 +764,21 @@ const commands: Record<string, CommandHandler> = {
 	screenfetch: () => ({ output: getNeofetchOutput() }),
 
 	fastfetch: () => ({ output: getNeofetchOutput() }),
+
+	tips: () => {
+		const allTips = getAllTips()
+		const categoryLabels: Record<string, string> = {
+			basic: "\x1b[green]Basic\x1b[reset]",
+			intermediate: "\x1b[cyan]Intermediate\x1b[reset]",
+			easter: "\x1b[magenta]Easter Eggs\x1b[reset]",
+			personality: "\x1b[yellow]Personality\x1b[reset]",
+		}
+		const output = ["\x1b[cyan]All Tips:\x1b[reset]", ""]
+		for (const tip of allTips) {
+			output.push(`  ${categoryLabels[tip.category]} - ${tip.text}`)
+		}
+		return { output }
+	},
 
 	cal: () => {
 		const now = new Date()
