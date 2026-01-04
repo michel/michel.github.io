@@ -39,7 +39,7 @@ export default function TmuxLine() {
 	return (
 		<div className="flex h-5 md:h-6 select-none items-center justify-between overflow-hidden bg-bg-dark font-mono text-[10px] md:text-sm text-nowrap">
 			{/* Left: Session + Windows */}
-			<div className="flex">
+			<div className="flex min-w-0 flex-1 overflow-hidden">
 				{/* Session segment */}
 				<span className="bg-magenta px-1 md:px-2 font-bold text-bg">≋ michel</span>
 
@@ -74,24 +74,24 @@ export default function TmuxLine() {
 			</div>
 
 			{/* Right: Status segments */}
-			<div className="flex">
+			<div className="flex shrink-0">
 				{/* Git branch */}
-				<span className="bg-green px-1 md:px-2 font-bold text-bg">⎇ main</span>
+				<span className="hidden md:flex bg-green px-1 md:px-2 font-bold text-bg">⎇ main</span>
 
 				{/* CPU */}
-				<span className="bg-yellow px-1 md:px-2 font-bold text-bg">◉ {cpu}%</span>
+				<span className="hidden md:flex bg-yellow px-1 md:px-2 font-bold text-bg">◉ {cpu}%</span>
 
 				{/* Network */}
-				<span className="bg-blue px-1 md:px-2 font-bold text-bg">◆</span>
+				<span className="hidden md:flex bg-blue px-1 md:px-2 font-bold text-bg">◆</span>
 
 				{/* Time */}
 				<span className="bg-magenta px-1 md:px-2 font-bold text-bg">◷ {time}</span>
 
 				{/* Date */}
-				<span className="bg-cyan px-1 md:px-2 font-bold text-bg">◫ {date}</span>
+				<span className="hidden md:flex bg-cyan px-1 md:px-2 font-bold text-bg">◫ {date}</span>
 
 				{/* User */}
-				<span className="bg-green px-1 md:px-2 font-bold text-bg">◈ michel</span>
+				<span className="hidden md:flex bg-green px-1 md:px-2 font-bold text-bg">◈ michel</span>
 			</div>
 		</div>
 	)
