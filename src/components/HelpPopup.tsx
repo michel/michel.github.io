@@ -10,7 +10,6 @@ const keybindings = [
 	{ key: "j", description: "Scroll down" },
 	{ key: "k", description: "Scroll up" },
 	{ key: "l", description: "Next buffer" },
-	{ key: "i", description: "Insert mode" },
 	{ key: "v", description: "Visual mode" },
 	{ key: ":", description: "Command line" },
 	{ key: "Esc", description: "Normal mode" },

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { allFiles, useEditor } from "../context/EditorContext"
+import { themeNames } from "../data/themes"
 
 const commandList = [
 	{ cmd: "w", description: "Save file" },
@@ -12,6 +13,8 @@ const commandList = [
 	{ cmd: "snake", description: "Play snake" },
 	{ cmd: "adventure", description: "Text adventure" },
 	{ cmd: "help", description: "Show commands" },
+	{ cmd: "colorscheme", description: "Change theme" },
+	{ cmd: "colo", description: "Change theme" },
 ]
 
 export default function CommandLine() {
@@ -28,6 +31,8 @@ export default function CommandLine() {
 		openSnakeGame,
 		openAdventureGame,
 		toggleHelpPopup,
+		setTheme,
+		theme,
 	} = useEditor()
 
 	useEffect(() => {
@@ -85,6 +90,14 @@ export default function CommandLine() {
 			if (match) return `e ${match.name}`
 		}
 
+		// Autocomplete theme names for :colorscheme/:colo
+		if (trimmed.startsWith("colorscheme ") || trimmed.startsWith("colo ")) {
+			const prefix = trimmed.startsWith("colorscheme ") ? "colorscheme " : "colo "
+			const partial = trimmed.slice(prefix.length).trim().toLowerCase()
+			const match = themeNames.find((t) => t.startsWith(partial) && t !== partial)
+			if (match) return `${prefix}${match}`
+		}
+
 		return null
 	}
 
@@ -95,6 +108,25 @@ export default function CommandLine() {
 
 		if (trimmed === "help") {
 			toggleHelpPopup()
+			return
+		}
+
+		// :colorscheme with no args cycles themes
+		if (trimmed === "colorscheme" || trimmed === "colo") {
+			const currentIndex = themeNames.indexOf(theme)
+			const nextIndex = (currentIndex + 1) % themeNames.length
+			const nextTheme = themeNames[nextIndex]
+			if (nextTheme) setTheme(nextTheme)
+			return
+		}
+
+		// :colorscheme <name> or :colo <name>
+		if (trimmed.startsWith("colorscheme ") || trimmed.startsWith("colo ")) {
+			const prefix = trimmed.startsWith("colorscheme ") ? "colorscheme " : "colo "
+			const themeName = trimmed.slice(prefix.length).trim().toLowerCase()
+			if (themeNames.includes(themeName)) {
+				setTheme(themeName)
+			}
 			return
 		}
 

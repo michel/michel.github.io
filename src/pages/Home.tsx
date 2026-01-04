@@ -4,6 +4,7 @@ import Buffer from "../components/Buffer"
 import { useEditor } from "../context/EditorContext"
 import { content } from "../data/content"
 import { usePageTitle } from "../hooks/usePageTitle"
+import { useTip } from "../hooks/useTip"
 
 const useIsMobile = () => {
 	const [isMobile, setIsMobile] = useState(false)
@@ -54,7 +55,7 @@ const Line = ({ children }: { children: React.ReactNode }) => (
 	</div>
 )
 
-const InfoBox = () => {
+const InfoBox = ({ tip }: { tip: string | null }) => {
 	const { queueTerminalCommand } = useEditor()
 	const isMobile = useIsMobile()
 
@@ -188,6 +189,14 @@ const InfoBox = () => {
 				<span className="text-yellow">Easter eggs hidden everywhere. Have fun exploring!</span>
 			</Line>
 			<Line> </Line>
+			<div className="flex">
+				<span className="text-green font-bold">║</span>
+				<span className="flex-1 text-fg pl-5 overflow-hidden" style={{ width: `${BOX_CHARS}ch` }}>
+					{tip && <span className="text-comment">💡 {tip}</span>}
+				</span>
+				<span className="text-green font-bold">║</span>
+			</div>
+			<Line> </Line>
 			<div className="text-green font-bold">╚{"═".repeat(BOX_CHARS)}╝</div>
 		</div>
 	)
@@ -195,6 +204,7 @@ const InfoBox = () => {
 
 export default function Home() {
 	usePageTitle()
+	const tip = useTip()
 	const lines = [
 		...logoLines.map((line, i) => (
 			<span key={`logo-${i}`} className="whitespace-pre font-bold text-magenta">
@@ -216,7 +226,7 @@ export default function Home() {
 			<span className="text-yellow">v1337</span>
 		</span>,
 		"",
-		<InfoBox key="readme-box" />,
+		<InfoBox key="readme-box" tip={tip?.text ?? null} />,
 		"",
 		<span key="cat-status">
 			<span className="text-green">~</span> <span className="text-magenta">cat status.rs</span>
