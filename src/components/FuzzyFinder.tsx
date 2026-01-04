@@ -49,8 +49,16 @@ export default function FuzzyFinder() {
 		closeFuzzyFinder()
 	}
 
+	const handleContainerKeyDown = (e: React.KeyboardEvent) => {
+		if (e.key === "Escape") closeFuzzyFinder()
+	}
+
 	return (
-		<div className="fixed inset-0 z-40 flex items-center justify-center">
+		<div
+			className="fixed inset-0 z-40 flex items-center justify-center"
+			onKeyDown={handleContainerKeyDown}
+			tabIndex={-1}
+		>
 			<div className="flex w-[80vw] gap-4">
 				{/* Left column: Results + Find Files */}
 				<div className="flex flex-[2] flex-col gap-4">
@@ -99,7 +107,7 @@ export default function FuzzyFinder() {
 				</div>
 
 				{/* Right column: Preview box */}
-				<div className="relative flex flex-[5] flex-col rounded-lg border border-[#4a4670] bg-bg-dark pt-2">
+				<div className="relative flex h-[17rem] flex-[5] flex-col rounded-lg border border-[#4a4670] bg-bg-dark pt-2">
 					<span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-bg-dark px-2 text-comment">
 						Grep Preview
 					</span>
