@@ -26,9 +26,9 @@ export default function StatusLine() {
 				<span className="px-2 text-comment">[+]</span>
 			</div>
 			<div className="flex gap-4 px-2">
-				<span className="text-comment">? for help</span>
-				<span className="text-comment">utf-8</span>
-				<span className="text-comment">unix</span>
+				<span className="hidden md:inline text-comment">? for help</span>
+				<span className="hidden md:inline text-comment">utf-8</span>
+				<span className="hidden md:inline text-comment">unix</span>
 				<span className="font-bold text-fg">100%</span>
 				<span className="font-bold text-fg">LN 1:1</span>
 			</div>
