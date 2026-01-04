@@ -1,5 +1,5 @@
 import { createContext, type ReactNode, useCallback, useContext, useState } from "react"
-import { files, type FileId, getPreview } from "../data/files"
+import { type FileId, files, getPreview } from "../data/files"
 
 export type VimMode = "NORMAL" | "INSERT" | "VISUAL" | "COMMAND"
 

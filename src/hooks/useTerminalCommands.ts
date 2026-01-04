@@ -1411,7 +1411,30 @@ const commands: Record<string, CommandHandler> = {
 		if (args.includes("-a"))
 			return { output: ["ll", "please", "yolo", "fuck", "vim", "python", "node"] }
 		if (args.includes("-c")) {
-			const binaries = ["cowsay", "sl", "lolcat", "vim", "nvim", "git", "curl", "wget", "htop", "tmux", "ssh", "rsync", "tar", "gzip", "make", "gcc", "fish", "python3", "node", "npm", "cargo", "rustc"]
+			const binaries = [
+				"cowsay",
+				"sl",
+				"lolcat",
+				"vim",
+				"nvim",
+				"git",
+				"curl",
+				"wget",
+				"htop",
+				"tmux",
+				"ssh",
+				"rsync",
+				"tar",
+				"gzip",
+				"make",
+				"gcc",
+				"fish",
+				"python3",
+				"node",
+				"npm",
+				"cargo",
+				"rustc",
+			]
 			return { output: [...Object.keys(commands), ...binaries].sort() }
 		}
 		return { output: ["compgen: usage: compgen [-a] [-c]"] }
