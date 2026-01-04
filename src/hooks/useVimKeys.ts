@@ -106,7 +106,7 @@ export function useVimKeys() {
 				e.preventDefault()
 				if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
 				setTmuxPrefixActive(false)
-				setActiveTmuxWindow(Number.parseInt(e.key) as 0 | 1 | 2 | 3 | 4 | 5 | 6)
+				setActiveTmuxWindow(Number.parseInt(e.key, 10) as 0 | 1 | 2 | 3 | 4 | 5 | 6)
 				return
 			}
 

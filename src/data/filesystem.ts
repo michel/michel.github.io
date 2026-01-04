@@ -1,7 +1,7 @@
 // Virtual filesystem for the terminal simulator
 // Simulates a minimal Arch Linux system with /home/michel/blog as the starting directory
 
-import { files, type FileId } from "./files"
+import { type FileId, files } from "./files"
 
 export interface FSEntry {
 	type: "file" | "dir"
