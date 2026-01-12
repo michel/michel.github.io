@@ -9,6 +9,13 @@ export type ContentItem = {
 export const content: ContentItem[] = [
 	{ slug: "about", title: "about_michel.man", date: "2024-01-01", type: "page", path: "/about" },
 	{
+		slug: "projects",
+		title: "projects.sys",
+		date: "2026-01-11",
+		type: "page",
+		path: "/projects",
+	},
+	{
 		slug: "contact",
 		title: "contact_card.vcf",
 		date: "2024-01-01",

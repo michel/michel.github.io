@@ -726,6 +726,7 @@ export const filesystem: Record<string, FSEntry> = {
 	"/home/michel/blog/README.md": fromLookup("home"),
 	"/home/michel/blog/about_michel.man": fromLookup("cv"),
 	"/home/michel/blog/contact_card.vcf": fromLookup("contact"),
+	"/home/michel/blog/projects.sys": fromLookup("projects"),
 	"/home/michel/blog/posts": { type: "dir" },
 	"/home/michel/blog/posts/learning_rust_the_hard_way.md": fromLookup("rust"),
 

@@ -4,3 +4,5 @@ docs/plans
 node_modules
 
 .env
+projects.json
+tsconfig.tsbuildinfo
