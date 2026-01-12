@@ -292,6 +292,25 @@ export const files = {
 			"    \x1b[blue]Instagram\x1b[reset]  @herrgraaf",
 		],
 	},
+	projects: {
+		id: "projects",
+		name: "projects.sys",
+		path: "/projects",
+		terminalPath: "/home/michel/blog/projects.sys",
+		content: [
+			"\x1b[cyan]SYSTEM MONITOR // PORTFOLIO\x1b[reset]",
+			"",
+			"\x1b[green]Interactive project browser with system monitor aesthetics.\x1b[reset]",
+			"",
+			"Features:",
+			"  • Filter by year (click graph bars)",
+			"  • Filter by language (click sidebar items)",
+			"  • Sort by any column (click headers)",
+			"  • Keyboard navigation (j/k or arrow keys)",
+			"",
+			"\x1b[comment]Open this file to explore all projects.\x1b[reset]",
+		],
+	},
 } as const satisfies Record<string, FileContent>
 
 export type FileId = keyof typeof files

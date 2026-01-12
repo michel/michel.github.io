@@ -30,6 +30,7 @@ export const fileTree: FileNode[] = [
 	},
 	{ id: files.home.id, name: files.home.name, path: files.home.path, type: "file" },
 	{ id: files.cv.id, name: files.cv.name, path: files.cv.path, type: "file" },
+	{ id: files.projects.id, name: files.projects.name, path: files.projects.path, type: "file" },
 	{ id: files.contact.id, name: files.contact.name, path: files.contact.path, type: "file" },
 ]
 
