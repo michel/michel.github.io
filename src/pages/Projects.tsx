@@ -84,6 +84,112 @@ const StatBar = ({ color, width }: { color: string; width: number }) => (
 	</div>
 )
 
+// Customer metadata from CV
+const CUSTOMER_DATA: Record<string, { role: string; period: string; activities: string }> = {
+	"Revive Capital": {
+		role: "Tech lead",
+		period: "2024 - Current",
+		activities: "Building asset-backed lending platform for brokers from the ground up",
+	},
+	"Financial Lease": {
+		role: "Tech lead",
+		period: "2023 - 2024",
+		activities: "Developing car dealership portal for handling customer lease requests",
+	},
+	IKEA: {
+		role: "Tech lead",
+		period: "2022 - 2023",
+		activities: "Leading Content Coworker Experience program with knowledge graph technology",
+	},
+	"Hypotheekrente.nl": {
+		role: "Tech lead",
+		period: "2022 - 2025",
+		activities: "Building lead processing system matching customers with mortgage advisors",
+	},
+	ING: {
+		role: "CTO",
+		period: "2019 - 2022",
+		activities: "Leading SaaS productivity platform (Homigo) for contractors and homeowners",
+	},
+	Homigo: {
+		role: "CTO",
+		period: "2019 - 2022",
+		activities: "Leading SaaS productivity platform for contractors and homeowners",
+	},
+	BEEQUIP: {
+		role: "Tech lead",
+		period: "2016 - 2019",
+		activities: "Developing online leasing platform and BEEHIVE information system",
+	},
+	Tele2: {
+		role: "Software engineer",
+		period: "2015 - 2016",
+		activities: "Maintaining 4G network device commissioning and provisioning system",
+	},
+	Postinitial: {
+		role: "CTO",
+		period: "2014 - 2016",
+		activities: "Building e-learning platform for Corporate Finance",
+	},
+	Kabisa: {
+		role: "Software engineer / Lead / DevOps / Consultant",
+		period: "2008 - 2015",
+		activities:
+			"Agency work for various clients including Philips, MGL, ViaViela, Seacon Logistics",
+	},
+	Philips: {
+		role: "Backend/Frontend engineer (via Kabisa)",
+		period: "2011 - 2012",
+		activities:
+			"Philips SleepGuide: architecting and developing web services for sleep tracking product designed for 300K+ users",
+	},
+	MGL: {
+		role: "Lead engineer / Architect (via Kabisa)",
+		period: "2010 - 2013",
+		activities: "Media Groep Limburg: mobile platform, ESB development, cloud migration to AWS EC2",
+	},
+	ViaViela: {
+		role: "Backend engineer (via Kabisa)",
+		period: "2012",
+		activities: "Building Ruby on Rails applications for day care intermediary platform",
+	},
+	"Seacon Logistics": {
+		role: "Lead engineer / Architect (via Kabisa)",
+		period: "2013 - 2014",
+		activities: "CASSANDRA project: supply chain visibility and risk assessment platform",
+	},
+	Simac: {
+		role: "Ruby on Rails / Frontend developer (via Kabisa)",
+		period: "2013",
+		activities: "Mobile application for law enforcement officers with back office system",
+	},
+	Lecturis: {
+		role: "Developer (via Kabisa)",
+		period: "2009",
+		activities: "Online print ordering portal integrated with Adobe InDesign Server",
+	},
+	Wegener: {
+		role: "Developer (via Kabisa)",
+		period: "2009",
+		activities: "Wijrijden: Ruby on Rails multisite for automotive news channel",
+	},
+	Brickyard: {
+		role: "Software engineer",
+		period: "2016",
+		activities: "Taxameter Centrale BV: taxi meter and fleet management systems",
+	},
+	"Dutchies Travel": {
+		role: "CTO",
+		period: "2015 - 2018",
+		activities: "BackpackApp: travel agency platform for backpackers with offline-first mobile app",
+	},
+}
+
+const getCustomerInfo = (customer: string | null | undefined) => {
+	if (!customer) return null
+	return CUSTOMER_DATA[customer] || null
+}
+
 export default function Projects() {
 	usePageTitle("projects")
 
@@ -217,7 +323,8 @@ export default function Projects() {
 		} else if (filter.type === "language" && typeof filter.value === "string") {
 			filtered = projects.filter((p) => p.languages?.some((l) => l.language === filter.value))
 		} else if (filter.type === "customer" && typeof filter.value === "string") {
-			filtered = projects.filter((p) => normalizeCustomer(p.customer) === filter.value)
+			const customerFilter = filter.value.toLowerCase()
+			filtered = projects.filter((p) => normalizeCustomer(p.customer) === customerFilter)
 		}
 
 		// Search filter (name and customer, case insensitive)
@@ -512,8 +619,8 @@ export default function Projects() {
 				</Panel>
 			</header>
 
-			{/* Details Panel - spans both rows, column 4 */}
-			<aside className="order-4 flex h-64 shrink-0 animate-[fadeIn_0.5s_ease-out_0.2s_both] flex-col md:order-none md:h-auto md:min-h-0 md:flex-1 md:row-span-2">
+			{/* Details & Customer Panels - spans both rows, column 4 */}
+			<aside className="order-4 flex h-64 shrink-0 animate-[fadeIn_0.5s_ease-out_0.2s_both] flex-col gap-3 md:order-none md:h-auto md:min-h-0 md:flex-1 md:row-span-2 md:gap-4">
 				<Panel title="DETAILS" titleColor="text-yellow" className="flex-1 p-2 md:p-4">
 					{selectedProject ? (
 						<div className="flex h-full flex-col gap-4">
@@ -609,6 +716,40 @@ export default function Projects() {
 						</div>
 					)}
 				</Panel>
+
+				{/* Customer Panel - only shown when project has customer info */}
+				{selectedProject && getCustomerInfo(selectedProject.customer) && (
+					<Panel title="CUSTOMER" titleColor="text-orange" className="shrink-0 p-2 md:p-4">
+						<div className="flex flex-col gap-2">
+							<h2
+								className="cursor-pointer text-lg font-bold text-fg hover:text-cyan"
+								onClick={() => toggleFilter("customer", selectedProject.customer!)}
+							>
+								{selectedProject.customer}
+							</h2>
+							<div className="grid grid-cols-2 gap-2 text-xs">
+								<div>
+									<span className="block text-comment">Role</span>
+									<span className="text-cyan">
+										{getCustomerInfo(selectedProject.customer)?.role}
+									</span>
+								</div>
+								<div>
+									<span className="block text-comment">Period</span>
+									<span className="text-fg">
+										{getCustomerInfo(selectedProject.customer)?.period}
+									</span>
+								</div>
+							</div>
+							<div className="text-xs">
+								<span className="block text-comment">Activities</span>
+								<span className="text-fg/80">
+									{getCustomerInfo(selectedProject.customer)?.activities}
+								</span>
+							</div>
+						</div>
+					</Panel>
+				)}
 			</aside>
 
 			{/* Languages & Customers - column 1 */}
@@ -619,38 +760,41 @@ export default function Projects() {
 						titleColor="text-magenta"
 						className="flex-1 p-2 md:p-4"
 					>
-						<div className="flex h-full gap-2 overflow-x-auto pb-1 md:flex-col md:space-y-2 md:overflow-y-auto md:pr-2">
-							{languageStats.map(([name, count], index) => {
-								const percent = Math.round((count / maxLangLines) * 100)
-								const colorClass = colors[index % colors.length]
-								const isActive = filter.type === "language" && filter.value === name
-								const isFaded = filter.type === "language" && !isActive
+						<div className="relative h-full">
+							<div className="flex h-full items-center gap-2 overflow-x-auto pb-1 md:flex-col md:items-stretch md:space-y-2 md:overflow-y-auto md:pr-2">
+								{languageStats.map(([name, count], index) => {
+									const percent = Math.round((count / maxLangLines) * 100)
+									const colorClass = colors[index % colors.length]
+									const isActive = filter.type === "language" && filter.value === name
+									const isFaded = filter.type === "language" && !isActive
 
-								return (
-									<div
-										key={name}
-										className={`min-w-[80px] shrink-0 cursor-pointer border-l-2 pl-2 transition-all duration-200 md:min-w-0 md:shrink ${
-											isActive ? "border-fg bg-fg/5" : "border-transparent hover:bg-fg/5"
-										} ${isFaded ? "opacity-30" : ""}`}
-										onClick={() => toggleFilter("language", name)}
-									>
-										<div className="flex justify-between text-xs md:flex-row">
-											<span className={`font-bold ${isActive ? "text-fg" : "text-comment"}`}>
-												{name}
-											</span>
-											<span className="hidden text-[10px] text-comment md:inline">
-												{formatNum(count)} LOC
-											</span>
+									return (
+										<div
+											key={name}
+											className={`min-w-[80px] shrink-0 cursor-pointer border-l-2 pl-2 transition-all duration-200 md:min-w-0 md:shrink ${
+												isActive ? "border-fg bg-fg/5" : "border-transparent hover:bg-fg/5"
+											} ${isFaded ? "opacity-30" : ""}`}
+											onClick={() => toggleFilter("language", name)}
+										>
+											<div className="flex justify-between text-xs md:flex-row">
+												<span className={`font-bold ${isActive ? "text-fg" : "text-comment"}`}>
+													{name}
+												</span>
+												<span className="hidden text-[10px] text-comment md:inline">
+													{formatNum(count)} LOC
+												</span>
+											</div>
+											<div className="mt-1 h-2.5 overflow-hidden rounded-sm bg-black/30">
+												<div
+													className={`h-full ${isActive ? "bg-fg" : colorClass}`}
+													style={{ width: `${percent}%` }}
+												/>
+											</div>
 										</div>
-										<div className="mt-1 h-2.5 overflow-hidden rounded-sm bg-black/30">
-											<div
-												className={`h-full ${isActive ? "bg-fg" : colorClass}`}
-												style={{ width: `${percent}%` }}
-											/>
-										</div>
-									</div>
-								)
-							})}
+									)
+								})}
+							</div>
+							<div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-bg-panel to-transparent md:hidden" />
 						</div>
 					</Panel>
 				</aside>
@@ -661,30 +805,33 @@ export default function Projects() {
 						titleColor="text-orange"
 						className="flex-1 p-2 md:p-4"
 					>
-						<div className="flex h-full gap-2 overflow-x-auto pb-1 md:flex-col md:space-y-2 md:overflow-y-auto md:pr-2">
-							{customerStats.map(([name, count]) => {
-								const isActive = filter.type === "customer" && filter.value === name
-								const isFaded = filter.type === "customer" && !isActive
+						<div className="relative h-full">
+							<div className="flex h-full items-center gap-2 overflow-x-auto pb-1 md:flex-col md:items-stretch md:space-y-2 md:overflow-y-auto md:pr-2">
+								{customerStats.map(([name, count]) => {
+									const isActive = filter.type === "customer" && filter.value === name
+									const isFaded = filter.type === "customer" && !isActive
 
-								return (
-									<div
-										key={name}
-										className={`min-w-[70px] shrink-0 cursor-pointer border-l-2 pl-2 transition-all duration-200 md:min-w-0 md:shrink ${
-											isActive ? "border-fg bg-fg/5" : "border-transparent hover:bg-fg/5"
-										} ${isFaded ? "opacity-30" : ""}`}
-										onClick={() => toggleFilter("customer", name)}
-									>
-										<div className="flex justify-between text-xs">
-											<span className={`font-bold ${isActive ? "text-fg" : "text-comment"}`}>
-												{name}
-											</span>
-											<span className="hidden text-[10px] text-comment md:inline">
-												{count} projects
-											</span>
+									return (
+										<div
+											key={name}
+											className={`min-w-[70px] shrink-0 cursor-pointer border-l-2 pl-2 transition-all duration-200 md:min-w-0 md:shrink ${
+												isActive ? "border-fg bg-fg/5" : "border-transparent hover:bg-fg/5"
+											} ${isFaded ? "opacity-30" : ""}`}
+											onClick={() => toggleFilter("customer", name)}
+										>
+											<div className="flex justify-between text-xs">
+												<span className={`font-bold ${isActive ? "text-fg" : "text-comment"}`}>
+													{name}
+												</span>
+												<span className="hidden text-[10px] text-comment md:inline">
+													{count} projects
+												</span>
+											</div>
 										</div>
-									</div>
-								)
-							})}
+									)
+								})}
+							</div>
+							<div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-bg-panel to-transparent md:hidden" />
 						</div>
 					</Panel>
 				</aside>
