@@ -1,7 +1,7 @@
 {
-	"generatedAt": "2026-01-13T01:19:13.116Z",
+	"generatedAt": "2026-01-13T13:14:38.279Z",
 	"rootPath": "/Users/micheldegraaf/src",
-	"totalProjects": 206,
+	"totalProjects": 255,
 	"projects": [
 		{
 			"name": "internetbode",
@@ -192,6 +192,36 @@
 			"isPersonalProject": true,
 			"repository": null,
 			"path": "/Users/micheldegraaf/src/oldmac/oldmac2/cas-server-3.4.3",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-mongo",
+			"description": null,
+			"customer": "Kabisa",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 2,
+					"lines": 92,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2010-01-01T00:00:00.000Z",
+			"lastCommitDate": "2010-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 92,
+			"myLinesOfCode": 92,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2010": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac2/cas-server-3.4.3/cas-server-support-mongo",
 			"status": "unknown",
 			"isMonorepo": false
 		},
@@ -612,6 +642,36 @@
 			"isPersonalProject": true,
 			"repository": null,
 			"path": "/Users/micheldegraaf/src/oldmac/oldmac3/mgl-sms",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "test_app",
+			"description": null,
+			"customer": "Kabisa",
+			"language": "Ruby",
+			"languages": [
+				{
+					"language": "Ruby",
+					"files": 84,
+					"lines": 5009,
+					"percentage": 100
+				}
+			],
+			"framework": "Rails",
+			"firstCommitDate": "2011-01-01T00:00:00.000Z",
+			"lastCommitDate": "2011-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 5009,
+			"myLinesOfCode": 5009,
+			"myCommitCount": 8,
+			"totalCommitCount": 8,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2011": 8
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac3/dsi/test_app",
 			"status": "unknown",
 			"isMonorepo": false
 		},
@@ -1725,6 +1785,768 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "websocket-demo",
+			"description": null,
+			"customer": "Personal",
+			"language": "Ruby",
+			"languages": [
+				{
+					"language": "Ruby",
+					"files": 21,
+					"lines": 393,
+					"percentage": 100
+				}
+			],
+			"framework": "Rails",
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 393,
+			"myLinesOfCode": 393,
+			"myCommitCount": 5,
+			"totalCommitCount": 5,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 5
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/websocket-demo",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "ghost",
+			"description": null,
+			"customer": "Personal",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 72,
+					"lines": 14085,
+					"percentage": 100
+				}
+			],
+			"framework": "Express",
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 14085,
+			"myLinesOfCode": 14085,
+			"myCommitCount": 40,
+			"totalCommitCount": 40,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 40
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/metropolian",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "mandysblog",
+			"description": null,
+			"customer": "Personal",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 9,
+					"lines": 565,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 565,
+			"myLinesOfCode": 565,
+			"myCommitCount": 8,
+			"totalCommitCount": 8,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 8
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/metropolitan_frontend",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "fbleecher",
+			"description": null,
+			"customer": "Personal",
+			"language": "Ruby",
+			"languages": [
+				{
+					"language": "Ruby",
+					"files": 2,
+					"lines": 30,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 30,
+			"myLinesOfCode": 30,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/fbleecher",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "fick",
+			"description": null,
+			"customer": "Personal",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 6,
+					"lines": 547,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 547,
+			"myLinesOfCode": 547,
+			"myCommitCount": 19,
+			"totalCommitCount": 19,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 19
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/fick",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "react-server-example",
+			"description": "A very simple implementation of server-side React rendering",
+			"customer": "Personal",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 2,
+					"lines": 141,
+					"percentage": 100
+				}
+			],
+			"framework": "React",
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 141,
+			"myLinesOfCode": 141,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/react-server-example",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "seacon-cas",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 366,
+					"lines": 28456,
+					"percentage": 100
+				},
+				{
+					"language": "JavaScript",
+					"files": 1,
+					"lines": 51,
+					"percentage": 0
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 28507,
+			"myLinesOfCode": 28507,
+			"myCommitCount": 48,
+			"totalCommitCount": 48,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 48
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-core",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 254,
+					"lines": 19170,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 19170,
+			"myLinesOfCode": 19170,
+			"myCommitCount": 19,
+			"totalCommitCount": 19,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 19
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-core",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-integration-berkeleydb",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 4,
+					"lines": 572,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 572,
+			"myLinesOfCode": 572,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-integration-berkeleydb",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-integration-jboss",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 3,
+					"lines": 404,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 404,
+			"myLinesOfCode": 404,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-integration-jboss",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-integration-memcached",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 1,
+					"lines": 146,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 146,
+			"myLinesOfCode": 146,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-integration-memcached",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-integration-restlet",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 2,
+					"lines": 302,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 302,
+			"myLinesOfCode": 302,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-integration-restlet",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-generic",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 6,
+					"lines": 656,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 656,
+			"myLinesOfCode": 656,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-generic",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-jdbc",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 4,
+					"lines": 229,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 229,
+			"myLinesOfCode": 229,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-jdbc",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-ldap",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 19,
+					"lines": 1828,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 1828,
+			"myLinesOfCode": 1828,
+			"myCommitCount": 2,
+			"totalCommitCount": 2,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 2
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-ldap",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-legacy",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 10,
+					"lines": 667,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 667,
+			"myLinesOfCode": 667,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-legacy",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-mongodb",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 5,
+					"lines": 330,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 330,
+			"myLinesOfCode": 330,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-mongodb",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-openid",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 15,
+					"lines": 896,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 896,
+			"myLinesOfCode": 896,
+			"myCommitCount": 2,
+			"totalCommitCount": 2,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 2
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-openid",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-radius",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 3,
+					"lines": 331,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 331,
+			"myLinesOfCode": 331,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-radius",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-spnego",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 13,
+					"lines": 1100,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 1100,
+			"myLinesOfCode": 1100,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-spnego",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-trusted",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 10,
+					"lines": 511,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 511,
+			"myLinesOfCode": 511,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-trusted",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-support-x509",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 15,
+					"lines": 1227,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 1227,
+			"myLinesOfCode": 1227,
+			"myCommitCount": 2,
+			"totalCommitCount": 2,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 2
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-support-x509",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "cas-server-webapp",
+			"description": null,
+			"customer": "Personal",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 2,
+					"lines": 87,
+					"percentage": 63
+				},
+				{
+					"language": "JavaScript",
+					"files": 1,
+					"lines": 51,
+					"percentage": 37
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 138,
+			"myLinesOfCode": 138,
+			"myCommitCount": 19,
+			"totalCommitCount": 19,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 19
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-cas/cas-server-webapp",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "seacon-esb-admin",
+			"description": null,
+			"customer": "Personal",
+			"language": "Ruby",
+			"languages": [
+				{
+					"language": "Ruby",
+					"files": 69,
+					"lines": 2542,
+					"percentage": 100
+				}
+			],
+			"framework": "Rails",
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 2542,
+			"myLinesOfCode": 2542,
+			"myCommitCount": 17,
+			"totalCommitCount": 17,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 17
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/seacon-esb-admin",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "websocket",
+			"description": null,
+			"customer": "Personal",
+			"language": "Ruby",
+			"languages": [
+				{
+					"language": "Ruby",
+					"files": 21,
+					"lines": 393,
+					"percentage": 100
+				}
+			],
+			"framework": "Rails",
+			"firstCommitDate": "2013-01-01T00:00:00.000Z",
+			"lastCommitDate": "2013-12-31T23:59:59.000Z",
+			"totalLinesOfCode": 393,
+			"myLinesOfCode": 393,
+			"myCommitCount": 5,
+			"totalCommitCount": 5,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2013": 5
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/oldmac/oldmac1/websocket",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "flow_designer",
 			"description": null,
 			"customer": "Seacon Logistics",
@@ -1905,42 +2727,6 @@
 			"isMonorepo": false
 		},
 		{
-			"name": "seacon-cas",
-			"description": null,
-			"customer": "Seacon Logistics",
-			"language": "Java",
-			"languages": [
-				{
-					"language": "Java",
-					"files": 366,
-					"lines": 28456,
-					"percentage": 100
-				},
-				{
-					"language": "JavaScript",
-					"files": 1,
-					"lines": 51,
-					"percentage": 0
-				}
-			],
-			"framework": null,
-			"firstCommitDate": "2013-01-01T00:00:00.000Z",
-			"lastCommitDate": "2013-12-31T23:59:59.000Z",
-			"totalLinesOfCode": 28507,
-			"myLinesOfCode": 28507,
-			"myCommitCount": 48,
-			"totalCommitCount": 48,
-			"contributorCount": 1,
-			"commitYearStats": {
-				"2013": 48
-			},
-			"isPersonalProject": true,
-			"repository": null,
-			"path": "/Users/micheldegraaf/src/oldmac/oldmac3/seacon-cas",
-			"status": "unknown",
-			"isMonorepo": false
-		},
-		{
 			"name": "seacon-cassandra",
 			"description": null,
 			"customer": "Seacon Logistics",
@@ -2020,36 +2806,6 @@
 			"isPersonalProject": true,
 			"repository": null,
 			"path": "/Users/micheldegraaf/src/oldmac/oldmac3/seacon-esb",
-			"status": "unknown",
-			"isMonorepo": false
-		},
-		{
-			"name": "seacon-esb-admin",
-			"description": null,
-			"customer": "Seacon Logistics",
-			"language": "Ruby",
-			"languages": [
-				{
-					"language": "Ruby",
-					"files": 53,
-					"lines": 1760,
-					"percentage": 100
-				}
-			],
-			"framework": "Rails",
-			"firstCommitDate": "2013-01-01T00:00:00.000Z",
-			"lastCommitDate": "2013-12-31T23:59:59.000Z",
-			"totalLinesOfCode": 1760,
-			"myLinesOfCode": 1760,
-			"myCommitCount": 13,
-			"totalCommitCount": 13,
-			"contributorCount": 1,
-			"commitYearStats": {
-				"2013": 13
-			},
-			"isPersonalProject": true,
-			"repository": null,
-			"path": "/Users/micheldegraaf/src/oldmac/oldmac3/seacon-esb-admin",
 			"status": "unknown",
 			"isMonorepo": false
 		},
@@ -2212,36 +2968,6 @@
 			"isMonorepo": false
 		},
 		{
-			"name": "websocket-demo",
-			"description": null,
-			"customer": "Personal",
-			"language": "Ruby",
-			"languages": [
-				{
-					"language": "Ruby",
-					"files": 21,
-					"lines": 393,
-					"percentage": 100
-				}
-			],
-			"framework": "Rails",
-			"firstCommitDate": "2013-04-23T21:13:45.000Z",
-			"lastCommitDate": "2013-04-23T21:13:45.000Z",
-			"totalLinesOfCode": 393,
-			"myLinesOfCode": 597,
-			"myCommitCount": 3,
-			"totalCommitCount": 3,
-			"contributorCount": 1,
-			"commitYearStats": {
-				"2013": 3
-			},
-			"isPersonalProject": true,
-			"repository": "git@github.com:michel/websocket-demo.git",
-			"path": "/Users/micheldegraaf/src/oldmac/oldmac3/websocket-demo",
-			"status": "archived",
-			"isMonorepo": false
-		},
-		{
 			"name": "viaviela-portal",
 			"description": null,
 			"customer": "Kabisa",
@@ -2384,36 +3110,6 @@
 			"isPersonalProject": false,
 			"repository": "git@git.kabisa.nl:commerciele_cvs.git",
 			"path": "/Users/micheldegraaf/src/commerciele_cvs",
-			"status": "archived",
-			"isMonorepo": false
-		},
-		{
-			"name": "mandysblog",
-			"description": null,
-			"customer": "Personal",
-			"language": "JavaScript",
-			"languages": [
-				{
-					"language": "JavaScript",
-					"files": 9,
-					"lines": 631,
-					"percentage": 100
-				}
-			],
-			"framework": null,
-			"firstCommitDate": "2013-12-29T00:14:08.000Z",
-			"lastCommitDate": "2013-12-29T00:14:08.000Z",
-			"totalLinesOfCode": 631,
-			"myLinesOfCode": 2003,
-			"myCommitCount": 6,
-			"totalCommitCount": 6,
-			"contributorCount": 1,
-			"commitYearStats": {
-				"2013": 6
-			},
-			"isPersonalProject": true,
-			"repository": "git@github.com:michel/metropolitan_frontend.git",
-			"path": "/Users/micheldegraaf/src/metropolitan_frontend",
 			"status": "archived",
 			"isMonorepo": false
 		},
@@ -2845,42 +3541,6 @@
 			"isPersonalProject": true,
 			"repository": null,
 			"path": "/Users/micheldegraaf/src/examples/web_demo",
-			"status": "unknown",
-			"isMonorepo": false
-		},
-		{
-			"name": "python",
-			"description": null,
-			"customer": "Personal",
-			"language": "Python",
-			"languages": [
-				{
-					"language": "Python",
-					"files": 16,
-					"lines": 6849,
-					"percentage": 96
-				},
-				{
-					"language": "C++",
-					"files": 1,
-					"lines": 302,
-					"percentage": 4
-				}
-			],
-			"framework": null,
-			"firstCommitDate": "2015-07-04T05:44:10.000Z",
-			"lastCommitDate": "2015-07-04T05:44:10.000Z",
-			"totalLinesOfCode": 7151,
-			"myLinesOfCode": 7151,
-			"myCommitCount": 2,
-			"totalCommitCount": 2,
-			"contributorCount": 1,
-			"commitYearStats": {
-				"2015": 2
-			},
-			"isPersonalProject": true,
-			"repository": null,
-			"path": "/Users/micheldegraaf/src/python",
 			"status": "unknown",
 			"isMonorepo": false
 		},
@@ -4363,6 +5023,68 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "android",
+			"description": null,
+			"customer": "Dutchies Travel",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 1,
+					"lines": 41,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2016-06-17T08:56:59.000Z",
+			"lastCommitDate": "2017-10-13T11:19:59.785Z",
+			"totalLinesOfCode": 41,
+			"myLinesOfCode": 41,
+			"myCommitCount": 66,
+			"totalCommitCount": 66,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2016": 2,
+				"2017": 64
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/backpack-app/BackpackApp/android",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "app",
+			"description": null,
+			"customer": "Dutchies Travel",
+			"language": "Java",
+			"languages": [
+				{
+					"language": "Java",
+					"files": 1,
+					"lines": 41,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2016-06-17T08:56:59.000Z",
+			"lastCommitDate": "2017-10-13T11:19:53.605Z",
+			"totalLinesOfCode": 41,
+			"myLinesOfCode": 41,
+			"myCommitCount": 65,
+			"totalCommitCount": 65,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2016": 1,
+				"2017": 64
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/backpack-app/BackpackApp/android/app",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "gaudi-portal",
 			"description": null,
 			"customer": "Brickyard",
@@ -5111,6 +5833,76 @@
 			"repository": null,
 			"path": "/Users/micheldegraaf/src/derp",
 			"status": "archived",
+			"isMonorepo": false
+		},
+		{
+			"name": "financial_lease",
+			"description": null,
+			"customer": "Financial Lease",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 3923,
+					"lines": 920202,
+					"percentage": 42
+				},
+				{
+					"language": "PHP",
+					"files": 8186,
+					"lines": 806501,
+					"percentage": 37
+				},
+				{
+					"language": "TypeScript",
+					"files": 2150,
+					"lines": 329164,
+					"percentage": 15
+				},
+				{
+					"language": "C#",
+					"files": 1671,
+					"lines": 109851,
+					"percentage": 5
+				},
+				{
+					"language": "Python",
+					"files": 26,
+					"lines": 3048,
+					"percentage": 0
+				},
+				{
+					"language": "Shell",
+					"files": 47,
+					"lines": 2580,
+					"percentage": 0
+				},
+				{
+					"language": "GraphQL",
+					"files": 5,
+					"lines": 519,
+					"percentage": 0
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2019-11-26T12:30:20.000Z",
+			"lastCommitDate": "2026-01-13T13:10:06.991Z",
+			"totalLinesOfCode": 2171865,
+			"myLinesOfCode": 2171865,
+			"myCommitCount": 3882,
+			"totalCommitCount": 3882,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2019": 1,
+				"2023": 1094,
+				"2024": 1243,
+				"2025": 1116,
+				"2026": 428
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease",
+			"status": "unknown",
 			"isMonorepo": false
 		},
 		{
@@ -5910,6 +6702,78 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "api",
+			"description": null,
+			"customer": "Personal",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 6,
+					"lines": 279,
+					"percentage": 89
+				},
+				{
+					"language": "JavaScript",
+					"files": 2,
+					"lines": 33,
+					"percentage": 11
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2022-04-13T14:46:02.452Z",
+			"lastCommitDate": "2022-04-13T14:46:34.558Z",
+			"totalLinesOfCode": 312,
+			"myLinesOfCode": 312,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2022": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/blockchain/blockchain_twitter_frontend/api",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "web",
+			"description": null,
+			"customer": "Personal",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 4,
+					"lines": 148,
+					"percentage": 94
+				},
+				{
+					"language": "JavaScript",
+					"files": 1,
+					"lines": 9,
+					"percentage": 6
+				}
+			],
+			"framework": "React",
+			"firstCommitDate": "2022-04-13T14:46:02.456Z",
+			"lastCommitDate": "2022-04-13T14:46:02.459Z",
+			"totalLinesOfCode": 157,
+			"myLinesOfCode": 157,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2022": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/blockchain/blockchain_twitter_frontend/web",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "equalexperts",
 			"description": null,
 			"customer": "Personal",
@@ -6142,7 +7006,7 @@
 			"firstCommitDate": "2022-11-29T12:33:57.000Z",
 			"lastCommitDate": "2022-11-29T12:33:57.000Z",
 			"totalLinesOfCode": 63980,
-			"myLinesOfCode": 62305,
+			"myLinesOfCode": 53438,
 			"myCommitCount": 2305,
 			"totalCommitCount": 3800,
 			"contributorCount": 27,
@@ -6296,6 +7160,162 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "packer",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 2,
+					"lines": 16,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2023-11-07T11:00:37.617Z",
+			"lastCommitDate": "2023-11-07T11:32:56.657Z",
+			"totalLinesOfCode": 16,
+			"myLinesOfCode": 16,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2023": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/packer",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "vivi-bulk-poc",
+			"description": "ViVi Bulk Proof of Concept",
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 15,
+					"lines": 1164,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2023-12-11T18:56:15.081Z",
+			"lastCommitDate": "2023-12-12T13:02:40.555Z",
+			"totalLinesOfCode": 1164,
+			"myLinesOfCode": 1164,
+			"myCommitCount": 2,
+			"totalCommitCount": 2,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2023": 2
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/indicata_node_js",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "indicata",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 6,
+					"lines": 399,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2023-12-14T15:04:32.000Z",
+			"lastCommitDate": "2023-12-14T15:04:32.000Z",
+			"totalLinesOfCode": 399,
+			"myLinesOfCode": 13415,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2023": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/basikon_experiments/indicata",
+			"status": "archived",
+			"isMonorepo": false
+		},
+		{
+			"name": "onfido",
+			"description": null,
+			"customer": null,
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 1,
+					"lines": 104,
+					"percentage": 58
+				},
+				{
+					"language": "Shell",
+					"files": 2,
+					"lines": 74,
+					"percentage": 42
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2024-03-15T16:08:48.276Z",
+			"lastCommitDate": "2024-04-11T14:04:06.443Z",
+			"totalLinesOfCode": 178,
+			"myLinesOfCode": 178,
+			"myCommitCount": 2,
+			"totalCommitCount": 2,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2024": 2
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/basikon_experiments/onfido",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "financialleasesalesforcedev",
+			"description": null,
+			"customer": "Financial Lease",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 20,
+					"lines": 1467,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2024-04-04T14:46:30.000Z",
+			"lastCommitDate": "2024-04-04T14:46:30.000Z",
+			"totalLinesOfCode": 1467,
+			"myLinesOfCode": 2517,
+			"myCommitCount": 54,
+			"totalCommitCount": 418,
+			"contributorCount": 11,
+			"commitYearStats": {
+				"2023": 54
+			},
+			"isPersonalProject": false,
+			"repository": "git@github.com:financiallease-nl/FinancialLeaseSalesforceDev.git",
+			"path": "/Users/micheldegraaf/src/financial_lease/FinancialLeaseSalesforceDev",
+			"status": "maintained",
+			"isMonorepo": false
+		},
+		{
 			"name": "locatiecentrale",
 			"description": null,
 			"customer": "locatiecentrale",
@@ -6330,6 +7350,101 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "lease-calculator",
+			"description": "serverless offline",
+			"customer": "Financial Lease",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 8,
+					"lines": 948,
+					"percentage": 74
+				},
+				{
+					"language": "GraphQL",
+					"files": 1,
+					"lines": 310,
+					"percentage": 24
+				},
+				{
+					"language": "Shell",
+					"files": 1,
+					"lines": 21,
+					"percentage": 2
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2024-05-14T06:30:06.000Z",
+			"lastCommitDate": "2024-05-14T06:30:06.000Z",
+			"totalLinesOfCode": 1279,
+			"myLinesOfCode": 22773,
+			"myCommitCount": 71,
+			"totalCommitCount": 111,
+			"contributorCount": 4,
+			"commitYearStats": {
+				"2023": 71
+			},
+			"isPersonalProject": true,
+			"repository": "git@github.com:financiallease-nl/lease-calculator-service.git",
+			"path": "/Users/micheldegraaf/src/financial_lease/lease-calculator-service",
+			"status": "maintained",
+			"isMonorepo": false
+		},
+		{
+			"name": "website",
+			"description": null,
+			"customer": "Revive Capital",
+			"language": "Unknown",
+			"languages": [],
+			"framework": null,
+			"firstCommitDate": "2024-07-25T14:21:22.000Z",
+			"lastCommitDate": "2024-07-25T14:21:22.000Z",
+			"totalLinesOfCode": 0,
+			"myLinesOfCode": 131,
+			"myCommitCount": 6,
+			"totalCommitCount": 9,
+			"contributorCount": 2,
+			"commitYearStats": {
+				"2024": 6
+			},
+			"isPersonalProject": true,
+			"repository": "https://github.com/revive-capital/website.git",
+			"path": "/Users/micheldegraaf/src/financial_lease/website",
+			"status": "maintained",
+			"isMonorepo": false
+		},
+		{
+			"name": "reservation",
+			"description": null,
+			"customer": null,
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 6,
+					"lines": 274,
+					"percentage": 100
+				}
+			],
+			"framework": "Express",
+			"firstCommitDate": "2024-08-07T07:22:40.869Z",
+			"lastCommitDate": "2024-08-07T08:13:57.737Z",
+			"totalLinesOfCode": 274,
+			"myLinesOfCode": 274,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2024": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/reservation",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "leads_backend",
 			"description": null,
 			"customer": "Hypotheekrente.nl",
@@ -6352,7 +7467,7 @@
 			"firstCommitDate": "2024-09-20T08:34:28.000Z",
 			"lastCommitDate": "2024-09-20T08:34:28.000Z",
 			"totalLinesOfCode": 11249,
-			"myLinesOfCode": 320940,
+			"myLinesOfCode": 345531,
 			"myCommitCount": 452,
 			"totalCommitCount": 452,
 			"contributorCount": 2,
@@ -6420,6 +7535,155 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "hyperfront",
+			"description": "Basikon Hyperfront",
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 2492,
+					"lines": 625081,
+					"percentage": 99
+				},
+				{
+					"language": "TypeScript",
+					"files": 14,
+					"lines": 8005,
+					"percentage": 1
+				},
+				{
+					"language": "Shell",
+					"files": 6,
+					"lines": 310,
+					"percentage": 0
+				}
+			],
+			"framework": "Express",
+			"firstCommitDate": "2024-11-27T21:42:37.000Z",
+			"lastCommitDate": "2026-01-13T13:10:06.991Z",
+			"totalLinesOfCode": 633396,
+			"myLinesOfCode": 633396,
+			"myCommitCount": 572,
+			"totalCommitCount": 572,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2024": 50,
+				"2025": 183,
+				"2026": 339
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "extraction",
+			"description": null,
+			"customer": null,
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 4,
+					"lines": 663,
+					"percentage": 98
+				},
+				{
+					"language": "JavaScript",
+					"files": 1,
+					"lines": 12,
+					"percentage": 2
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2024-12-02T14:10:57.641Z",
+			"lastCommitDate": "2024-12-12T10:48:03.662Z",
+			"totalLinesOfCode": 675,
+			"myLinesOfCode": 675,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2024": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/experiments/extraction",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "basikon-lib",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 48,
+					"lines": 39519,
+					"percentage": 95
+				},
+				{
+					"language": "TypeScript",
+					"files": 2,
+					"lines": 2177,
+					"percentage": 5
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2024-12-05T09:47:23.000Z",
+			"lastCommitDate": "2026-01-13T09:53:28.544Z",
+			"totalLinesOfCode": 41696,
+			"myLinesOfCode": 41696,
+			"myCommitCount": 6,
+			"totalCommitCount": 6,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2024": 1,
+				"2026": 5
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/basikon-lib",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "basikon-server-external",
+			"description": null,
+			"customer": "Revive Capital",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 270,
+					"lines": 77924,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2024-12-05T09:47:25.000Z",
+			"lastCommitDate": "2026-01-13T10:31:23.978Z",
+			"totalLinesOfCode": 77924,
+			"myLinesOfCode": 77924,
+			"myCommitCount": 21,
+			"totalCommitCount": 21,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2024": 1,
+				"2025": 1,
+				"2026": 19
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/basikon-server-external",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "flowai",
 			"description": null,
 			"customer": "Personal",
@@ -6446,6 +7710,42 @@
 			"isPersonalProject": true,
 			"repository": null,
 			"path": "/Users/micheldegraaf/src/flowai",
+			"status": "maintained",
+			"isMonorepo": false
+		},
+		{
+			"name": "salesforce-app",
+			"description": "Salesforce App",
+			"customer": "Financial Lease",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 38,
+					"lines": 2085,
+					"percentage": 93
+				},
+				{
+					"language": "Shell",
+					"files": 1,
+					"lines": 149,
+					"percentage": 7
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2025-06-19T15:49:14.000Z",
+			"lastCommitDate": "2025-06-19T15:49:14.000Z",
+			"totalLinesOfCode": 2234,
+			"myLinesOfCode": 954,
+			"myCommitCount": 6,
+			"totalCommitCount": 2566,
+			"contributorCount": 15,
+			"commitYearStats": {
+				"2024": 6
+			},
+			"isPersonalProject": false,
+			"repository": "https://github.com/financiallease-nl/sf_devops_center",
+			"path": "/Users/micheldegraaf/src/financial_lease/sf_devops_center",
 			"status": "maintained",
 			"isMonorepo": false
 		},
@@ -6623,6 +7923,37 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "basikon-test-lib",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 38,
+					"lines": 9401,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2025-12-03T12:04:15.809Z",
+			"lastCommitDate": "2026-01-13T09:54:02.165Z",
+			"totalLinesOfCode": 9401,
+			"myLinesOfCode": 9401,
+			"myCommitCount": 7,
+			"totalCommitCount": 7,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2025": 5,
+				"2026": 2
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/basikon-test-lib",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "code_spy",
 			"description": null,
 			"customer": "Personal",
@@ -6749,6 +8080,37 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "basikon-server-report",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 40,
+					"lines": 10627,
+					"percentage": 100
+				}
+			],
+			"framework": "Express",
+			"firstCommitDate": "2025-12-19T15:29:07.034Z",
+			"lastCommitDate": "2026-01-13T09:53:48.978Z",
+			"totalLinesOfCode": 10627,
+			"myLinesOfCode": 10627,
+			"myCommitCount": 60,
+			"totalCommitCount": 60,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2025": 55,
+				"2026": 5
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/basikon-server-report",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "prefix-sum",
 			"description": "Prefix sum + hash map algorithm problems",
 			"customer": "Personal",
@@ -6840,6 +8202,222 @@
 			"isMonorepo": false
 		},
 		{
+			"name": "contract-document-verifier",
+			"description": null,
+			"customer": "Financial Lease",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 75,
+					"lines": 36164,
+					"percentage": 95
+				},
+				{
+					"language": "Python",
+					"files": 6,
+					"lines": 1795,
+					"percentage": 5
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2026-01-07T13:49:45.000Z",
+			"lastCommitDate": "2026-01-07T13:49:45.000Z",
+			"totalLinesOfCode": 37959,
+			"myLinesOfCode": 86780,
+			"myCommitCount": 22,
+			"totalCommitCount": 22,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2025": 18,
+				"2026": 4
+			},
+			"isPersonalProject": true,
+			"repository": "git@github.com:financiallease-nl/contract-document-verifier.git",
+			"path": "/Users/micheldegraaf/src/financial_lease/contract-document-verifier",
+			"status": "active",
+			"isMonorepo": false
+		},
+		{
+			"name": "dealer-portal",
+			"description": null,
+			"customer": "Financial Lease",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 593,
+					"lines": 89406,
+					"percentage": 95
+				},
+				{
+					"language": "JavaScript",
+					"files": 38,
+					"lines": 3947,
+					"percentage": 4
+				},
+				{
+					"language": "Shell",
+					"files": 6,
+					"lines": 394,
+					"percentage": 0
+				}
+			],
+			"framework": "Next.js",
+			"firstCommitDate": "2026-01-12T12:26:28.000Z",
+			"lastCommitDate": "2026-01-12T12:26:28.000Z",
+			"totalLinesOfCode": 93747,
+			"myLinesOfCode": 48474,
+			"myCommitCount": 1075,
+			"totalCommitCount": 2850,
+			"contributorCount": 13,
+			"commitYearStats": {
+				"2023": 250,
+				"2024": 114,
+				"2025": 709,
+				"2026": 2
+			},
+			"isPersonalProject": false,
+			"repository": "git@github.com:financiallease-nl/dealer-portal.git",
+			"path": "/Users/micheldegraaf/src/financial_lease/dealer-portal",
+			"status": "active",
+			"isMonorepo": false
+		},
+		{
+			"name": "external-api",
+			"description": null,
+			"customer": "Revive Capital",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 75,
+					"lines": 31407,
+					"percentage": 100
+				},
+				{
+					"language": "Shell",
+					"files": 2,
+					"lines": 80,
+					"percentage": 0
+				},
+				{
+					"language": "JavaScript",
+					"files": 3,
+					"lines": 48,
+					"percentage": 0
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2026-01-12T14:51:55.000Z",
+			"lastCommitDate": "2026-01-12T14:51:55.000Z",
+			"totalLinesOfCode": 31535,
+			"myLinesOfCode": 478035,
+			"myCommitCount": 187,
+			"totalCommitCount": 197,
+			"contributorCount": 4,
+			"commitYearStats": {
+				"2024": 135,
+				"2025": 50,
+				"2026": 2
+			},
+			"isPersonalProject": true,
+			"repository": "git@github.com:revive-capital/external-api.git",
+			"path": "/Users/micheldegraaf/src/financial_lease/external-api",
+			"status": "active",
+			"isMonorepo": false
+		},
+		{
+			"name": "basikon-common-utils",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 35,
+					"lines": 11984,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2026-01-12T16:48:19.000Z",
+			"lastCommitDate": "2026-01-13T09:53:28.170Z",
+			"totalLinesOfCode": 11984,
+			"myLinesOfCode": 11984,
+			"myCommitCount": 3,
+			"totalCommitCount": 3,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2026": 3
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/basikon-common-utils",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "basikon-server-ebics",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 60,
+					"lines": 9874,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2026-01-12T16:48:20.000Z",
+			"lastCommitDate": "2026-01-13T09:53:30.211Z",
+			"totalLinesOfCode": 9874,
+			"myLinesOfCode": 9874,
+			"myCommitCount": 5,
+			"totalCommitCount": 5,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2026": 5
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/basikon-server-ebics",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
+			"name": "basikon-server-import",
+			"description": null,
+			"customer": null,
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 8,
+					"lines": 2655,
+					"percentage": 100
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2026-01-12T16:48:20.000Z",
+			"lastCommitDate": "2026-01-13T09:53:41.821Z",
+			"totalLinesOfCode": 2655,
+			"myLinesOfCode": 2655,
+			"myCommitCount": 1,
+			"totalCommitCount": 1,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2026": 1
+			},
+			"isPersonalProject": true,
+			"repository": null,
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/basikon-server-import",
+			"status": "unknown",
+			"isMonorepo": false
+		},
+		{
 			"name": "portfolio-analyzer",
 			"description": "Analyze project directories and generate metadata for portfolio",
 			"customer": "Personal",
@@ -6848,14 +8426,14 @@
 				{
 					"language": "TypeScript",
 					"files": 15,
-					"lines": 1780,
+					"lines": 1808,
 					"percentage": 100
 				}
 			],
 			"framework": null,
 			"firstCommitDate": "2026-01-12T19:46:30.000Z",
 			"lastCommitDate": "2026-01-12T19:46:30.000Z",
-			"totalLinesOfCode": 1780,
+			"totalLinesOfCode": 1808,
 			"myLinesOfCode": 2670,
 			"myCommitCount": 1,
 			"totalCommitCount": 1,
@@ -6878,7 +8456,7 @@
 				{
 					"language": "TypeScript",
 					"files": 43,
-					"lines": 10583,
+					"lines": 10648,
 					"percentage": 100
 				},
 				{
@@ -6889,12 +8467,12 @@
 				}
 			],
 			"framework": "React",
-			"firstCommitDate": "2026-01-12T23:37:57.000Z",
-			"lastCommitDate": "2026-01-12T23:37:57.000Z",
-			"totalLinesOfCode": 10585,
-			"myLinesOfCode": 14127,
-			"myCommitCount": 67,
-			"totalCommitCount": 67,
+			"firstCommitDate": "2026-01-13T01:48:06.000Z",
+			"lastCommitDate": "2026-01-13T01:48:06.000Z",
+			"totalLinesOfCode": 10650,
+			"myLinesOfCode": 19111,
+			"myCommitCount": 71,
+			"totalCommitCount": 71,
 			"contributorCount": 1,
 			"commitYearStats": {
 				"2015": 8,
@@ -6902,11 +8480,56 @@
 				"2020": 1,
 				"2023": 1,
 				"2025": 44,
-				"2026": 9
+				"2026": 13
 			},
 			"isPersonalProject": true,
 			"repository": "git@github.com:michel/michel.git",
 			"path": "/Users/micheldegraaf/src/michel",
+			"status": "active",
+			"isMonorepo": false
+		},
+		{
+			"name": "implementation-finlease",
+			"description": "Financiallease.nl",
+			"customer": "Revive Capital",
+			"language": "JavaScript",
+			"languages": [
+				{
+					"language": "JavaScript",
+					"files": 329,
+					"lines": 95127,
+					"percentage": 94
+				},
+				{
+					"language": "TypeScript",
+					"files": 12,
+					"lines": 5828,
+					"percentage": 6
+				},
+				{
+					"language": "Shell",
+					"files": 3,
+					"lines": 56,
+					"percentage": 0
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2026-01-13T13:02:58.000Z",
+			"lastCommitDate": "2026-01-13T13:02:58.000Z",
+			"totalLinesOfCode": 101011,
+			"myLinesOfCode": 296815,
+			"myCommitCount": 759,
+			"totalCommitCount": 2572,
+			"contributorCount": 25,
+			"commitYearStats": {
+				"2023": 24,
+				"2024": 517,
+				"2025": 203,
+				"2026": 15
+			},
+			"isPersonalProject": false,
+			"repository": "git@github.com:basikon2/implementation-finlease.git",
+			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/implementation-finlease",
 			"status": "active",
 			"isMonorepo": false
 		}
