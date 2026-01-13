@@ -181,6 +181,7 @@ const InfoBox = ({ tip }: { tip: string | null }) => {
 			<Line> Or click to run in the terminal:</Line>
 			<Line> </Line>
 			<Cmd cmd="help" desc="see all commands" />
+			<Cmd cmd="colorscheme" desc="cycle theme" />
 			<Cmd cmd="cowsay hi" desc="make a cow talk" />
 			<Cmd cmd="fortune" desc="words of wisdom" />
 			<Line> </Line>

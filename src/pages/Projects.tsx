@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import { useEditor } from "../context/EditorContext"
 import { usePageTitle } from "../hooks/usePageTitle"
 
 type Language = {
@@ -192,6 +193,10 @@ const getCustomerInfo = (customer: string | null | undefined) => {
 
 export default function Projects() {
 	usePageTitle("projects")
+	const { openBuffer } = useEditor()
+	useEffect(() => {
+		openBuffer("/projects")
+	}, [openBuffer])
 
 	const [projects, setProjects] = useState<Project[]>([])
 	const [loading, setLoading] = useState(true)
@@ -504,7 +509,7 @@ export default function Projects() {
 	const maxLangLines = languageStats[0]?.[1] || 1
 
 	return (
-		<div className="grid min-h-full grid-cols-1 gap-3 overflow-y-auto px-2 pb-2 pt-1 md:h-full md:grid-cols-4 md:grid-rows-[auto_1fr] md:gap-4 md:overflow-hidden md:px-4 md:pb-4 md:pt-2">
+		<div className="grid min-h-full grid-cols-1 gap-3 overflow-y-auto px-1 pb-1 pt-3 md:h-full md:grid-cols-4 md:grid-rows-[auto_1fr] md:gap-4 md:overflow-hidden md:px-4 md:pb-4 md:pt-2">
 			{/* System Stats - spans columns 1-3 */}
 			<header className="order-1 animate-[fadeIn_0.5s_ease-out] md:order-none md:col-span-3">
 				<Panel title="SYSTEM_STATS" titleColor="text-green" className="p-2 md:p-4">
@@ -620,7 +625,7 @@ export default function Projects() {
 			</header>
 
 			{/* Details & Customer Panels - spans both rows, column 4 */}
-			<aside className="order-4 flex h-64 shrink-0 animate-[fadeIn_0.5s_ease-out_0.2s_both] flex-col gap-3 md:order-none md:h-auto md:min-h-0 md:flex-1 md:row-span-2 md:gap-4">
+			<aside className="order-4 flex h-auto shrink-0 pt-2 animate-[fadeIn_0.5s_ease-out_0.2s_both] flex-col gap-4 md:order-none md:h-auto md:min-h-0 md:flex-1 md:row-span-2 md:gap-4 md:pt-0">
 				<Panel title="DETAILS" titleColor="text-yellow" className="flex-1 p-2 md:p-4">
 					{selectedProject ? (
 						<div className="flex h-full flex-col gap-4">
@@ -753,7 +758,7 @@ export default function Projects() {
 			</aside>
 
 			{/* Languages & Customers - column 1 */}
-			<div className="order-3 flex shrink-0 animate-[fadeIn_0.5s_ease-out_0.1s_both] flex-col gap-3 md:order-none md:col-span-1 md:min-h-0 md:flex-1 md:gap-4">
+			<div className="order-2 flex shrink-0 pt-2 animate-[fadeIn_0.5s_ease-out_0.1s_both] flex-col gap-3 md:order-none md:col-span-1 md:min-h-0 md:flex-1 md:gap-4 md:pt-0">
 				<aside className="flex h-20 shrink-0 flex-col md:h-auto md:min-h-0 md:flex-1">
 					<Panel
 						title={`LANGUAGES (${languageStats.length})`}
@@ -799,7 +804,7 @@ export default function Projects() {
 					</Panel>
 				</aside>
 
-				<aside className="flex h-16 shrink-0 flex-col md:h-auto md:min-h-0 md:flex-1">
+				<aside className="flex h-16 shrink-0 pt-1 flex-col md:h-auto md:min-h-0 md:flex-1 md:pt-0">
 					<Panel
 						title={`CUSTOMERS (${customerStats.length})`}
 						titleColor="text-orange"
@@ -838,7 +843,7 @@ export default function Projects() {
 			</div>
 
 			{/* Project List - columns 2-3 */}
-			<section className="order-2 flex min-h-[300px] shrink-0 animate-[fadeIn_0.5s_ease-out_0.15s_both] flex-col md:order-none md:col-span-2 md:min-h-0 md:flex-1">
+			<section className="order-3 flex min-h-[300px] max-h-[50vh] shrink-0 pt-2 animate-[fadeIn_0.5s_ease-out_0.15s_both] flex-col md:order-none md:col-span-2 md:min-h-0 md:max-h-none md:flex-1 md:pt-0">
 				<Panel
 					title={`PROJECTS (${filter.type || searchQuery ? `${filteredProjects.length} of ` : ""}${projects.length})${searchQuery ? ` /${searchQuery}` : ""}`}
 					titleColor="text-cyan"
