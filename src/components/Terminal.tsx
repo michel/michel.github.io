@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useEditor } from "../context/EditorContext"
+import { themeNames } from "../data/themes"
 import {
 	availableCommands,
 	executeCommand,
@@ -71,7 +72,15 @@ export default function Terminal() {
 		clearPendingCommand,
 		openSnakeGame,
 		openAdventureGame,
+		theme,
+		setTheme,
 	} = useEditor()
+
+	const cycleTheme = () => {
+		const currentIndex = themeNames.indexOf(theme)
+		const nextIndex = (currentIndex + 1) % themeNames.length
+		setTheme(themeNames[nextIndex] ?? "default")
+	}
 	const [currentDirectory, setCurrentDirectory] = useState("/home/michel/blog")
 	const [history, setHistory] = useState<TerminalLine[]>(() => {
 		// Run neofetch on initial mount
@@ -107,6 +116,7 @@ export default function Terminal() {
 		])
 		setCommandHistory((h) => [...h, pendingTerminalCommand])
 		if (result.newDirectory) setCurrentDirectory(result.newDirectory)
+		if (result.cycleTheme) cycleTheme()
 		clearPendingCommand()
 	}, [pendingTerminalCommand, currentDirectory, clearPendingCommand])
 
@@ -190,6 +200,10 @@ export default function Terminal() {
 
 		if (result.openAdventureGame) {
 			setTimeout(() => openAdventureGame(), 300)
+		}
+
+		if (result.cycleTheme) {
+			cycleTheme()
 		}
 
 		setInput("")

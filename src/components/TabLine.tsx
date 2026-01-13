@@ -1,11 +1,18 @@
-import { Home } from "lucide-react"
+import { Home, Palette } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { allFiles, useEditor } from "../context/EditorContext"
+import { themeNames, themes } from "../data/themes"
 
 export default function TabLine() {
 	const navigate = useNavigate()
 	const location = useLocation()
-	const { openBuffers, toggleMobileSidebar } = useEditor()
+	const { openBuffers, toggleMobileSidebar, theme, setTheme } = useEditor()
+
+	const cycleTheme = () => {
+		const currentIndex = themeNames.indexOf(theme)
+		const nextIndex = (currentIndex + 1) % themeNames.length
+		setTheme(themeNames[nextIndex] ?? "default")
+	}
 
 	return (
 		<div className="flex select-none overflow-x-auto" style={{ backgroundColor: "#191725" }}>
@@ -86,6 +93,18 @@ export default function TabLine() {
 					</div>
 				)
 			})}
+			{/* Theme toggle */}
+			<div
+				className="group relative ml-auto cursor-pointer px-3 py-1 text-comment hover:text-fg"
+				onClick={cycleTheme}
+			>
+				<Palette className="h-4 w-4" />
+				<div className="pointer-events-none absolute right-0 top-full z-20 mt-1 hidden group-hover:block">
+					<div className="whitespace-nowrap rounded border border-border bg-bg-dark px-2 py-1 text-xs text-fg shadow-lg">
+						Theme: <span className="text-cyan">{themes[theme]?.label ?? theme}</span>
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }

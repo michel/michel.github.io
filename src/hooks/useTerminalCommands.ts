@@ -47,6 +47,7 @@ export interface CommandResult {
 	newDirectory?: string
 	openSnakeGame?: boolean
 	openAdventureGame?: boolean
+	cycleTheme?: boolean
 }
 
 type CommandHandler = (args: string[], cwd: string) => CommandResult
@@ -1580,6 +1581,11 @@ const commands: Record<string, CommandHandler> = {
 			"",
 			"\x1b[comment]Access Granted. Welcome back, hackerman.\x1b[reset]",
 		],
+	}),
+
+	colorscheme: () => ({
+		output: ["\x1b[cyan]Cycling colorscheme...\x1b[reset]"],
+		cycleTheme: true,
 	}),
 }
 
