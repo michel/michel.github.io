@@ -612,7 +612,7 @@ export default function Projects() {
 												style={{ height: `${heightPct}%` }}
 											/>
 										</div>
-										<div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden -translate-x-1/2 group-hover:block">
+										<div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 opacity-0 transition-opacity group-hover:opacity-100">
 											<div className="whitespace-nowrap rounded border border-border bg-bg-dark px-2 py-1 text-xs text-fg shadow-lg">
 												<span className="font-bold text-cyan">{item.year}</span>:{" "}
 												{formatNum(item.count)} commits
