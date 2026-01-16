@@ -194,7 +194,7 @@ export default function About() {
 					<div key="metrics-langs-header" className="ml-8 text-yellow font-bold">
 						Languages
 					</div>,
-					<div key="metrics-langs" className="ml-8 font-mono text-sm">
+					<div key="metrics-langs" className="ml-8 font-mono">
 						{metrics.topLangs.map(([lang, count], i) => (
 							<span key={lang}>
 								<Link to={`/projects?lang=${lang}`} className="text-fg hover:underline">
@@ -209,7 +209,7 @@ export default function About() {
 					<div key="metrics-fw-header" className="ml-8 text-yellow font-bold">
 						Frameworks
 					</div>,
-					<div key="metrics-fw" className="ml-8 font-mono text-sm">
+					<div key="metrics-fw" className="ml-8 font-mono">
 						{metrics.topFrameworks.map(([fw, count], i) => (
 							<span key={fw}>
 								<span className="text-fg">{fw}</span>
@@ -222,7 +222,7 @@ export default function About() {
 					<div key="metrics-enterprise-header" className="ml-8 text-yellow font-bold">
 						Enterprise Clients
 					</div>,
-					<div key="metrics-enterprise" className="ml-8 font-mono text-sm">
+					<div key="metrics-enterprise" className="ml-8 font-mono">
 						{Object.entries(metrics.enterpriseStats).map(([name, count], i, arr) => (
 							<span key={name}>
 								<Link
@@ -243,7 +243,7 @@ export default function About() {
 					...metrics.topProjects.map((p, i) => {
 						const years = getYearRange(p)
 						return (
-							<div key={`top-proj-${i}`} className="ml-8 font-mono text-sm">
+							<div key={`top-proj-${i}`} className="ml-8 font-mono">
 								<Link to={`/projects?q=${p.name}`} className="text-fg hover:underline">
 									{p.name}
 								</Link>
@@ -262,7 +262,7 @@ export default function About() {
 					<div key="metrics-leadership-header" className="ml-8 text-yellow font-bold">
 						Leadership Indicators
 					</div>,
-					<ul key="metrics-leadership" className="ml-8 list-disc list-inside text-sm">
+					<ul key="metrics-leadership" className="ml-8 list-disc list-inside">
 						<li>
 							<span className="text-cyan">207</span> personal/solo projects — initiative and
 							self-driven development
@@ -279,7 +279,7 @@ export default function About() {
 					<div key="metrics-talking-header" className="ml-8 text-yellow font-bold">
 						Value Proposition
 					</div>,
-					<ol key="metrics-talking" className="ml-8 list-decimal list-inside text-sm">
+					<ol key="metrics-talking" className="ml-8 list-decimal list-inside">
 						<li>
 							<span className="text-fg font-semibold">Full-stack polyglot</span>
 							<span className="text-comment">
