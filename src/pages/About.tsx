@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react"
+import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import Buffer from "../components/Buffer"
 import { usePageTitle } from "../hooks/usePageTitle"
@@ -249,7 +249,8 @@ export default function About() {
 								</Link>
 								<span className="text-comment">
 									{" "}
-									— {formatNum(p.totalLinesOfCode)} LOC, {formatNum(p.myCommitCount)} personal commits
+									— {formatNum(p.totalLinesOfCode)} LOC, {formatNum(p.myCommitCount)} personal
+									commits
 									{p.customer &&
 										` (${p.customer === "Homigo" ? "ING" : p.customer === "Brickyard" ? "Yellobrick" : p.customer})`}
 									{years && ` [${years}]`}
@@ -281,7 +282,10 @@ export default function About() {
 					<ol key="metrics-talking" className="ml-8 list-decimal list-inside text-sm">
 						<li>
 							<span className="text-fg font-semibold">Full-stack polyglot</span>
-							<span className="text-comment"> — Proven across Ruby, TypeScript, Java, Elixir, Rust</span>
+							<span className="text-comment">
+								{" "}
+								— Proven across Ruby, TypeScript, Java, Elixir, Rust
+							</span>
 						</li>
 						<li>
 							<span className="text-fg font-semibold">Enterprise experience</span>
