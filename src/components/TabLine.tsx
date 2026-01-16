@@ -99,7 +99,7 @@ export default function TabLine() {
 				onClick={cycleTheme}
 			>
 				<Palette className="h-4 w-4" />
-				<div className="pointer-events-none absolute right-0 top-full z-20 mt-1 hidden group-hover:block">
+				<div className="pointer-events-none absolute right-0 top-full z-20 mt-1 opacity-0 transition-opacity group-hover:opacity-100">
 					<div className="whitespace-nowrap rounded border border-border bg-bg-dark px-2 py-1 text-xs text-fg shadow-lg">
 						Theme: <span className="text-cyan">{themes[theme]?.label ?? theme}</span>
 					</div>
