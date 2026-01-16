@@ -1,6 +1,35 @@
-import type { ReactNode } from "react"
+import { useEffect, useMemo, useState, type ReactNode } from "react"
+import { Link } from "react-router-dom"
 import Buffer from "../components/Buffer"
 import { usePageTitle } from "../hooks/usePageTitle"
+
+type Project = {
+	name: string
+	customer?: string | null
+	language: string
+	framework?: string | null
+	firstCommitDate?: string
+	lastCommitDate?: string
+	totalLinesOfCode: number
+	myLinesOfCode: number
+	myCommitCount: number
+}
+
+const formatNum = (n: number) =>
+	n >= 1_000_000
+		? `${(n / 1_000_000).toFixed(1)}M`
+		: n >= 1_000
+			? `${Math.round(n / 1_000)}K`
+			: String(n)
+
+const getYearRange = (p: Project): string => {
+	const start = p.firstCommitDate ? new Date(p.firstCommitDate).getFullYear() : null
+	const end = p.lastCommitDate ? new Date(p.lastCommitDate).getFullYear() : null
+	if (!start || start < 1980) return ""
+	if (!end || end < 1980) return `${start}`
+	if (start === end) return `${start}`
+	return `${start}-${end}`
+}
 
 const ManEntry = ({
 	id,
@@ -34,6 +63,77 @@ const ManEntry = ({
 
 export default function About() {
 	usePageTitle("About")
+	const [projects, setProjects] = useState<Project[]>([])
+
+	useEffect(() => {
+		fetch("/projects.json")
+			.then((res) => res.json())
+			.then((data) => setProjects(data.projects))
+			.catch(() => {})
+	}, [])
+
+	const metrics = useMemo(() => {
+		if (projects.length === 0) return null
+
+		const dates = projects
+			.map((p) => (p.firstCommitDate ? new Date(p.firstCommitDate) : null))
+			.filter((d): d is Date => d !== null && d.getFullYear() > 1970)
+		const earliest = dates.length ? Math.min(...dates.map((d) => d.getTime())) : Date.now()
+		const years = new Date().getFullYear() - new Date(earliest).getFullYear()
+
+		const totalLoc = projects.reduce((acc, p) => acc + (p.myLinesOfCode || 0), 0)
+		const totalCommits = projects.reduce((acc, p) => acc + (p.myCommitCount || 0), 0)
+
+		const personalNames = ["personal", "michel", "micheldegraaf"]
+		const customers = new Set(
+			projects
+				.map((p) => p.customer)
+				.filter((c): c is string => !!c && !personalNames.includes(c.toLowerCase()))
+				.map((c) => (c === "Homigo" ? "ING" : c)),
+		)
+
+		const langCounts: Record<string, number> = {}
+		projects.forEach((p) => {
+			if (p.language) langCounts[p.language] = (langCounts[p.language] || 0) + 1
+		})
+		const topLangs = Object.entries(langCounts)
+			.filter(([lang]) => lang !== "Unknown")
+			.sort((a, b) => b[1] - a[1])
+			.slice(0, 6)
+
+		const frameworkCounts: Record<string, number> = {}
+		projects.forEach((p) => {
+			if (p.framework) frameworkCounts[p.framework] = (frameworkCounts[p.framework] || 0) + 1
+		})
+		const topFrameworks = Object.entries(frameworkCounts)
+			.sort((a, b) => b[1] - a[1])
+			.slice(0, 4)
+
+		const topProjects = [...projects]
+			.sort((a, b) => (b.myCommitCount || 0) - (a.myCommitCount || 0))
+			.slice(0, 5)
+
+		const enterpriseNames = ["IKEA", "Homigo", "Tele2", "Philips"]
+		const enterpriseStats: Record<string, number> = {}
+		enterpriseNames.forEach((name) => {
+			const displayName = name === "Homigo" ? "ING" : name
+			const count = projects.filter((p) => p.customer === name).length
+			if (count > 0) enterpriseStats[displayName] = (enterpriseStats[displayName] || 0) + count
+		})
+
+		return {
+			years,
+			totalLoc,
+			totalCommits,
+			totalProjects: projects.length,
+			customers: customers.size,
+			topLangs,
+			topFrameworks,
+			topProjects,
+			enterpriseStats,
+		}
+	}, [projects])
+
 	const lines: ReactNode[] = [
 		<h1 key="title" className="text-2xl font-bold text-fg">
 			MICHEL(1)
@@ -69,10 +169,156 @@ export default function About() {
 			and high-impact solutions in fast-paced environments. Systems thinker who combines deep
 			technical expertise with leadership, mentoring, and strategic vision.
 		</div>,
-		<div key="desc-tags" className="ml-8 text-yellow">
-			#typescript #ruby #rust #elixir #lua
-		</div>,
 		"",
+		...(metrics
+			? [
+					<div key="metrics-header" className="font-bold text-magenta uppercase">
+						METRICS
+					</div>,
+					<div key="metrics-intro" className="ml-8">
+						<span className="text-fg font-semibold">Track record, quantified.</span>{" "}
+						<span className="text-comment italic">Metrics from 22 years of real projects.</span>{" "}
+						<Link to="/projects" className="text-cyan hover:underline">
+							Explore →
+						</Link>
+					</div>,
+					"",
+					<div key="metrics-summary" className="ml-8">
+						<span className="text-cyan">{metrics.years}+</span> years •{" "}
+						<span className="text-cyan">{metrics.totalProjects}</span> projects •{" "}
+						<span className="text-cyan">{formatNum(metrics.totalLoc)}</span> LOC •{" "}
+						<span className="text-cyan">{formatNum(metrics.totalCommits)}</span> commits •{" "}
+						<span className="text-cyan">{metrics.customers}</span> organizations
+					</div>,
+					"",
+					<div key="metrics-langs-header" className="ml-8 text-yellow font-bold">
+						Languages
+					</div>,
+					<div key="metrics-langs" className="ml-8 font-mono text-sm">
+						{metrics.topLangs.map(([lang, count], i) => (
+							<span key={lang}>
+								<Link to={`/projects?lang=${lang}`} className="text-fg hover:underline">
+									{lang}
+								</Link>
+								<span className="text-comment"> ({count})</span>
+								{i < metrics.topLangs.length - 1 ? " • " : ""}
+							</span>
+						))}
+					</div>,
+					"",
+					<div key="metrics-fw-header" className="ml-8 text-yellow font-bold">
+						Frameworks
+					</div>,
+					<div key="metrics-fw" className="ml-8 font-mono text-sm">
+						{metrics.topFrameworks.map(([fw, count], i) => (
+							<span key={fw}>
+								<span className="text-fg">{fw}</span>
+								<span className="text-comment"> ({count})</span>
+								{i < metrics.topFrameworks.length - 1 ? " • " : ""}
+							</span>
+						))}
+					</div>,
+					"",
+					<div key="metrics-enterprise-header" className="ml-8 text-yellow font-bold">
+						Enterprise Clients
+					</div>,
+					<div key="metrics-enterprise" className="ml-8 font-mono text-sm">
+						{Object.entries(metrics.enterpriseStats).map(([name, count], i, arr) => (
+							<span key={name}>
+								<Link
+									to={`/projects?customer=${name === "ING" ? "Homigo" : name}`}
+									className="text-fg hover:underline"
+								>
+									{name}
+								</Link>
+								<span className="text-comment"> ({count} projects)</span>
+								{i < arr.length - 1 ? " • " : ""}
+							</span>
+						))}
+					</div>,
+					"",
+					<div key="metrics-top-header" className="ml-8 text-yellow font-bold">
+						Largest Projects
+					</div>,
+					...metrics.topProjects.map((p, i) => {
+						const years = getYearRange(p)
+						return (
+							<div key={`top-proj-${i}`} className="ml-8 font-mono text-sm">
+								<Link to={`/projects?q=${p.name}`} className="text-fg hover:underline">
+									{p.name}
+								</Link>
+								<span className="text-comment">
+									{" "}
+									— {formatNum(p.totalLinesOfCode)} LOC, {formatNum(p.myCommitCount)} personal commits
+									{p.customer &&
+										` (${p.customer === "Homigo" ? "ING" : p.customer === "Brickyard" ? "Yellobrick" : p.customer})`}
+									{years && ` [${years}]`}
+								</span>
+							</div>
+						)
+					}),
+					"",
+					<div key="metrics-leadership-header" className="ml-8 text-yellow font-bold">
+						Leadership Indicators
+					</div>,
+					<ul key="metrics-leadership" className="ml-8 list-disc list-inside text-sm">
+						<li>
+							<span className="text-cyan">207</span> personal/solo projects — initiative and
+							self-driven development
+						</li>
+						<li>
+							Worked on teams up to <span className="text-cyan">39</span> engineers (gaudi-portal)
+						</li>
+						<li>Maintained open-source projects</li>
+						<li>
+							<span className="text-cyan">13</span> currently active projects
+						</li>
+					</ul>,
+					"",
+					<div key="metrics-talking-header" className="ml-8 text-yellow font-bold">
+						Value Proposition
+					</div>,
+					<ol key="metrics-talking" className="ml-8 list-decimal list-inside text-sm">
+						<li>
+							<span className="text-fg font-semibold">Full-stack polyglot</span>
+							<span className="text-comment"> — Proven across Ruby, TypeScript, Java, Elixir, Rust</span>
+						</li>
+						<li>
+							<span className="text-fg font-semibold">Enterprise experience</span>
+							<span className="text-comment">
+								{" "}
+								— IKEA, Tele2, Philips, plus fintech/proptech startups
+							</span>
+						</li>
+						<li>
+							<span className="text-fg font-semibold">Scale</span>
+							<span className="text-comment">
+								{" "}
+								— 6M+ LOC, 22K commits, 22 years of continuous delivery
+							</span>
+						</li>
+						<li>
+							<span className="text-fg font-semibold">Technical leadership</span>
+							<span className="text-comment">
+								{" "}
+								— Large team collaboration + significant solo ownership
+							</span>
+						</li>
+						<li>
+							<span className="text-fg font-semibold">Modern stack fluency</span>
+							<span className="text-comment">
+								{" "}
+								— React, Next.js, TypeScript, serverless (GraphQL + AWS)
+							</span>
+						</li>
+						<li>
+							<span className="text-fg font-semibold">Domain expertise</span>
+							<span className="text-comment"> — Telecom, fintech, proptech, healthcare</span>
+						</li>
+					</ol>,
+					"",
+				]
+			: []),
 		<div key="exp-header" className="font-bold text-magenta uppercase">
 			EXPERIENCE
 		</div>,

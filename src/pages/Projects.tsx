@@ -177,7 +177,7 @@ const CUSTOMER_DATA: Record<string, { role: string; period: string; activities: 
 	Brickyard: {
 		role: "Software engineer",
 		period: "2016",
-		activities: "Taxameter Centrale BV: taxi meter and fleet management systems",
+		activities: "Yellobrick Parking: fleet management systems",
 	},
 	"Dutchies Travel": {
 		role: "CTO",
@@ -306,6 +306,15 @@ export default function Projects() {
 	const normalizeCustomer = (customer: string | null | undefined): string => {
 		if (!customer || customer === "michel" || customer === "micheldegraaf") return "personal"
 		return customer.toLowerCase()
+	}
+
+	// Display name mapping for customers
+	const getCustomerDisplayName = (name: string): string => {
+		const displayNames: Record<string, string> = {
+			brickyard: "Yellobrick",
+			homigo: "ING",
+		}
+		return displayNames[name.toLowerCase()] || name
 	}
 
 	// Customer stats
@@ -645,7 +654,9 @@ export default function Projects() {
 								<div>
 									<span className="block text-comment">Client</span>
 									<span className="text-fg">
-										{selectedProject.customer || "Internal / Personal"}
+										{selectedProject.customer
+											? getCustomerDisplayName(selectedProject.customer)
+											: "Internal / Personal"}
 									</span>
 								</div>
 								<div>
@@ -730,7 +741,7 @@ export default function Projects() {
 								className="cursor-pointer text-lg font-bold text-fg hover:text-cyan"
 								onClick={() => toggleFilter("customer", selectedProject.customer!)}
 							>
-								{selectedProject.customer}
+								{getCustomerDisplayName(selectedProject.customer!)}
 							</h2>
 							<div className="grid grid-cols-2 gap-2 text-xs">
 								<div>
@@ -826,7 +837,7 @@ export default function Projects() {
 										>
 											<div className="flex justify-between text-xs">
 												<span className={`font-bold ${isActive ? "text-fg" : "text-comment"}`}>
-													{name}
+													{getCustomerDisplayName(name)}
 												</span>
 												<span className="hidden text-[10px] text-comment md:inline">
 													{count} projects
@@ -962,7 +973,7 @@ export default function Projects() {
 											{p.name.length > 25 ? `${p.name.substring(0, 22)}...` : p.name}
 										</div>
 										<div className="hidden w-24 shrink-0 truncate text-comment md:block">
-											{p.customer || "-"}
+											{p.customer ? getCustomerDisplayName(p.customer) : "-"}
 										</div>
 										<div className="hidden w-20 shrink-0 truncate text-magenta md:block">
 											{p.language || "-"}
