@@ -33,8 +33,18 @@ createRoot(document.getElementById("root")!).render(
 			apiKey="phc_Xiya7U8hHyMIzYg6YCQ8ZJEN3dnfCNTyIRJWr1mdO1J"
 			options={{
 				api_host: "https://eu.i.posthog.com",
+				ui_host: "https://eu.posthog.com",
 				defaults: "2025-05-24",
+				capture_pageview: false, // Manual pageview tracking via usePostHogPageview
+				capture_pageleave: true,
 				capture_exceptions: true,
+				session_recording: {
+					maskAllInputs: false,
+					maskInputFn: (text, element) => {
+						const input = element as HTMLInputElement | null
+						return input?.type === "password" || input?.autocomplete === "cc-number" ? "*".repeat(text.length) : text
+					},
+				},
 				debug: import.meta.env.MODE === "development",
 			}}
 		>
