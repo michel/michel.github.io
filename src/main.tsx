@@ -42,7 +42,9 @@ createRoot(document.getElementById("root")!).render(
 					maskAllInputs: false,
 					maskInputFn: (text, element) => {
 						const input = element as HTMLInputElement | null
-						return input?.type === "password" || input?.autocomplete === "cc-number" ? "*".repeat(text.length) : text
+						return input?.type === "password" || input?.autocomplete === "cc-number"
+							? "*".repeat(text.length)
+							: text
 					},
 				},
 				debug: import.meta.env.MODE === "development",
