@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Outlet, useLocation } from "react-router-dom"
 import { useEditor } from "../context/EditorContext"
+import { usePostHogPageview } from "../hooks/usePostHogPageview"
 import { useVimKeys } from "../hooks/useVimKeys"
 import AdventureGame from "./AdventureGame"
 import ColossusTerminal from "./ColossusTerminal"
@@ -21,6 +22,7 @@ import TmuxLine from "./TmuxLine"
 
 export default function Layout() {
 	useVimKeys()
+	usePostHogPageview()
 	const location = useLocation()
 	const mainContentRef = useRef<HTMLDivElement>(null)
 	const {

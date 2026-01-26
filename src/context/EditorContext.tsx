@@ -26,6 +26,12 @@ export const fileTree: FileNode[] = [
 				path: files.rust.path,
 				type: "file",
 			},
+			{
+				id: files.llmocr.id,
+				name: files.llmocr.name,
+				path: files.llmocr.path,
+				type: "file",
+			},
 		],
 	},
 	{ id: files.home.id, name: files.home.name, path: files.home.path, type: "file" },
