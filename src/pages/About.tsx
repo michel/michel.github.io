@@ -291,7 +291,7 @@ export default function About() {
 							<span className="text-fg font-semibold">Enterprise experience</span>
 							<span className="text-comment">
 								{" "}
-								— IKEA, Tele2, Philips, plus fintech/proptech startups
+								— IKEA, Tele2, Philips, ING, fintech/proptech startups
 							</span>
 						</li>
 						<li>
