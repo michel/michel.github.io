@@ -29,4 +29,11 @@ export const content: ContentItem[] = [
 		type: "post",
 		path: "/posts/learning-rust-the-hard-way",
 	},
+	// {
+	// 	slug: "llm-vs-ocr-document-extraction",
+	// 	title: "llm_vs_ocr_document_extraction.md",
+	// 	date: "2026-01-16",
+	// 	type: "post",
+	// 	path: "/posts/llm-vs-ocr-document-extraction",
+	// },
 ]
