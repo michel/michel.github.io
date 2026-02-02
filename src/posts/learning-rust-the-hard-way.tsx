@@ -31,6 +31,24 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			<span className="text-comment text-sm">{"// soulseek-rs demo"}</span>
 		</div>,
 		"",
+		<span key="hook1">
+			On a flight to Costa Rica. 12 hours offline. No internet. No distractions. Just me, my
+			laptop, and Wireshark captures.
+		</span>,
+		"",
+		<span key="hook2">
+			After months of staring at hex dumps, something clicked. I finally got file transfers
+			working.
+		</span>,
+		"",
+		<span key="hook3" className="text-orange font-bold">
+			It was an off-by-one bit error.
+		</span>,
+		"",
+		<h2 key="challenge" className="text-green font-bold text-lg">
+			## What was I even doing?
+		</h2>,
+		"",
 		<span key="intro1">
 			I wanted to really learn Rust. I needed a challenge after so many years of building systems
 			for the web. Not tutorials. Not toy projects.{" "}
@@ -50,7 +68,7 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		/>,
 		"",
 		<h2 key="rules" className="text-green font-bold text-lg">
-			## The Rules I set myself:
+			## The rules I set myself:
 		</h2>,
 		<span key="rule1">• No external dependencies (just Rust's standard library)</span>,
 		<span key="rule2">
@@ -59,11 +77,9 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		<span key="rule3">• No AI assistance - just me, the compiler, and documentation</span>,
 		<span key="rule4">• Keep going till it works</span>,
 		"",
-		<Lightbox
-			key="img2"
-			src="/images/posts/learning-rust-the-hard-way/packet_dump.png"
-			alt="tcpdump and hexyl packet analysis"
-		/>,
+		<h2 key="struggle" className="text-green font-bold text-lg">
+			## The struggle
+		</h2>,
 		"",
 		<span key="p1">
 			The reality? I got stuck on reverse engineering the protocol for months, testing against the
@@ -76,11 +92,16 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			start transferring.
 		</span>,
 		"",
-		<div key="quote" className="border-l-4 border-orange pl-4 text-comment italic">
-			"On a flight to Costa Rica. 12 hours offline. No internet. No distractions. Just me, my
-			laptop, and Wireshark captures. Something clicked. Deep work works. I broke through and
-			finally got things working. Of course, it was an off-by-one bit error"
-		</div>,
+		<Lightbox
+			key="img2"
+			src="/images/posts/learning-rust-the-hard-way/packet_dump.png"
+			alt="tcpdump and hexyl packet analysis"
+		/>,
+		"",
+		<span key="p2b">
+			Deep work works. That flight with zero distractions finally broke through what months of
+			fragmented debugging couldn't.
+		</span>,
 		"",
 		<Lightbox
 			key="img3"
@@ -110,20 +131,17 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			loop (epoll/kqueue)
 		</span>,
 		"",
-		<Lightbox
-			key="img4"
-			src="/images/posts/learning-rust-the-hard-way/costa_rica.png"
-			alt="Hacking in the Costa Rica jungle"
-		/>,
+		<h2 key="verdict" className="text-green font-bold text-lg">
+			## The verdict on Rust
+		</h2>,
 		"",
 		<span key="p4">
-			The verdict on Rust? The compiler is brutal, but it becomes your friend once you start
-			trusting the process. Once it compiles, it usually works. But productivity-wise? I wouldn't
-			build an information system in it; the kind that captures domain and business logic. Those
-			systems are prone to change and require flexibility. In Rust, once you define an abstraction
-			or structure, it takes work to change it. You become careful upfront because the cost of
-			redesign is high. During this project, I changed my design and abstractions many times. Each
-			time was painful.
+			The compiler is brutal, but it becomes your friend once you start trusting the process. Once
+			it compiles, it usually works. But productivity-wise? I wouldn't build an information system
+			in it; the kind that captures domain and business logic. Those systems are prone to change and
+			require flexibility. In Rust, once you define an abstraction or structure, it takes work to
+			change it. You become careful upfront because the cost of redesign is high. During this
+			project, I changed my design and abstractions many times. Each time was painful.
 		</span>,
 		"",
 		<span key="p5">
@@ -133,6 +151,12 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		</span>,
 		"",
 		<span key="p6">But searching and downloading works, and that's a milestone!</span>,
+		"",
+		<Lightbox
+			key="img-costa"
+			src="/images/posts/learning-rust-the-hard-way/costa_rica.png"
+			alt="Hacking in the Costa Rica jungle"
+		/>,
 		"",
 		<span key="link">
 			Find the project on:{" "}
