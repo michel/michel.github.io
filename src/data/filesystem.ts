@@ -729,6 +729,8 @@ export const filesystem: Record<string, FSEntry> = {
 	"/home/michel/blog/projects.sys": fromLookup("projects"),
 	"/home/michel/blog/posts": { type: "dir" },
 	"/home/michel/blog/posts/learning_rust_the_hard_way.md": fromLookup("rust"),
+	"/home/michel/blog/posts/llm_vs_ocr_document_extraction.md": fromLookup("llmocr"),
+	"/home/michel/blog/posts/visualizing_17_years_of_code.md": fromLookup("portfolio"),
 
 	// /tmp
 	"/tmp/.X11-unix": { type: "dir" },

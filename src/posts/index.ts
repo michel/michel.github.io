@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { learningRustTheHardWay } from "./learning-rust-the-hard-way"
 import { llmVsOcrDocumentExtraction } from "./llm-vs-ocr-document-extraction"
+import { visualizing17YearsOfCode } from "./visualizing-17-years-of-code"
 
 export type Post = {
 	title: string
@@ -11,4 +12,5 @@ export type Post = {
 export const posts: Record<string, Post> = {
 	"learning-rust-the-hard-way": learningRustTheHardWay,
 	"llm-vs-ocr-document-extraction": llmVsOcrDocumentExtraction,
+	"visualizing-17-years-of-code": visualizing17YearsOfCode,
 }
