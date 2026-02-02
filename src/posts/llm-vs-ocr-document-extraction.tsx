@@ -22,21 +22,66 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			# Combining LLM and OCR for Invoice Validation: Lessons Learned
 		</h1>,
 		"",
-		<span key="intro1">
+		// THE HOOK - Lead with the failure
+		<span key="hook1">
+			GPT returned a VIN with a zero where there should be an O. WMI validation failed. The car
+			couldn't be registered at the RDW. Manual work required.{" "}
+			<span className="text-green font-bold">Trust in the system lost.</span>
+		</span>,
+		"",
+		<span key="hook2">
+			This is the problem with "just use GPT for document extraction."
+		</span>,
+		"",
+		// STAKES - Why this matters
+		<h3 key="stakes" className="text-cyan font-bold">
+			### The Stakes
+		</h3>,
+		"",
+		<span key="p1">
+			I'm building invoice validation for <span className="text-blue font-bold">Revive Capital</span>
+			, a B2B car financing company. We extract IBANs, VINs, Chamber of Commerce numbers, prices,
+			and tax amounts from supplier invoices. Get them wrong, and we might finance the wrong car.
+		</span>,
+		"",
+		<Lightbox
+			key="img1"
+			src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.png"
+			alt="Redacted Dutch car invoice"
+		/>,
+		"",
+		// THE NAIVE APPROACH
+		<h3 key="naive" className="text-cyan font-bold">
+			### The Naive Approach: Just Use GPT
+		</h3>,
+		"",
+		<span key="p2">
+			First attempt: "Just use GPT with vision." Send the invoice image, ask it to extract all
+			fields. It works great for semantic understanding. Trade-in deductions? GPT gets it. Price
+			calculations across line items? No problem with the right prompt.
+		</span>,
+		"",
+		<span key="p3">
+			But then the hallucinations started.{" "}
+			<span className="text-green font-bold">Character-level hallucinations</span> on critical
+			alphanumeric fields. O became 0. I became 1. Q became 0. The LLM would confidently return
+			values that looked plausible but were wrong.
+		</span>,
+		"",
+		// BACKGROUND - Now that reader cares
+		<h3 key="background" className="text-cyan font-bold">
+			### I've Seen This Before
+		</h3>,
+		"",
+		<span key="bg1">
 			In 2016, I built <span className="text-blue font-bold">Dutchies Travel</span> (BackpackApp), a
-			travel agency platform for backpackers in Australia. The main technical challenge? Extracting
-			booking codes, dates, locations, and vendor names from travel voucher PDFs. Each vendor had a
-			different format. Each required custom regex extractors and heuristics.
+			travel agency platform for backpackers in Australia. Same problem: extracting booking codes,
+			dates, locations from travel voucher PDFs. Each vendor had a different format. Each required
+			custom regex extractors. Formats changed over time. Constant maintenance, custom code for
+			each case.
 		</span>,
 		"",
-		<span key="intro2">
-			For each vendor we had to create field extractors and normalizers. Within vendor PDFs there
-			was variation, and formats changed over time. This meant constant maintenance, custom code for
-			each case. And when field extraction went wrong? End customers, vendors, and internal
-			stakeholders all lost trust.
-		</span>,
-		"",
-		<span key="intro3">
+		<span key="bg2">
 			This problem isn't unique to me. My friend{" "}
 			<a
 				href="https://www.linkedin.com/in/jdanino"
@@ -47,58 +92,17 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 				Joni Danino
 			</a>{" "}
 			at <span className="text-blue font-bold">TicketSwap</span> deals with the same class of
-			problem at massive scale. They have entire teams on standby seven days a week to manually
-			process and deduplicate tickets from PDFs and images, matching extracted fields to events with
-			high confidence. They're on a similar journey: figuring out if LLMs can automate away the
-			manual work.
+			problem at massive scale. Entire teams on standby seven days a week to manually process and
+			deduplicate tickets from PDFs. They're on a similar journey: figuring out if LLMs can
+			automate away the manual work.
 		</span>,
 		"",
-		<h3 key="challenge" className="text-cyan font-bold">
-			### The New Challenge: Revive Capital Invoices
-		</h3>,
-		"",
-		<span key="p1">
-			Fast forward to 2024-2025. I'm building invoice validation for{" "}
-			<span className="text-blue font-bold">Revive Capital</span>, a B2B car financing company. Same
-			fundamental problem: extract fields from unstructured vendor documents (supplier invoices),
-			then match against ground truth (the lease contract data).
+		<span key="bg3">
+			When field extraction goes wrong? End customers, vendors, and internal stakeholders all lose
+			trust. That's the real cost.
 		</span>,
 		"",
-		<span key="p2">
-			The stakes are high. We need to extract IBANs, VINs, Chamber of Commerce numbers, prices, and
-			tax amounts. If we make mistakes, we might finance the wrong car.
-		</span>,
-		"",
-		<Lightbox
-			key="img1"
-			src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.png"
-			alt="Redacted Dutch car invoice"
-		/>,
-		"",
-		<h3 key="naive" className="text-cyan font-bold">
-			### The Naive Approach: Just Use GPT
-		</h3>,
-		"",
-		<span key="p3">
-			First attempt: "Just use GPT with vision." Send the invoice image, ask it to extract all
-			fields. It works great for semantic understanding. Trade-in deductions? GPT gets it. Price
-			calculations across line items? No problem if you provide the right promt. We can sum and
-			validate the extracted prices so seems to be a good fit!
-		</span>,
-		"",
-		<span key="p4">
-			But then the hallucinations started.{" "}
-			<span className="text-green font-bold">Character-level hallucinations</span> on critical
-			alphanumeric fields. O became 0. I became 1. Q became 0. The LLM would confidently return
-			values that looked plausible but were wrong.
-		</span>,
-		"",
-		<div key="quote" className="border-l-4 border-orange pl-4 text-comment italic">
-			"The LLM would confidently return a VIN with a zero where there should be an O. WMI
-			validation? Failed. OTT registration of car at RDW not possible, manual work required, loss of
-			trust in the system."
-		</div>,
-		"",
+		// THE SOLUTION
 		<h3 key="hybrid" className="text-cyan font-bold">
 			### The Hybrid Approach: Let Each Tool Do What It's Best At
 		</h3>,
