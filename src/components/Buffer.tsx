@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useRef, useState } from "react"
+import { useLocation } from "react-router-dom"
 import { useEditor } from "../context/EditorContext"
 
 interface BufferProps {
@@ -10,6 +11,7 @@ export default function Buffer({ lines }: BufferProps) {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const contentRef = useRef<HTMLDivElement>(null)
 	const { cursorLine, setCursorLine, setLineCount } = useEditor()
+	const location = useLocation()
 
 	useEffect(() => {
 		if (!containerRef.current) return
@@ -33,10 +35,10 @@ export default function Buffer({ lines }: BufferProps) {
 		setLineCount(lines.length)
 	}, [lines.length, setLineCount])
 
-	// Scroll to top when content changes (e.g., navigation)
+	// Scroll to top when navigating to a different page
 	useEffect(() => {
 		if (contentRef.current) contentRef.current.scrollTop = 0
-	}, [lines])
+	}, [location.pathname])
 
 	// Auto-scroll to keep cursor visible
 	useEffect(() => {
