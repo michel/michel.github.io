@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import Lightbox from "../components/Lightbox"
 
 export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: ReactNode[] } = {
 	title: "Combining LLM and OCR for Invoice Validation: Lessons Learned",
@@ -68,6 +69,12 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			tax amounts. If we make mistakes, we might finance the wrong car.
 		</span>,
 		"",
+		<Lightbox
+			key="img1"
+			src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.png"
+			alt="Redacted Dutch car invoice"
+		/>,
+		"",
 		<h3 key="naive" className="text-cyan font-bold">
 			### The Naive Approach: Just Use GPT
 		</h3>,
@@ -115,6 +122,12 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			specific sensitive fields (IBAN, VIN, CoC). Everything else uses GPT's semantic understanding.
 		</span>,
 		"",
+		<Lightbox
+			key="img2"
+			src="/images/posts/llm-vs-ocr-document-extraction/extraction_prompts.png"
+			alt="Extraction prompts and extractor code"
+		/>,
+		"",
 		<h3 key="prompts" className="text-cyan font-bold">
 			### The Prompt Optimization Rabbit Hole
 		</h3>,
@@ -156,6 +169,12 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			addresses, dates, mileage. Each with their own parsing logic, tolerance thresholds, and
 			comparison strategies. This harness is what makes the system actually work.
 		</span>,
+		"",
+		<Lightbox
+			key="img3"
+			src="/images/posts/llm-vs-ocr-document-extraction/normalizers_code.png"
+			alt="Field normalizers and extractors code"
+		/>,
 		"",
 		<h3 key="degradation" className="text-cyan font-bold">
 			### Building for Failure
