@@ -35,7 +35,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		// STAKES - Why this matters
 		<h3 key="stakes" className="text-cyan font-bold">
-			### The Stakes
+			### Why this matters
 		</h3>,
 		"",
 		<span key="p1">
@@ -44,15 +44,20 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			and tax amounts from supplier invoices. Get them wrong, and we might finance the wrong car.
 		</span>,
 		"",
-		<Lightbox
-			key="img1"
-			src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.png"
-			alt="Redacted Dutch car invoice"
-		/>,
+		<div key="img1-wrapper" className="flex flex-col gap-1">
+			<Lightbox
+				key="img1"
+				src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.png"
+				alt="Redacted Dutch car invoice"
+			/>
+			<span className="text-comment text-sm">
+				{"// typical Dutch car invoice with VIN, IBAN, prices, and tax fields"}
+			</span>
+		</div>,
 		"",
 		// THE NAIVE APPROACH
 		<h3 key="naive" className="text-cyan font-bold">
-			### The Naive Approach: Just Use GPT
+			### Just use GPT, right?
 		</h3>,
 		"",
 		<span key="p2">
@@ -62,10 +67,18 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</span>,
 		"",
 		<span key="p3">
-			But then the hallucinations started.{" "}
-			<span className="text-green font-bold">Character-level hallucinations</span> on critical
-			alphanumeric fields. O became 0. I became 1. Q became 0. The LLM would confidently return
-			values that looked plausible but were wrong.
+			But then the failures started. O became 0. I became 1. Q became 0. The LLM would confidently
+			return values that looked plausible but were wrong.
+		</span>,
+		"",
+		<span key="p3b">
+			This is the core problem:{" "}
+			<span className="text-green font-bold">
+				LLMs excel at semantic aggregation but fail at symbol fidelity
+			</span>
+			. They understand what a VIN means. They can't reliably transcribe one. Token-based models
+			don't see characters, they see probability distributions. And for checksummed identifiers,
+			close is useless.
 		</span>,
 		"",
 		// BACKGROUND - Now that reader cares
@@ -104,7 +117,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		// THE SOLUTION
 		<h3 key="hybrid" className="text-cyan font-bold">
-			### The Hybrid Approach: Let Each Tool Do What It's Best At
+			### The fix: let each tool do what it's best at
 		</h3>,
 		"",
 		<span key="p5">
@@ -117,13 +130,14 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			deductions, price sums across line items, supplier vs buyer detection, contextual reasoning
 		</span>,
 		<span key="b2">
-			• <span className="text-blue font-bold">AWS Textract</span> handles pattern recognition: IBAN
-			validation with MOD 97-10 checksums, VIN extraction with WMI verification, Chamber of Commerce
-			numbers
+			• <span className="text-blue font-bold">AWS Textract</span> handles symbol-critical fields:
+			IBAN, VIN, Chamber of Commerce numbers. Why? OCR is deterministic and checksum-verifiable.
+			LLMs are probabilistic and token-based. For fields with validation algorithms, deterministic
+			wins.
 		</span>,
 		<span key="b3">
 			• <span className="text-blue font-bold">Merge strategy</span>: Textract only overrides GPT for
-			specific sensitive fields (IBAN, VIN, CoC). Everything else uses GPT's semantic understanding.
+			these specific fields. Everything else uses GPT's semantic understanding.
 		</span>,
 		"",
 		<Lightbox
@@ -133,31 +147,37 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		/>,
 		"",
 		<h3 key="prompts" className="text-cyan font-bold">
-			### The Prompt Optimization Rabbit Hole
+			### The prompt optimization rabbit hole
 		</h3>,
 		"",
 		<span key="p6">
-			We experimented with prompt optimization. Built a 331-line system prompt with detailed
-			extraction instructions. Added verification checklists. Explicit warnings about BPM vs BTW
-			(German vehicle registration tax vs VAT). IBAN validation instructions in the prompt itself.
+			I went deep on prompt optimization. Built a 331-line system prompt with detailed extraction
+			instructions. Verification checklists. Explicit warnings about BPM vs BTW (German vehicle
+			registration tax vs VAT). IBAN validation instructions in the prompt itself.
 		</span>,
 		"",
 		<span key="p7">
-			We even used Promptomatix for automated prompt optimization, running experiments against
-			baseline prompts. The optimized prompts were more concise. Accuracy improved marginally.
+			Even used{" "}
+			<a
+				href="https://github.com/SalesforceAIResearch/promptomatix"
+				className="text-blue hover:underline"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				Promptomatix
+			</a>{" "}
+			for automated prompt optimization, running experiments against baseline prompts. The optimized
+			prompts were more concise. Accuracy improved marginally.
 		</span>,
 		"",
 		<span key="p8">
-			But here's the reality:{" "}
-			<span className="text-green font-bold">
-				even perfect prompts can't prevent character-level hallucinations
-			</span>
-			. You can tell the LLM to double-check, to verify, to be careful. It still confuses O and 0.
-			Know when prompt engineering hits diminishing returns.
+			But here's the reality: remember the symbol fidelity problem? Prompts can't fix it. You can
+			tell the LLM to double-check, to verify, to be careful. It still operates on tokens, not
+			characters. The failure mode is architectural, not instructional.
 		</span>,
 		"",
 		<h3 key="normalization" className="text-cyan font-bold">
-			### Normalization is Everything
+			### Normalization is everything
 		</h3>,
 		"",
 		<span key="p9">
@@ -169,7 +189,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</span>,
 		"",
 		<span key="p10">
-			We built field-specific normalizers for everything: amounts, invoice numbers, company names,
+			I built field-specific normalizers for everything: amounts, invoice numbers, company names,
 			addresses, dates, mileage. Each with their own parsing logic, tolerance thresholds, and
 			comparison strategies. This harness is what makes the system actually work.
 		</span>,
@@ -181,30 +201,34 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		/>,
 		"",
 		<h3 key="degradation" className="text-cyan font-bold">
-			### Building for Failure
+			### Building for failure
 		</h3>,
 		"",
-		<span key="p11">Systems fail. The question is how gracefully. Our approach:</span>,
+		<span key="p11">Systems fail. The question is how gracefully. My approach:</span>,
 		"",
 		<span key="b4">
-			• Textract fails? Fall back to GPT values. Still works, just less accurate.
+			• <span className="text-blue font-bold">Textract fails?</span> Fall back to GPT values. Still
+			works, just less accurate.
 		</span>,
 		<span key="b5">
-			• PDF format rejected? Rasterize with Poppler, retry Textract on the image.
+			• <span className="text-blue font-bold">PDF format rejected?</span> Rasterize with Poppler,
+			retry Textract on the image.
 		</span>,
 		<span key="b6">
-			• Field extraction fails? First-value-wins merge from multiple extraction paths.
+			• <span className="text-blue font-bold">Field extraction fails?</span> First-value-wins merge
+			from multiple extraction paths.
 		</span>,
 		<span key="b7">
-			• Validation near-miss? Partial scoring with tolerance thresholds (within 1% = 0.95 score).
+			• <span className="text-blue font-bold">Validation near-miss?</span> Partial scoring with
+			tolerance thresholds (within 1% = 0.95 score).
 		</span>,
 		<span key="b8">
-			• 8 critical fields must match for valid=true. Non-critical fields can fail without
-			invalidating the invoice.
+			• <span className="text-blue font-bold">Critical fields:</span> 8 must match for valid=true.
+			Non-critical fields can fail without invalidating the invoice.
 		</span>,
 		"",
 		<h3 key="alternative" className="text-cyan font-bold">
-			### The Alternative: Back to Vendor/document-Specific Extractors?
+			### Full circle: back to vendor-specific extractors?
 		</h3>,
 		"",
 		<span key="p12">
@@ -220,23 +244,29 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			code generation, deterministic execution for reliability.
 		</span>,
 		"",
-		<span key="p14">
-			The "old" approach might win again, if the tooling makes it maintainable.
+		<span key="p13b">
+			Concrete example: new supplier sends invoices with VIN in a table on page 2. Instead of
+			prompt-engineering GPT to find it, generate a parser: "Extract text from row 3, column 2 of
+			the first table on page 2." When their format changes, regenerate the parser. Minutes of work
+			instead of hours of prompt debugging.
 		</span>,
 		"",
-		<h3 key="conclusion" className="text-cyan font-bold">
-			### Conclusion
-		</h3>,
+		<span key="p14">
+			The "old" approach might win again, now that the tooling makes it maintainable.
+		</span>,
 		"",
 		<span key="p15">
 			Ten years later, same problem, more tools. Neither LLM nor OCR alone is sufficient for
 			production. The hybrid approach works: let each tool do what it's best at. Know your failure
-			modes and design for graceful degradation.
+			modes. Design for graceful degradation.
 		</span>,
 		"",
-		<span key="p16">
-			And sometimes the deterministic approach wins, if AI makes it maintainable.
+		<span key="p15b" className="text-comment">
+			Note: this article reflects the state of GPT-4o and AWS Textract as of late 2025. These tools
+			evolve fast. The symbol fidelity problem may improve. Swapping models is easy—better accuracy,
+			cheaper tokens, just plug in the next generation.
 		</span>,
+		"",
 		"",
 		<span key="link">
 			See the project:{" "}
