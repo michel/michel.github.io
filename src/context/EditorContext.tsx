@@ -32,6 +32,12 @@ export const fileTree: FileNode[] = [
 				path: files.llmocr.path,
 				type: "file",
 			},
+			{
+				id: files.portfolio.id,
+				name: files.portfolio.name,
+				path: files.portfolio.path,
+				type: "file",
+			},
 		],
 	},
 	{ id: files.home.id, name: files.home.name, path: files.home.path, type: "file" },
