@@ -135,7 +135,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		<span key="p6">
 			I went deep on prompt optimization. Built a 331-line system prompt with detailed extraction
-			instructions. Verification checklists. Explicit warnings about BPM vs BTW (German vehicle
+			instructions. Verification checklists. Explicit warnings about BPM vs BTW (vehicle
 			registration tax vs VAT). IBAN validation instructions in the prompt itself.
 		</span>,
 		"",
