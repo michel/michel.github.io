@@ -93,22 +93,6 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			case.
 		</span>,
 		"",
-		<span key="bg2">
-			This problem isn't unique to me. My friend{" "}
-			<a
-				href="https://www.linkedin.com/in/jdanino"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				Joni Danino
-			</a>{" "}
-			at <span className="text-blue font-bold">TicketSwap</span> deals with the same class of
-			problem at massive scale. Entire teams on standby seven days a week to manually process and
-			deduplicate tickets from PDFs. They're on a similar journey: figuring out if LLMs can automate
-			away the manual work.
-		</span>,
-		"",
 		<span key="bg3">
 			When field extraction goes wrong? End customers, vendors, and internal stakeholders all lose
 			trust. That's the real cost.
