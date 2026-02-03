@@ -29,9 +29,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			<span className="text-green font-bold">Trust in the system lost.</span>
 		</span>,
 		"",
-		<span key="hook2">
-			This is the problem with "just use GPT for document extraction."
-		</span>,
+		<span key="hook2">This is the problem with "just use GPT for document extraction."</span>,
 		"",
 		// STAKES - Why this matters
 		<h3 key="stakes" className="text-cyan font-bold">
@@ -39,9 +37,10 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</h3>,
 		"",
 		<span key="p1">
-			I'm building invoice validation for <span className="text-blue font-bold">Revive Capital</span>
-			, a B2B car financing company. We extract IBANs, VINs, Chamber of Commerce numbers, prices,
-			and tax amounts from supplier invoices. Get them wrong, and we might finance the wrong car.
+			I'm building invoice validation for{" "}
+			<span className="text-blue font-bold">Revive Capital</span>, a B2B car financing company. We
+			extract IBANs, VINs, Chamber of Commerce numbers, prices, and tax amounts from supplier
+			invoices. Get them wrong, and we might finance the wrong car.
 		</span>,
 		"",
 		<div key="img1-wrapper" className="flex flex-col gap-1">
@@ -90,8 +89,8 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			In 2016, I built <span className="text-blue font-bold">Dutchies Travel</span> (BackpackApp), a
 			travel agency platform for backpackers in Australia. Same problem: extracting booking codes,
 			dates, locations from travel voucher PDFs. Each vendor had a different format. Each required
-			custom regex extractors. Formats changed over time. Constant maintenance, custom code for
-			each case.
+			custom regex extractors. Formats changed over time. Constant maintenance, custom code for each
+			case.
 		</span>,
 		"",
 		<span key="bg2">
@@ -106,8 +105,8 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			</a>{" "}
 			at <span className="text-blue font-bold">TicketSwap</span> deals with the same class of
 			problem at massive scale. Entire teams on standby seven days a week to manually process and
-			deduplicate tickets from PDFs. They're on a similar journey: figuring out if LLMs can
-			automate away the manual work.
+			deduplicate tickets from PDFs. They're on a similar journey: figuring out if LLMs can automate
+			away the manual work.
 		</span>,
 		"",
 		<span key="bg3">
@@ -246,9 +245,12 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		<span key="p13b">
 			Concrete example: new supplier sends invoices with VIN in a table on page 2. Instead of
-			prompt-engineering GPT to find it, generate a parser: "Extract text from row 3, column 2 of
-			the first table on page 2." When their format changes, regenerate the parser. Minutes of work
-			instead of hours of prompt debugging.
+			prompt-engineering GPT to find it, generate a vendor-specific extractor—pure regex patterns
+			and spatial relations in actual code—a regex validates the VIN format, table coordinates
+			locate it on page 2. When their format changes, regenerate the code. Minutes of work instead
+			of hours of prompt debugging, burning tokens, and non-deterministic results. In the past this
+			approach would have been too cost-intensive. But with genAI, you can even automate away this
+			whole process and end up with deterministic, performant extraction code.
 		</span>,
 		"",
 		<span key="p14">
