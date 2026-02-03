@@ -24,7 +24,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		// THE HOOK - Lead with the failure
 		<span key="hook1">
-			GPT returned a VIN with a zero where there should be an O. WMI validation failed. The car
+			ChatGPT returned a VIN with a zero where there should be an O. WMI validation failed. The car
 			couldn't be registered at the RDW. Manual work required.{" "}
 			<span className="text-green font-bold">Trust in the system lost.</span>
 		</span>,
