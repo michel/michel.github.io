@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peliqan Staging — Security Assessment Report</title>
+<style>
+  :root{
+    --ink:#1a2332; --sub:#5b6b82; --line:#e3e8f0; --bg:#f6f8fb; --card:#ffffff;
+    --crit:#c0392b; --high:#d35400; --med:#b7950b; --low:#2874a6; --info:#7f8c9b; --ok:#1e8449;
+    --code-bg:#0f172a; --code-ink:#dce7f5; --accent:#1f4e8c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px 80px}
+  header.hero{background:linear-gradient(135deg,#101c33 0%,#1f4e8c 100%);color:#fff;padding:44px 0 36px;margin-bottom:36px}
+  header.hero .wrap{padding-bottom:0}
+  .kicker{text-transform:uppercase;letter-spacing:.18em;font-size:12px;color:#9fb6d9;margin:0 0 10px}
+  h1{margin:0 0 10px;font-size:30px;font-weight:650;letter-spacing:-.01em}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:13.5px;color:#c8d6ec;margin-top:14px}
+  .meta b{color:#fff;font-weight:600}
+  h2{font-size:21px;margin:44px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+  h3{font-size:16px;margin:22px 0 8px}
+  p{margin:8px 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 24px;margin:14px 0;box-shadow:0 1px 2px rgba(16,28,51,.04)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  th{background:#eef2f8;text-align:left;padding:9px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);border-bottom:1px solid var(--line)}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+  .b-crit{background:#fdecea;color:var(--crit)} .b-high{background:#fdf0e7;color:var(--high)}
+  .b-med{background:#fbf5d7;color:#8a6d0b} .b-low{background:#e8f1fa;color:var(--low)}
+  .b-info{background:#eef1f5;color:var(--info)} .b-ok{background:#e8f6ee;color:var(--ok)}
+  pre{background:var(--code-bg);color:var(--code-ink);border-radius:8px;padding:13px 15px;font-size:12.5px;overflow-x:auto;line-height:1.5;margin:10px 0}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  p code,li code,td code{background:#eef2f8;color:#173a63;padding:1px 5px;border-radius:4px;font-size:12.5px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .kv{font-size:13.5px}
+  .kv div{display:flex;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .kv div:last-child{border-bottom:none}
+  .kv .k{min-width:130px;color:var(--sub);font-weight:600}
+  .finding{border-left:4px solid var(--line);background:var(--card);border-radius:8px;padding:18px 22px;margin:18px 0;border:1px solid var(--line)}
+  .finding.h{border-left-color:var(--high)} .finding.m{border-left-color:var(--med)} .finding.l{border-left-color:var(--low)} .finding.i{border-left-color:var(--info)}
+  .finding h3{margin-top:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .fid{font-family:ui-monospace,monospace;font-size:12px;background:#eef2f8;color:#33475f;padding:2px 8px;border-radius:5px}
+  ul{margin:8px 0;padding-left:22px}
+  li{margin:4px 0}
+  .note{font-size:13px;color:var(--sub)}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub)}
+  .toc{font-size:14px}
+  .toc a{color:var(--accent);text-decoration:none}
+  .toc a:hover{text-decoration:underline}
+  .count{text-align:center;font-size:13px;color:var(--sub);margin:6px 0 0}
+  .stat{display:inline-block;background:#eef2f8;border-radius:8px;padding:10px 16px;margin:4px 6px 4px 0;font-size:13px}
+  .stat b{display:block;font-size:20px;color:var(--ink)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Black-Box Security Assessment · Staging</p>
+    <h1>Peliqan Platform — Red Team Findings Report</h1>
+    <div class="meta">
+      <span><b>Targets:</b> api / app / admin .staging.peliqan.eu</span>
+      <span><b>Footholds:</b> unauthenticated API · shared DEMO session</span>
+      <span><b>Date:</b> 2026-08-24/25</span>
+      <span><b>Status:</b> Final (staging, no prod pivot)</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<h2 id="summary">Executive Summary</h2>
+<p>The assessment verified the platform's two primary defences — the <b>demo read-only write-gate</b> and
+<b>object-level (owner-scope) authorization</b> — and both held under targeted mutation and IDOR testing.
+The edge <b>better-auth path blocklist</b> was not bypassable with the available normalizer-variant set.
+No privilege escalation from the DEMO session to write or to another tenant's data was found.</p>
+<p>The strongest issues are in the <b>unauthenticated attack surface</b>: client-controllable rate limits
+(<code>X-Forwarded-For</code>), open self-registration, an unauthenticated impersonation-token exchange whose
+token travels in the URL with no origin check, a Set-Cookie side channel on the demo-session mint, and spec/key
+disclosure (OpenAPI schema, JWKS, service health). One availability bug was induced in staging: a document
+uploaded with a filename over 255 characters <b>wedges the owner's (and the admin's) document list</b> into a
+persistent 400 (F9).</p>
+<div style="margin:14px 0">
+  <span class="stat"><b>2</b> High</span>
+  <span class="stat"><b>1</b> Medium/High</span>
+  <span class="stat"><b>3</b> Medium</span>
+  <span class="stat"><b>2</b> Low</span>
+  <span class="stat"><b>1</b> Info (F8)</span>
+  <span class="stat"><b>1</b> Info (F10)</span>
+  <span class="stat"><b>10+</b> Controls verified</span>
+</div>
+<table>
+  <tr><th style="width:60px">ID</th><th>Finding</th><th style="width:110px">Severity</th><th style="width:120px">Foothold</th><th style="width:150px">Track</th></tr>
+  <tr><td>F1</td><td>Per-IP rate limits reset via <code>X-Forwarded-For</code> spoofing</td><td><span class="badge b-high">HIGH</span></td><td>Unauthenticated</td><td>D — Auth hardening</td></tr>
+  <tr><td>F2</td><td>Unauthenticated self-registration creates a real investor account</td><td><span class="badge b-high">HIGH</span></td><td>Unauthenticated</td><td>B — Demo/account</td></tr>
+  <tr><td>F3</td><td>Impersonation token in URL; unauth exchange with no origin check</td><td><span class="badge b-med">MED / HIGH*</span></td><td>Unauthenticated</td><td>A — Impersonation</td></tr>
+  <tr><td>F4</td><td><code>demo/session</code> CSRF — session cookie overwritten from any origin</td><td><span class="badge b-med">MEDIUM</span></td><td>Unauthenticated</td><td>B / D — CORS/CSRF</td></tr>
+  <tr><td>F5</td><td>OpenAPI schema (90 KB) + JWKS exposed unauthenticated</td><td><span class="badge b-med">MEDIUM</span></td><td>Unauthenticated</td><td>1 — Recon</td></tr>
+  <tr><td>F6</td><td>Unauthenticated <code>GET /api/system/health</code> service disclosure</td><td><span class="badge b-low">LOW</span></td><td>Unauthenticated</td><td>F — Admin surface</td></tr>
+  <tr><td>F7</td><td>Document upload: declared-MIME only, traversal-sanitized keys, 50 MiB cap</td><td><span class="badge b-low">LOW</span></td><td>Demo → real user</td><td>E — Upload/doc-AI</td></tr>
+  <tr><td>F8</td><td>Validation-error information disclosure (role enum, discriminators)</td><td><span class="badge b-info">INFO</span></td><td>Unauth / Demo</td><td>C — Fuzzing</td></tr>
+  <tr><td>F9</td><td>Filename &gt;255 chars sets document <code>title</code>; response schema 400s — owner's document list wedged until archived</td><td><span class="badge b-med">MEDIUM</span></td><td>Demo → real user</td><td>E — Upload/doc-AI</td></tr>
+  <tr><td>F10</td><td>Unauthenticated 500 on impersonation exchange (JSON content-type, empty body)</td><td><span class="badge b-info">INFO</span></td><td>Unauthenticated</td><td>A — Impersonation</td></tr>
+</table>
+<p class="note">*F3 severity rises to High if any URL-leak channel (history, Referer, logs, analytics) is confirmed in the admin flow.</p>
+
+<h2 id="scope">Scope &amp; Rules of Engagement</h2>
+<div class="card kv">
+  <div><span class="k">Environment</span><span>Staging only (<code>*.staging.peliqan.eu</code>). No pivot to production.</span></div>
+  <div><span class="k">Footholds</span><span>(1) Unauthenticated API access. (2) Self-minted shared read-only DEMO session for <code>investor@demo.peliqan.eu</code>. (3) Self-created real user <code>rt-tester1@example.com</code> (created via F2, used as an owner-scoped probe).</span></div>
+  <div><span class="k">Excluded</span><span>DoS / load testing (limited to ≤12-request rate-limit bursts), deep AWS control-plane testing, real SES mail delivery verification (a small number of reset/verification emails were triggered).</span></div>
+  <div><span class="k">Method</span><span>Black-box HTTP probing, route × method × identity matrices, header/oracle analysis, client-bundle reverse engineering (app/admin JS), timing measurements (n=5), upload fuzzing.</span></div>
+</div>
+
+<h2 id="findings">Detailed Findings</h2>
+
+<div class="finding h">
+  <h3><span class="fid">F1</span> Per-IP rate limits reset via <code>X-Forwarded-For</code> spoofing <span class="badge b-high">HIGH</span></h3>
+  <p><b>Summary.</b> Every per-IP rate limit on staging (sign-in 3/60s, sign-up 3/300s, forget-password 2/300s,
+  reset 3/300s, demo-session 10/60s) keys on the <em>client-supplied</em> <code>X-Forwarded-For</code> header.
+  The ALB does not overwrite it, so rotating the header resets the counter — the limits are the only
+  brute-force control on sign-in, and they are client-controlled.</p>
+  <p><b>Reproduction.</b></p>
+  <pre>$ for i in 1 2 3 4 5; do
+    curl -s -o /dev/null -w "%{http_code}\n" -X POST \
+      https://api.staging.peliqan.eu/api/auth/sign-in/email \
+      -H 'Content-Type: application/json' \
+      -d '{"email":"rt-tester1@example.com","password":"wrongpass1"}'
+  done
+401
+401
+401
+429
+429
+
+$ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
+    https://api.staging.peliqan.eu/api/auth/sign-in/email \
+    -H 'X-Forwarded-For: 10.66.0.1' \
+    -H 'Content-Type: application/json' \
+    -d '{"email":"rt-tester1@example.com","password":"wrongpass1"}'
+401        # counter reset — brute force resumes immediately</pre>
+  <p><b>Impact.</b> Unlimited online password brute force against any account, user-creation spam,
+  demo-session spam. The generic sign-in error (<code>Invalid email or password</code>) prevents
+  enumeration, but the timing cap is gone.</p>
+  <p><b>Recommendation.</b> Derive the client IP server-side (first untrusted hop) or overwrite
+  <code>X-Forwarded-For</code> at the ALB before the app keys limits on it; consider a global (per-account)
+  floor for sign-in.</p>
+</div>
+
+<div class="finding h">
+  <h3><span class="fid">F2</span> Unauthenticated self-registration mints a real investor account <span class="badge b-high">HIGH</span></h3>
+  <p><b>Summary.</b> <code>POST /api/auth/sign-up/email</code> is open unauthenticated and creates a
+  fully functional account (role <code>USER</code>, <code>performWrites: true</code>) with an immediate
+  session cookie (<code>Max-Age=604800</code>). The new user can upload documents (S3 write),
+  create/patch positions, create liquidity interests, archive documents, and delete document files —
+  an unauthenticated <b>write path</b> into staging data.</p>
+  <pre>$ curl -i -X POST https://api.staging.peliqan.eu/api/auth/sign-up/email \
+    -H 'Content-Type: application/json' \
+    -d '{"name":"RT Tester","email":"rt-tester1@example.com","password":"Rt-Pass-12345!"}'
+HTTP/2 200
+set-cookie: __Secure-better-auth.session_token=…; Max-Age=604800; HttpOnly; Secure; SameSite=Lax
+{ "token":"UCCob2nw…", "user":{ "id":"zMCbWj20…", "email":"rt-tester1@example.com", … } }</pre>
+  <p><b>Guardrails observed.</b> <code>demo.peliqan.eu</code> addresses are reserved
+  (<code>400 "Emails on demo.peliqan.eu are reserved"</code>, case-insensitive). Sign-up is
+  rate-limited 3/300s per IP — bypassable per F1.</p>
+  <p><b>Impact.</b> Unauthenticated writes, tenant pollution, and it enabled the cross-tenant
+  (IDOR) testing in this report. Confirm whether open sign-up is intended for staging; if not, gate it.</p>
+</div>
+
+<div class="finding m">
+  <h3><span class="fid">F3</span> Impersonation token in URL; unauthenticated exchange with no origin check <span class="badge b-med">MEDIUM / HIGH*</span></h3>
+  <p><b>Summary.</b> The admin impersonation flow mints a 60-second single-use token and redirects to
+  <code>/auth/impersonate?token=&lt;uuid&gt;</code> on the app (and admin) hosts. The page (200 SSR,
+  renders without a session) auto-POSTs the token, <b>unauthenticated</b>, to
+  <code>POST /api/impersonation/exchange-impersonation-token</code>, which sets the <b>signed session
+  cookie of the impersonated user</b>.</p>
+  <ul>
+    <li>Live token in the URL → exposed via browser history, <code>Referer</code>, proxy logs, analytics (Sentry is instrumented in the bundles).</li>
+    <li>No origin check on the exchange: <code>Origin: evil / null / absent</code> all processed identically → a leaked token is also a cross-site CSRF primitive (<code>set-auth-token</code> is exposed for credentialed reads).</li>
+    <li>Error oracle: <code>404</code> invalid · <code>410</code> expired · <code>400</code> validation (UI text differs for 410 vs other).</li>
+  </ul>
+  <pre># bad token, arbitrary origin — processed, not origin-rejected:
+$ curl -i -X POST https://api.staging.peliqan.eu/api/impersonation/exchange-impersonation-token \
+    -H 'Origin: https://evil.example.com' -H 'Content-Type: application/json' \
+    -d '{"token":"6f1e2c9d-3a4b-4c5d-8e9f-0a1b2c3d4e5f"}'
+HTTP/2 404
+{"error":"not_found","message":"Invalid token"}</pre>
+  <p><b>Browser-CSRF nuance.</b> The endpoint accepts only <code>Content-Type: application/json</code>
+  (text/plain/urlencoded bodies parse empty), so a cross-site JS request from an <em>untrusted</em> origin is
+  blocked by the CORS preflight (no ACAO reflection). The missing server-side origin check therefore matters
+  for trusted-origin contexts (compromised app/admin/marketing page, subdomain takeover, XSS on a trusted
+  origin) and for non-browser clients — a defense-in-depth gap, not a standalone cross-site trigger.</p>
+  <p><b>Impact.</b> Any leak of a live token within its 60 s window yields an authenticated session of the
+  impersonated (possibly admin) user. Replay is single-use; expiry/replay semantics confirmed in code/UI,
+  not externally demonstrable without an admin-minted token.</p>
+  <p><b>Recommendation.</b> Move the token out of the URL (POST-only handoff / one-time code), verify
+  <code>Origin</code> on the exchange, and short-token logging of exchanges.</p>
+</div>
+
+<div class="finding m">
+  <h3><span class="fid">F4</span> <code>demo/session</code> CSRF — session cookie overwritten from any origin <span class="badge b-med">MEDIUM</span></h3>
+  <p><b>Summary.</b> The demo-session mint (intended for the marketing embed) performs <b>no origin
+  check</b>: any site can cross-origin POST it and the response <code>Set-Cookie</code>s the shared DEMO
+  session onto <code>api.staging.peliqan.eu</code>. A cross-site fetch need not read the response — the
+  victim's existing API session cookie is <b>replaced</b> with the shared demo session
+  (<code>SameSite=Lax</code> does not protect a cookie that is <em>set</em>, not <em>sent</em>).</p>
+  <pre>$ curl -i -X POST https://api.staging.peliqan.eu/api/auth/demo/session \
+    -H 'Origin: https://evil.example.com' -H 'Content-Type: application/json' \
+    -d '{"email":"investor@demo.peliqan.eu"}'
+HTTP/2 200
+access-control-allow-credentials: true
+set-cookie: __Secure-better-auth.session_token=4no5rh…; HttpOnly; Secure; SameSite=Lax
+{"ok":true}</pre>
+  <p><b>Browser-CSRF nuance.</b> As in F3, the JSON-only content type means the preflight gates untrusted
+  origins; the effect is real for trusted-origin contexts and non-browser clients, and it is the mechanism the
+  intended marketing embed relies on (note: the embed's own origin is <em>not</em> reflected in ACAO — verify
+  the embed actually works via <code>app.staging</code>).</p>
+  <p><b>Impact.</b> Low-privilege downgrade: victim is switched to the shared read-only demo identity
+  (API session displaced; the victim now views all visitors' shared demo state). Rate-limited 10/60s
+  (bypassable per F1).</p>
+  <p><b>Recommendation.</b> Enforce <code>BETTER_AUTH_TRUSTED_ORIGINS</code> on the mint, or require a
+  short-lived nonce issued by the embed page.</p>
+</div>
+
+<div class="finding m">
+  <h3><span class="fid">F5</span> OpenAPI schema + JWKS exposed unauthenticated <span class="badge b-med">MEDIUM</span></h3>
+  <p><b>Summary.</b> <code>disableDefaultReference: true</code> removed the HTML reference UI, but the JSON
+  generator survives on staging.</p>
+  <pre>$ curl -s https://api.staging.peliqan.eu/api/auth/open-api/generate-schema | wc -c
+90399        # full better-auth route table + request/response schemas
+$ curl -s https://api.staging.peliqan.eu/api/auth/jwks
+{"keys":[{"alg":"EdDSA","crv":"Ed25519","kty":"OKP","x":"btjB0…","kid":"I2cbv…"}]}</pre>
+  <p>The app's own OpenAPI (<code>/doc</code>, <code>/reference</code>) is correctly dev-gated (404).
+  <b>Impact:</b> complete auth-surface and data-shape enumeration without a session; JWKS discloses the
+  signing algorithm/key (public by nature, but useful for token crafting attempts).</p>
+</div>
+
+<div class="finding l">
+  <h3><span class="fid">F6</span> Unauthenticated <code>GET /api/system/health</code> <span class="badge b-low">LOW</span></h3>
+  <pre>HTTP/2 200
+{"status":true,"services":{"database":true,"notifications":true,"worker":true}}</pre>
+  <p>Service-status and infra-component disclosure; also a DoS/failure oracle.</p>
+</div>
+
+<div class="finding l">
+  <h3><span class="fid">F7</span> Document upload quirks <span class="badge b-low">LOW</span></h3>
+  <ul>
+    <li><b>MIME by declaration only</b> — allowlist (<code>pdf/png/jpeg/tiff/webp/heic/heif</code>, else <code>415</code>)
+        checks the client-declared type; content is not sniffed. A <b>PDF declared as <code>image/png</code> is accepted</b>
+        (MIME confusion; the doc-AI pipeline then treats bytes as image).</li>
+    <li><b>Filename → storageKey:</b> traversal names accepted verbatim in <code>fileName</code>
+        (<code>../../../../../tmp/../../evil-traversal.pdf</code> → 201) but sanitized in the S3 key
+        (<code>_.._.._.._.._tmp_.._.._evil-traversal.pdf</code>) — no escape from the
+        <code>document-files/{docId}/{uuid}/</code> prefix.</li>
+    <li>Size cap: 10 MiB accepted, 50 MiB rejected — <code>413 {"error":"payload_too_large","message":"File
+        exceeds 52428800 bytes"}</code> (exact limit disclosed). A 10 MiB all-zero PDF is accepted and the
+        doc-AI pipeline marks the document <code>FAILED</code> (graceful).</li>
+    <li>Presigned URLs: bucket <code>peliqan-storage-staging</code>, per-object key, STS token
+        (<code>ASIA…</code>), <code>X-Amz-Expires=300</code>.</li>
+    <li><code>DELETE /api/document-files/{id}</code> works for the owner even on classified files
+        (<code>204</code>) — the flagged "500 on scanned files (audit FK <code>RESTRICT</code>)" bug did
+        <b>not</b> reproduce from this foothold.</li>
+    <li><code>POST /api/portfolio/documents/{id}/archive|unarchive</code> — real write routes; owner-scoped
+        (cross-owner → <code>404</code>), write-gated for demo (<code>403 demo_mode</code>).</li>
+  </ul>
+</div>
+
+</div>
+
+</div>
+
+<div class="finding i">
+  <h3><span class="fid">F8</span> Validation-error information disclosure <span class="badge b-info">INFO</span></h3>
+  <p>Unauthenticated 400s leak schema details: role enum <code>USER|ADMIN|DEMO</code>, liquidity types
+  <code>SELL|NAV_LOAN</code>, required-field lists, Zod paths. Useful targeting data, low direct impact.
+  Consider a generic validation message in non-dev environments.</p>
+</div>
+
+<div class="finding m">
+  <h3><span class="fid">F9</span> Filename &gt;255 chars wedges the document list (availability) <span class="badge b-med">MEDIUM</span></h3>
+  <p><b>Summary.</b> Upload accepts 10 KB filenames (F7). The doc-AI pipeline defaults the document
+  <code>title</code> to the filename; the API's <em>response</em> schema validates
+  <code>title ≤ 255 chars</code>. From that point every serialization of the row fails:</p>
+  <pre>$ curl -b user2 https://api.staging.peliqan.eu/api/portfolio/documents
+HTTP/2 400
+{"error":"validation_failed","message":"Invalid input",
+ "fields":{"data.4.title":[{"rule":"too_big","message":"Too big: expected string to have &lt;=255 characters"}]}}
+
+$ curl -b user2 https://api.staging.peliqan.eu/api/users/{user2}/portfolio/documents   # admin/portfolio view route
+HTTP/2 400   (same)
+
+$ curl -b user2 https://api.staging.peliqan.eu/api/portfolio/documents/{long-title-doc}
+HTTP/2 400   (single fetch also fails — the row is unreadable)</pre>
+  <p><b>Recovery.</b> <code>POST /api/portfolio/documents/{id}/archive</code> performs the write
+  (<code>archivedAt</code> is set) but its response also 400s; after archiving, the default list (active docs)
+  returns 200 again. No user-facing route deletes or renames a document, so the row stays wedged in the
+  archive (admin archive view uses the same serialization).</p>
+  <p><b>Impact.</b> Any real user can, with a single upload of a long-named file (common from mail/Slack),
+  break the document views for their own portfolio <em>and</em> the admin's views of that document —
+  a read-path availability bug triggered by a normal client-supplied string. The write-gate is unaffected
+  (demo cannot upload), but this is a demo→write-adjacent surface: the doc-AI pipeline's title derivation
+  should be truncated/clamped at ingest.</p>
+  <p><b>Recommendation.</b> Clamp <code>title</code> at 255 chars on upload/classification (or reject
+  filenames &gt;255), and validate request fields against response schemas.</p>
+
+<div class="finding i">
+  <h3><span class="fid">F10</span> Unauthenticated 500 on the impersonation exchange (empty body) <span class="badge b-info">INFO</span></h3>
+  <pre>$ curl -i -X POST https://api.staging.peliqan.eu/api/impersonation/exchange-impersonation-token \
+    -H 'Content-Type: application/json'        # no body
+HTTP/2 500
+{"error":"internal","message":"Internal server error"}</pre>
+  <p>With <code>Content-Type: application/json</code> but no body, <code>req.body</code> is
+  <code>undefined</code> and the route destructures it before validation → 500 (any query value, with or
+  without <code>?token=</code>). Without the header the framework defaults the body to <code>{}</code> → clean
+  400 Zod. Not exploitable (generic message, no data leaked), but it shows the security-critical route lacks
+  the body-type pre-validation the better-auth endpoints have (all of which return 400 in the same case) —
+  fix by parsing the body through Zod first.</p>
+
+<h2 id="verified">Controls Verified (Negative Results)</h2>
+<table>
+  <tr><th style="width:220px">Control</th><th>Result</th></tr>
+  <tr><td>Demo read-only write-gate</td><td>Held on every mutation found: positions create/patch/delete, liquidity create, documents upload/archive/unarchive, <code>two-factor/enable|disable</code> → all <code>403 {"error":"demo_mode","message":"This demo account is read-only"}</code>. (Gate fires after Zod validation, hence 400s on malformed bodies.)</td></tr>
+  <tr><td>Object-level authz</td><td>Other users' positions/documents/document-files → <code>404</code>; <code>/api/users/{other}/portfolio/positions|documents</code> → explicit <code>403</code>; <code>document-files/{id}/download|signed-url</code> owner-only (positive control: owner 302/200; demo 404; unauth 401).</td></tr>
+  <tr><td>Mass-assignment (<code>createPosition</code>/<code>PATCH</code>)</td><td><code>userId</code>/<code>ownerId</code> injected in create/patch bodies ignored for non-admins — owner lists unchanged after writes.</td></tr>
+  <tr><td>Edge auth blocklist</td><td>All 21 blocked paths return a uniform 64-byte 404. Normalizer handles <code>./</code>, trailing <code>/</code>, <code>/.&gt;</code>; bypass variants (<code>List-Sessions</code>, <code>//</code>, <code>%2f</code>, <code>%20</code>, double-encoding) pass the edge but better-auth matches exactly → no blocked route reachable. better-auth is case-sensitive (<code>Get-Session</code> → 404; <code>./get-session</code> → 200).</td></tr>
+  <tr><td>Demo-session guards</td><td>Identical 403 for non-demo domain and unknown demo-domain email; no timing oracle (≈0.36 s ± 0.04, n=5 per case); case-insensitive email works; demo-domain sign-up reserved. Stacked-role guard (<code>roles.length !== 1</code>) not externally triggerable (role assignment is admin-only).</td></tr>
+  <tr><td>Admin surface (demo &amp; real user)</td><td><code>/api/users</code> 403 Cannot list · <code>POST /api/users</code> 403 Cannot manage users · <code>POST /api/users/{id}/impersonate</code> 403 Cannot impersonate users · <code>/api/system/jobs(+stats)</code> 403 Cannot list · <code>/api/communications</code> 403.</td></tr>
+  <tr><td>Session hardening</td><td><code>__Secure-*</code> cookies: HttpOnly, Secure, SameSite=Lax, host-only on the API origin; server-minted tokens (no fixation); Bearer auth accepted; generic sign-in error; <code>update-session</code> reachable as demo but a no-op ("No fields to update").</td></tr>
+  <tr><td>CORS</td><td>Only <code>app.staging</code>/<code>admin.staging</code> origins reflected (ACAO); evil/<code>null</code>/<code>peliqan.eu</code> not reflected → cross-origin reads blocked; only the Set-Cookie side channel remains (F4).</td></tr>
+  <tr><td>Liquidity interests</td><td>User create works (201, own id); cross-owner read → <code>404</code>; no user-side update routes (admin manages status); <code>userId</code> mass-assignment not applicable (create forces own id).</td></tr>
+  <tr><td>User profile route</td><td><code>GET /api/users/{id}</code> owner-only (self → 200, other → <code>404 User not found</code>) — no cross-user profile read.</td></tr>
+  <tr><td>XXE / XML injection (doc-AI)</td><td>Valid PDF with XMP metadata containing an undefined entity (<code>&amp;undeftest;</code>) and a numeric-entity probe → <code>CLASSIFIED</code> normally, no <code>lastError</code>; a fake JPEG with APP1 XMP fails image decode (<code>FAILED</code>). No parser-error signal; blind XXE not excludable without parse-result visibility.</td></tr>
+</table>
+
+<h2 id="open">Open Items / Follow-Up</h2>
+<ul>
+  <li><b>SSRF via document content — tested, no signal.</b> Uploaded three PDFs (control; link-annotation +
+      text URL to <code>http://169.254.169.254/latest/meta-data/</code>; link-annotation + text URL to
+      <code>http://rt-ssrf-abc123.invalid/</code>). All classified within ~3–6 min with identical timing, no
+      <code>lastError</code>, type <code>OTHER</code> — the pipeline appears fully local. A collector-based
+      re-test would be needed to rule out rare fetch paths.</li>
+  <li>XXE in allowed non-PDF types (heic/tiff): JPEG XMP attempted (decode failure masked it); HEIC XMP not crafted.</li>
+  <li>Impersonation-token replay &amp; 60 s expiry end-to-end (requires an admin-minted token).</li>
+  <li>Delete-<code>DocumentFile</code> 500 (audit FK <code>RESTRICT</code>): all owner deletes returned
+      <code>204</code> (incl. classified files) — likely needs an admin-reviewed file state; not reproducible
+      without admin.</li>
+</ul>
+
+<h2 id="recs">Top Recommendations</h2>
+<ol>
+  <li>Normalize client IP at the ALB (overwrite/ignore client <code>X-Forwarded-For</code>) for all rate limiting (F1).</li>
+  <li>Gate or confirm intent of open self-registration on staging (F2); add email verification before write access if open.</li>
+  <li>Keep the impersonation token out of the URL and verify origin on the exchange (F3).</li>
+  <li>Apply the trusted-origins check to <code>demo/session</code> or issue a per-embed nonce (F4).</li>
+  <li>Gate <code>generate-schema</code> and <code>/api/system/health</code> behind auth or dev-only flags (F5/F6).</li>
+  <li>Clamp document titles/filenames at 255 chars on ingest so one upload can't wedge the list (F9); sniff content vs declared MIME (F7).</li>
+</ol>
+
+<h2 id="appendix">Appendix — Artifacts &amp; Notes</h2>
+<div class="card kv">
+  <div><span class="k">Evidence</span><span><code>evidence/</code> — raw curl responses, cookies, probe scripts (<code>matrix*.sh</code>), downloaded app/admin JS bundles, OpenAPI schema body.</span></div>
+  <div><span class="k">Accounts created</span><span><code>rt-tester1@example.com</code> (live); <code>rt-dom-1..4@demo.peliqan.eu</code> (rejected — reserved domain). One password-reset email sent to <code>investor@demo.peliqan.eu</code>. Demo seeded data left intact.</span></div>
+  <div><span class="k">Key identities</span><span>Demo user <code>8d5c155c-3c5e-4354-bb05-6053f5cf9f5b</code> · user2 <code>zMCbWj20undsrROPjm9QoiS8km2zPVqx</code> · demo fund <code>cmt2z5oct001af2o4hck57hqf</code> · user2 uploaded file <code>cmt8msitx002z08uiamlgfzmr</code>.</span></div>
+</div>
+
+<footer>
+  Peliqan staging red team · black-box · prepared 2026-08-25 · severity scale: Critical / High / Medium / Low / Info ·
+  all statements reproducible from the curls shown; staging environment.
+</footer>
+
+</div>
+</body>
+</html>
