@@ -43,9 +43,15 @@ export function usePostHogPageview() {
 			capture()
 			return
 		}
-		// First pageview waits for idle but is never cancelled — quick navigations away
-		// from the landing page would otherwise lose it entirely
-		if ("requestIdleCallback" in window) requestIdleCallback(capture, { timeout: 5000 })
-		else setTimeout(capture, 2000)
+		// PostHog costs ~165kB over 7 requests and more main-thread time than the app
+		// itself, so it waits for load and then idle — otherwise it lands inside the
+		// LCP window on a real connection. Never cancelled: quick navigations away from
+		// the landing page would otherwise lose the first pageview entirely.
+		const onIdle = () => {
+			if ("requestIdleCallback" in window) requestIdleCallback(capture, { timeout: 5000 })
+			else setTimeout(capture, 2000)
+		}
+		if (document.readyState === "complete") onIdle()
+		else window.addEventListener("load", onIdle, { once: true })
 	}, [location.pathname])
 }

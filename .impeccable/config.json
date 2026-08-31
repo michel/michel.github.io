@@ -8,6 +8,13 @@
         "value": "roboto",
         "createdAt": "2026-08-31T17:50:17.613Z",
         "reason": "User explicitly requested the site's original Roboto Mono font back"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "file": "src/posts/the-model-never-types-the-number.tsx",
+        "createdAt": "2026-08-31T20:20:00.000Z",
+        "reason": "SVG stroke-width transition on the pipeline animation's skip-arc. The rule matches the substring 'width', but stroke-width is an SVG painting property: it repaints inside the SVG layer and never triggers document reflow. User confirmed intentional."
       }
     ]
   }
