@@ -711,7 +711,7 @@ export const filesystem: Record<string, FSEntry> = {
 		type: "file",
 		content: [
 			"\x1b[keyword]let\x1b[reset] status = \x1b[cyan]Status\x1b[reset] {",
-			'    role: \x1b[green]"Tech Lead"\x1b[reset],',
+			'    role: \x1b[green]"CTO"\x1b[reset],',
 			'    loc: \x1b[green]"NL"\x1b[reset],',
 			"    remote: \x1b[yellow]true\x1b[reset],",
 			"    hybrid: \x1b[yellow]true\x1b[reset],",
