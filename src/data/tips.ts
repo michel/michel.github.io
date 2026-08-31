@@ -16,7 +16,7 @@ export const tips: Tip[] = [
 	{ id: "resize", text: "Drag the dividers to resize panels", category: "basic" },
 
 	// Intermediate tips
-	{ id: "buffers", text: "Tab and Shift+Tab cycle through open buffers", category: "intermediate" },
+	{ id: "buffers", text: "gt and gT cycle through open buffers", category: "intermediate" },
 	{ id: "close", text: "Press x to close the current buffer", category: "intermediate" },
 	{ id: "hjkl", text: "Use j/k or arrow keys to scroll in normal mode", category: "intermediate" },
 	{ id: "modes", text: "Try v for visual mode, : for command mode", category: "intermediate" },

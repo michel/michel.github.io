@@ -1,41 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useEditor } from "../context/EditorContext"
+import { loadProjects, type Project } from "../data/loadProjects"
 import { usePageTitle } from "../hooks/usePageTitle"
-
-type Language = {
-	language: string
-	files?: number
-	lines: number
-	percentage: number
-}
-
-type Project = {
-	name: string
-	description?: string | null
-	customer?: string | null
-	language: string
-	languages?: Language[]
-	framework?: string | null
-	firstCommitDate?: string
-	lastCommitDate?: string
-	totalLinesOfCode: number
-	myLinesOfCode: number
-	myCommitCount: number
-	totalCommitCount?: number
-	status: string
-	path?: string
-	isPersonalProject?: boolean
-	repository?: string | null
-	commitYearStats?: Record<string, number>
-}
-
-type ProjectsData = {
-	generatedAt: string
-	rootPath: string
-	totalProjects: number
-	projects: Project[]
-}
 
 type Filter = {
 	type: "year" | "language" | "customer" | null
@@ -66,9 +33,7 @@ const Panel = ({
 	children: React.ReactNode
 	className?: string
 }) => (
-	<div
-		className={`relative flex min-h-0 flex-col rounded-md border border-border bg-bg-panel ${className}`}
-	>
+	<div className={`relative flex min-h-0 flex-col border border-border bg-bg-panel ${className}`}>
 		<div
 			className={`absolute -top-2.5 left-3 bg-bg-panel px-1.5 text-[10px] font-bold uppercase tracking-wide ${titleColor}`}
 		>
@@ -78,11 +43,30 @@ const Panel = ({
 	</div>
 )
 
-// Bar component for stats
-const StatBar = ({ color, width }: { color: string; width: number }) => (
-	<div className="mt-1 h-2.5 overflow-hidden rounded-sm bg-black/30">
-		<div className={`h-full transition-all duration-500 ${color}`} style={{ width: `${width}%` }} />
-	</div>
+// Sortable column header
+const SortHeader = ({
+	column,
+	label,
+	className,
+	sortCol,
+	sortAsc,
+	onSort,
+}: {
+	column: SortColumn
+	label: string
+	className: string
+	sortCol: SortColumn
+	sortAsc: boolean
+	onSort: (column: SortColumn) => void
+}) => (
+	<button
+		type="button"
+		aria-label={`Sort by ${label}${sortCol === column ? (sortAsc ? ", ascending" : ", descending") : ""}`}
+		className={`cursor-pointer text-comment hover:text-fg ${className}`}
+		onClick={() => onSort(column)}
+	>
+		{label} {sortCol === column && (sortAsc ? "↑" : "↓")}
+	</button>
 )
 
 // Customer metadata from CV
@@ -90,12 +74,13 @@ const CUSTOMER_DATA: Record<string, { role: string; period: string; activities: 
 	Peliqan: {
 		role: "CTO",
 		period: "2026 - Current",
-		activities: "Building the Peliqan platform from the ground up: private equity made liquid",
+		activities:
+			"Building the Peliqan platform: portfolio visibility and liquidity for PE investors",
 	},
 	"Revive Capital": {
 		role: "Tech lead",
 		period: "2024 - Current",
-		activities: "Building asset-backed lending platform for brokers from the ground up",
+		activities: "Built Revive Capital's asset-backed lending platform for brokers from scratch",
 	},
 	"Financial Lease": {
 		role: "Tech lead",
@@ -204,7 +189,7 @@ export default function Projects() {
 	}, [openBuffer])
 
 	const [projects, setProjects] = useState<Project[]>([])
-	const [loading, setLoading] = useState(true)
+	const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading")
 	const [selectedIndex, setSelectedIndex] = useState(0)
 	const [searchParams, setSearchParams] = useSearchParams()
 	const [sortCol, setSortCol] = useState<SortColumn>("commits")
@@ -227,15 +212,19 @@ export default function Projects() {
 	const searchQuery = searchParams.get("q") || ""
 
 	// Fetch projects data
-	useEffect(() => {
-		fetch("/projects.json")
-			.then((res) => res.json())
-			.then((data: ProjectsData) => {
-				setProjects(data.projects)
-				setLoading(false)
+	const load = useCallback(() => {
+		setLoadState("loading")
+		loadProjects()
+			.then((data) => {
+				setProjects(data)
+				setLoadState("ready")
 			})
-			.catch(() => setLoading(false))
+			.catch(() => setLoadState("error"))
 	}, [])
+
+	useEffect(() => {
+		load()
+	}, [load])
 
 	// Global stats
 	const globalStats = useMemo(() => {
@@ -264,6 +253,12 @@ export default function Projects() {
 			avgLocPerDay,
 		}
 	}, [projects])
+
+	// Busiest project, used to scale the contribution meter
+	const maxMyCommitCount = useMemo(
+		() => projects.reduce((max, p) => Math.max(max, p.myCommitCount || 0), 0),
+		[projects],
+	)
 
 	// Commit history by year
 	const commitsByYear = useMemo(() => {
@@ -399,6 +394,16 @@ export default function Projects() {
 
 	// Selected project
 	const selectedProject = filteredProjects[selectedIndex] || null
+	// Log scale so the long tail below the 2.3K-commit max still lights up cells
+	const commitIntensity =
+		maxMyCommitCount && selectedProject?.myCommitCount
+			? Math.max(
+					1,
+					Math.round(
+						(Math.log10(1 + selectedProject.myCommitCount) / Math.log10(1 + maxMyCommitCount)) * 20,
+					),
+				)
+			: 0
 
 	// Filter handlers
 	// Update URL with filter
@@ -457,6 +462,10 @@ export default function Projects() {
 	// Keyboard navigation
 	useEffect(() => {
 		const handleKeydown = (e: KeyboardEvent) => {
+			// Never steal keys from a field the user is typing in
+			const tag = (e.target as HTMLElement).tagName
+			if (tag === "INPUT" || tag === "TEXTAREA") return
+
 			// "/" to enter search mode
 			if (e.key === "/" && !searchMode) {
 				e.preventDefault()
@@ -503,29 +512,48 @@ export default function Projects() {
 		setSelectedIndex(0)
 	}, [searchQuery])
 
+	// Clamp selection when any filter shrinks the list (incl. browser back/forward)
+	useEffect(() => {
+		setSelectedIndex((i) => Math.min(i, Math.max(0, filteredProjects.length - 1)))
+	}, [filteredProjects.length])
+
 	// Scroll selected row into view
 	useEffect(() => {
 		const container = listRef.current
 		if (!container) return
 		const row = container.children[selectedIndex] as HTMLElement
-		if (row) row.scrollIntoView({ block: "nearest", behavior: "smooth" })
+		if (row) row.scrollIntoView({ block: "nearest", behavior: "auto" })
 	}, [selectedIndex])
 
-	if (loading) {
+	if (loadState === "error") {
 		return (
-			<div className="flex h-full items-center justify-center text-comment">
-				Loading system data...
+			<div className="flex h-full flex-col items-center justify-center gap-3 px-4 text-center">
+				<div className="text-red">E484: Can't open file projects.json</div>
+				<button
+					type="button"
+					className="cursor-pointer border border-border px-2 py-1 text-comment hover:text-fg"
+					onClick={load}
+				>
+					:e! to retry
+				</button>
 			</div>
 		)
 	}
 
-	const colors = ["bg-cyan", "bg-magenta", "bg-green", "bg-yellow", "bg-red"]
+	if (loadState === "loading") {
+		return (
+			<div role="status" className="flex h-full items-center justify-center text-comment">
+				:e projects.json
+			</div>
+		)
+	}
+
 	const maxLangLines = languageStats[0]?.[1] || 1
 
 	return (
-		<div className="grid min-h-full grid-cols-1 gap-3 overflow-y-auto px-1 pb-1 pt-3 md:h-full md:grid-cols-4 md:grid-rows-[auto_1fr] md:gap-4 md:overflow-hidden md:px-4 md:pb-4 md:pt-2">
+		<div className="grid min-h-full grid-cols-1 gap-3 overflow-y-auto px-1 pb-1 pt-3 md:h-full md:grid-cols-4 md:grid-rows-[auto_1fr] md:gap-4 md:overflow-hidden md:px-4 md:pb-4 md:pt-3">
 			{/* System Stats - spans columns 1-3 */}
-			<header className="order-1 animate-[fadeIn_0.5s_ease-out] md:order-none md:col-span-3">
+			<header className="order-1 md:order-none md:col-span-3">
 				<Panel title="SYSTEM_STATS" titleColor="text-green" className="p-2 md:p-4">
 					{/* Row 1: Counters */}
 					<div className="grid grid-cols-2 gap-2 md:grid-cols-5 md:gap-4">
@@ -534,35 +562,30 @@ export default function Projects() {
 							<span className="text-base font-bold text-fg md:text-xl">
 								{globalStats.diffYears}y {globalStats.diffDays}d
 							</span>
-							<StatBar color="bg-green" width={100} />
 						</div>
 						<div className="flex flex-col justify-between">
 							<span className="text-[10px] text-comment md:text-xs">PROJECTS</span>
 							<span className="text-base font-bold text-fg md:text-xl">
 								{globalStats.totalProjects}
 							</span>
-							<StatBar color="bg-magenta" width={85} />
 						</div>
 						<div className="flex flex-col justify-between">
 							<span className="text-[10px] text-comment md:text-xs">TOTAL LOC</span>
 							<span className="text-base font-bold text-fg md:text-xl">
 								{formatNum(globalStats.totalLoc)}
 							</span>
-							<StatBar color="bg-cyan" width={60} />
 						</div>
 						<div className="flex flex-col justify-between">
 							<span className="text-[10px] text-comment md:text-xs">COMMITS</span>
 							<span className="text-base font-bold text-fg md:text-xl">
 								{formatNum(globalStats.totalCommits)}
 							</span>
-							<StatBar color="bg-yellow" width={45} />
 						</div>
 						<div className="col-span-2 flex flex-col justify-between md:col-span-1">
 							<span className="text-[10px] text-comment md:text-xs">AVG LOC/DAY</span>
 							<span className="text-base font-bold text-fg md:text-xl">
 								{formatNum(globalStats.avgLocPerDay)}
 							</span>
-							<StatBar color="bg-orange" width={55} />
 						</div>
 					</div>
 
@@ -603,11 +626,11 @@ export default function Projects() {
 										className="group relative flex h-full flex-1 cursor-pointer flex-col justify-end"
 										onClick={() => toggleFilter("year", item.year)}
 									>
-										<div className="flex h-full w-full items-end overflow-hidden rounded-sm bg-cyan/10">
+										<div className="flex h-full w-full items-end overflow-hidden bg-cyan/10">
 											<div
-												className={`w-full transition-all duration-300 hover:bg-fg ${
+												className={`w-full transition-colors duration-150 hover:bg-fg ${
 													isActive
-														? "bg-fg shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+														? "bg-fg"
 														: isFaded
 															? "bg-cyan opacity-20"
 															: item.count > 0
@@ -618,7 +641,7 @@ export default function Projects() {
 											/>
 										</div>
 										<div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 opacity-0 transition-opacity group-hover:opacity-100">
-											<div className="whitespace-nowrap rounded border border-border bg-bg-dark px-2 py-1 text-xs text-fg shadow-lg">
+											<div className="whitespace-nowrap border border-border bg-bg-dark px-2 py-1 text-xs text-fg">
 												<span className="font-bold text-cyan">{item.year}</span>:{" "}
 												{formatNum(item.count)} commits
 											</div>
@@ -639,19 +662,17 @@ export default function Projects() {
 			</header>
 
 			{/* Details & Customer Panels - spans both rows, column 4 */}
-			<aside className="order-4 flex h-auto shrink-0 pt-2 animate-[fadeIn_0.5s_ease-out_0.2s_both] flex-col gap-4 md:order-none md:h-auto md:min-h-0 md:flex-1 md:row-span-2 md:gap-4 md:pt-0">
+			<aside className="order-4 flex h-auto shrink-0 flex-col gap-4 pt-2 md:order-none md:row-span-2 md:h-auto md:min-h-0 md:flex-1 md:gap-4 md:pt-0">
 				<Panel title="DETAILS" titleColor="text-yellow" className="flex-1 p-2 md:p-4">
 					{selectedProject ? (
 						<div className="flex h-full flex-col gap-4">
 							<div>
 								<h2 className="mb-1 text-xl font-bold text-fg">{selectedProject.name}</h2>
-								<div className="mb-2 font-mono text-xs text-cyan">
-									{selectedProject.path
-										? selectedProject.path.replace("/Users/micheldegraaf", "~")
-										: `~/src/${selectedProject.name}`}
+								<div className="mb-2 break-all font-mono text-xs text-cyan">
+									{selectedProject.path.replace("/Users/micheldegraaf", "~")}
 								</div>
 								<div className="text-sm italic text-comment">
-									{selectedProject.description || "No description available."}
+									{selectedProject.description || "--"}
 								</div>
 							</div>
 
@@ -694,10 +715,10 @@ export default function Projects() {
 									{selectedProject.languages && selectedProject.languages.length > 0 ? (
 										[...selectedProject.languages]
 											.sort((a, b) => b.percentage - a.percentage)
-											.map((l, i) => (
-												<div key={i} className="flex items-center gap-2 text-xs">
+											.map((l) => (
+												<div key={l.language} className="flex items-center gap-2 text-xs">
 													<span className="w-20 truncate text-fg">{l.language}</span>
-													<div className="h-2 flex-1 overflow-hidden rounded-sm bg-black/30">
+													<div className="h-2 flex-1 overflow-hidden bg-black/30">
 														<div className="h-full bg-cyan" style={{ width: `${l.percentage}%` }} />
 													</div>
 													<span className="w-8 text-right text-comment">{l.percentage}%</span>
@@ -712,28 +733,18 @@ export default function Projects() {
 							<div className="mt-auto pt-2">
 								<div className="mb-1 text-xs text-comment">CONTRIBUTION LEVEL</div>
 								<div className="flex h-4 gap-1">
-									{Array.from({ length: 20 }).map((_, i) => {
-										const commitIntensity = Math.min(
-											20,
-											Math.ceil((selectedProject.myCommitCount || 0) / 10),
-										)
-										return (
-											<div
-												key={i}
-												className={`flex-1 rounded-sm ${
-													i < commitIntensity ? "bg-green" : "bg-black/30"
-												}`}
-											/>
-										)
-									})}
+									{Array.from({ length: 20 }, (_, i) => (
+										<div
+											key={i}
+											className={`flex-1 ${i < commitIntensity ? "bg-green" : "bg-black/30"}`}
+										/>
+									))}
 								</div>
 							</div>
 						</div>
 					) : (
-						<div className="flex h-full items-center justify-center text-center italic text-comment opacity-50">
-							Select a project
-							<br />
-							to view details
+						<div className="flex h-full items-center justify-center text-center text-comment opacity-50">
+							:e a project to view details
 						</div>
 					)}
 				</Panel>
@@ -774,8 +785,8 @@ export default function Projects() {
 			</aside>
 
 			{/* Languages & Customers - column 1 */}
-			<div className="order-2 flex shrink-0 pt-2 animate-[fadeIn_0.5s_ease-out_0.1s_both] flex-col gap-3 md:order-none md:col-span-1 md:min-h-0 md:flex-1 md:gap-4 md:pt-0">
-				<aside className="flex h-20 shrink-0 flex-col md:h-auto md:min-h-0 md:flex-1">
+			<div className="order-2 flex shrink-0 flex-col gap-3 pt-2 md:order-none md:col-span-1 md:min-h-0 md:flex-1 md:gap-4 md:pt-0">
+				<aside className="flex min-h-24 shrink-0 flex-col md:min-h-0 md:flex-1">
 					<Panel
 						title={`LANGUAGES (${languageStats.length})`}
 						titleColor="text-magenta"
@@ -783,35 +794,35 @@ export default function Projects() {
 					>
 						<div className="relative h-full">
 							<div className="flex h-full items-center gap-2 overflow-x-auto pb-1 md:flex-col md:items-stretch md:space-y-2 md:overflow-y-auto md:pr-2">
-								{languageStats.map(([name, count], index) => {
+								{languageStats.map(([name, count]) => {
 									const percent = Math.round((count / maxLangLines) * 100)
-									const colorClass = colors[index % colors.length]
 									const isActive = filter.type === "language" && filter.value === name
 									const isFaded = filter.type === "language" && !isActive
 
 									return (
-										<div
+										<button
+											type="button"
 											key={name}
-											className={`min-w-[80px] shrink-0 cursor-pointer border-l-2 pl-2 transition-all duration-200 md:min-w-0 md:shrink ${
+											className={`min-h-11 min-w-[80px] shrink-0 cursor-pointer border-l-2 pl-2 text-left transition-colors duration-150 md:min-h-0 md:min-w-0 md:shrink ${
 												isActive ? "border-fg bg-fg/5" : "border-transparent hover:bg-fg/5"
 											} ${isFaded ? "opacity-30" : ""}`}
 											onClick={() => toggleFilter("language", name)}
 										>
-											<div className="flex justify-between text-xs md:flex-row">
+											<span className="flex justify-between text-xs">
 												<span className={`font-bold ${isActive ? "text-fg" : "text-comment"}`}>
 													{name}
 												</span>
 												<span className="hidden text-[10px] text-comment md:inline">
 													{formatNum(count)} LOC
 												</span>
-											</div>
-											<div className="mt-1 h-2.5 overflow-hidden rounded-sm bg-black/30">
-												<div
-													className={`h-full ${isActive ? "bg-fg" : colorClass}`}
+											</span>
+											<span className="mt-1 block h-2.5 overflow-hidden bg-black/30">
+												<span
+													className={`block h-full ${isActive ? "bg-fg" : "bg-cyan"}`}
 													style={{ width: `${percent}%` }}
 												/>
-											</div>
-										</div>
+											</span>
+										</button>
 									)
 								})}
 							</div>
@@ -820,7 +831,7 @@ export default function Projects() {
 					</Panel>
 				</aside>
 
-				<aside className="flex h-16 shrink-0 pt-1 flex-col md:h-auto md:min-h-0 md:flex-1 md:pt-0">
+				<aside className="flex min-h-20 shrink-0 flex-col pt-1 md:min-h-0 md:flex-1 md:pt-0">
 					<Panel
 						title={`CUSTOMERS (${customerStats.length})`}
 						titleColor="text-orange"
@@ -833,22 +844,23 @@ export default function Projects() {
 									const isFaded = filter.type === "customer" && !isActive
 
 									return (
-										<div
+										<button
+											type="button"
 											key={name}
-											className={`min-w-[70px] shrink-0 cursor-pointer border-l-2 pl-2 transition-all duration-200 md:min-w-0 md:shrink ${
+											className={`min-h-11 min-w-[70px] shrink-0 cursor-pointer border-l-2 pl-2 text-left transition-colors duration-150 md:min-h-0 md:min-w-0 md:shrink ${
 												isActive ? "border-fg bg-fg/5" : "border-transparent hover:bg-fg/5"
 											} ${isFaded ? "opacity-30" : ""}`}
 											onClick={() => toggleFilter("customer", name)}
 										>
-											<div className="flex justify-between text-xs">
+											<span className="flex justify-between text-xs">
 												<span className={`font-bold ${isActive ? "text-fg" : "text-comment"}`}>
 													{getCustomerDisplayName(name)}
 												</span>
 												<span className="hidden text-[10px] text-comment md:inline">
 													{count} projects
 												</span>
-											</div>
-										</div>
+											</span>
+										</button>
 									)
 								})}
 							</div>
@@ -859,7 +871,7 @@ export default function Projects() {
 			</div>
 
 			{/* Project List - columns 2-3 */}
-			<section className="order-3 flex min-h-[300px] max-h-[50vh] shrink-0 pt-2 animate-[fadeIn_0.5s_ease-out_0.15s_both] flex-col md:order-none md:col-span-2 md:min-h-0 md:max-h-none md:flex-1 md:pt-0">
+			<section className="order-3 flex max-h-[50vh] min-h-[300px] shrink-0 flex-col pt-2 md:order-none md:col-span-2 md:max-h-none md:min-h-0 md:flex-1 md:pt-0">
 				<Panel
 					title={`PROJECTS (${filter.type || searchQuery ? `${filteredProjects.length} of ` : ""}${projects.length})${searchQuery ? ` /${searchQuery}` : ""}`}
 					titleColor="text-cyan"
@@ -867,49 +879,63 @@ export default function Projects() {
 				>
 					{/* Header */}
 					<div className="flex shrink-0 items-center gap-2 border-b border-border p-2 text-[10px] font-semibold uppercase">
-						<div className="w-8 text-center text-comment">#</div>
-						<div
-							className="flex-1 cursor-pointer text-comment hover:text-fg"
-							onClick={() => handleSort("name")}
-						>
-							Name {sortCol === "name" && (sortAsc ? "↑" : "↓")}
-						</div>
-						<div
-							className="hidden w-24 cursor-pointer text-comment hover:text-fg md:block"
-							onClick={() => handleSort("customer")}
-						>
-							Client {sortCol === "customer" && (sortAsc ? "↑" : "↓")}
-						</div>
-						<div
-							className="hidden w-20 cursor-pointer text-comment hover:text-fg md:block"
-							onClick={() => handleSort("language")}
-						>
-							Language {sortCol === "language" && (sortAsc ? "↑" : "↓")}
-						</div>
-						<div
-							className="w-20 cursor-pointer text-right text-comment hover:text-fg"
-							onClick={() => handleSort("lines")}
-						>
-							Lines {sortCol === "lines" && (sortAsc ? "↑" : "↓")}
-						</div>
-						<div
-							className="hidden w-16 cursor-pointer text-right text-comment hover:text-fg md:block"
-							onClick={() => handleSort("commits")}
-						>
-							Commits {sortCol === "commits" && (sortAsc ? "↑" : "↓")}
-						</div>
-						<div
-							className="hidden w-12 cursor-pointer text-center text-comment hover:text-fg md:block"
-							onClick={() => handleSort("start")}
-						>
-							Start {sortCol === "start" && (sortAsc ? "↑" : "↓")}
-						</div>
-						<div
-							className="w-20 cursor-pointer text-center text-comment hover:text-fg"
-							onClick={() => handleSort("status")}
-						>
-							Status {sortCol === "status" && (sortAsc ? "↑" : "↓")}
-						</div>
+						<div className="w-8 shrink-0 text-center text-comment">#</div>
+						<SortHeader
+							column="name"
+							label="Name"
+							className="min-w-[8rem] flex-1 text-left"
+							sortCol={sortCol}
+							sortAsc={sortAsc}
+							onSort={handleSort}
+						/>
+						<SortHeader
+							column="customer"
+							label="Client"
+							className="hidden w-24 shrink-0 text-left lg:block"
+							sortCol={sortCol}
+							sortAsc={sortAsc}
+							onSort={handleSort}
+						/>
+						<SortHeader
+							column="language"
+							label="Language"
+							className="hidden w-20 shrink-0 text-left lg:block"
+							sortCol={sortCol}
+							sortAsc={sortAsc}
+							onSort={handleSort}
+						/>
+						<SortHeader
+							column="lines"
+							label="Lines"
+							className="w-20 shrink-0 text-right"
+							sortCol={sortCol}
+							sortAsc={sortAsc}
+							onSort={handleSort}
+						/>
+						<SortHeader
+							column="commits"
+							label="Commits"
+							className="hidden w-16 shrink-0 text-right lg:block"
+							sortCol={sortCol}
+							sortAsc={sortAsc}
+							onSort={handleSort}
+						/>
+						<SortHeader
+							column="start"
+							label="Start"
+							className="hidden w-12 shrink-0 text-center lg:block"
+							sortCol={sortCol}
+							sortAsc={sortAsc}
+							onSort={handleSort}
+						/>
+						<SortHeader
+							column="status"
+							label="Status"
+							className="w-20 shrink-0 text-center"
+							sortCol={sortCol}
+							sortAsc={sortAsc}
+							onSort={handleSort}
+						/>
 					</div>
 
 					{/* Search Input */}
@@ -921,7 +947,13 @@ export default function Projects() {
 								type="text"
 								value={searchQuery}
 								onChange={(e) => updateSearchQuery(e.target.value)}
-								placeholder="type to filter..."
+								onKeyDown={(e) => {
+									if (e.key !== "Escape") return
+									e.preventDefault()
+									setSearchMode(false)
+									updateSearchQuery("")
+								}}
+								placeholder="type to filter…"
 								className="flex-1 bg-transparent text-xs text-fg placeholder-comment outline-none"
 							/>
 							<span className="text-[10px] text-comment">ESC to close</span>
@@ -934,29 +966,20 @@ export default function Projects() {
 							className="shrink-0 cursor-pointer bg-magenta/20 p-2 text-center text-xs text-magenta hover:bg-magenta/30"
 							onClick={clearFilter}
 						>
-							Filter Active:{" "}
-							<span className="font-bold">
-								{filter.type === "year"
-									? `Year: ${filter.value}`
-									: filter.type === "customer"
-										? `Client: ${filter.value}`
-										: filter.value}
-							</span>{" "}
-							(Click to Clear or ESC)
+							filter: <span className="font-bold">{filter.value}</span>{" "}
+							<span className="text-comment">[esc to clear]</span>
 						</div>
 					)}
 
 					{/* List */}
 					<div ref={listRef} className="flex-1 overflow-y-auto">
 						{filteredProjects.length === 0 ? (
-							<div className="p-4 text-center italic text-comment">
-								No projects found for current filter.
-							</div>
+							<div className="p-4 text-center text-comment">E486: Pattern not found</div>
 						) : (
 							filteredProjects.map((p, i) => {
 								const statusColor =
 									p.status === "active"
-										? "text-green font-bold animate-pulse"
+										? "font-bold text-green"
 										: p.status === "maintained"
 											? "text-cyan"
 											: p.status === "archived"
@@ -965,31 +988,31 @@ export default function Projects() {
 
 								return (
 									<div
-										key={`${p.name}-${i}`}
-										className={`flex shrink-0 cursor-pointer items-center gap-2 border-b border-border/50 p-2 text-xs transition-colors duration-100 ${
+										key={p.path}
+										className={`flex min-h-11 shrink-0 cursor-pointer items-center gap-2 border-b border-l-2 border-border/50 p-2 text-xs transition-colors duration-150 [content-visibility:auto] [contain-intrinsic-size:0_32px] md:min-h-0 ${
 											i === selectedIndex
-												? "border-l-2 border-l-cyan bg-cyan/20"
-												: "hover:bg-cyan/10"
+												? "border-l-cyan bg-cyan/20"
+												: "border-l-transparent hover:bg-cyan/10"
 										}`}
 										onClick={() => setSelectedIndex(i)}
 									>
 										<div className="w-8 shrink-0 text-center font-mono text-comment">{i + 1}</div>
-										<div className="flex-1 truncate font-semibold text-fg">
-											{p.name.length > 25 ? `${p.name.substring(0, 22)}...` : p.name}
+										<div className="min-w-[8rem] flex-1 truncate font-semibold text-fg">
+											{p.name}
 										</div>
-										<div className="hidden w-24 shrink-0 truncate text-comment md:block">
+										<div className="hidden w-24 shrink-0 truncate text-comment lg:block">
 											{p.customer ? getCustomerDisplayName(p.customer) : "-"}
 										</div>
-										<div className="hidden w-20 shrink-0 truncate text-magenta md:block">
+										<div className="hidden w-20 shrink-0 truncate text-magenta lg:block">
 											{p.language || "-"}
 										</div>
 										<div className="w-20 shrink-0 text-right font-mono text-cyan">
 											{formatNum(p.totalLinesOfCode)}
 										</div>
-										<div className="hidden w-16 shrink-0 text-right font-mono text-yellow md:block">
+										<div className="hidden w-16 shrink-0 text-right font-mono text-yellow lg:block">
 											{p.myCommitCount || 0}
 										</div>
-										<div className="hidden w-12 shrink-0 text-center font-mono text-comment md:block">
+										<div className="hidden w-12 shrink-0 text-center font-mono text-comment lg:block">
 											{parseDate(p.firstCommitDate)?.getFullYear() || "-"}
 										</div>
 										<div
@@ -1009,9 +1032,9 @@ export default function Projects() {
 							Total Projects: <span className="text-fg">{filteredProjects.length}</span>
 						</span>
 						<span className="hidden md:inline">
-							<span className="rounded border border-border px-1 text-fg">/</span> search{" "}
-							<span className="rounded border border-border px-1 text-fg">j</span>{" "}
-							<span className="rounded border border-border px-1 text-fg">k</span> navigate
+							<span className="border border-border px-1 text-fg">/</span> search{" "}
+							<span className="border border-border px-1 text-fg">j</span>{" "}
+							<span className="border border-border px-1 text-fg">k</span> navigate
 						</span>
 					</div>
 				</Panel>

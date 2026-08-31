@@ -1,7 +1,10 @@
 import { ChevronDown, ChevronRight, FileText, FolderClosed } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { type FileNode, fileTree, flattenVisibleTree, useEditor } from "../context/EditorContext"
+
+const rowBase =
+	"flex w-full items-center gap-1 border-l-2 border-l-transparent py-0.5 text-left transition-colors duration-100 hover:bg-black"
 
 function FileTreeNode({
 	node,
@@ -16,7 +19,6 @@ function FileTreeNode({
 	isExpanded: boolean
 	onToggle: (id: string) => void
 }) {
-	const navigate = useNavigate()
 	const location = useLocation()
 	const { openBuffer, sidebarFocused, unfocusSidebar } = useEditor()
 
@@ -26,37 +28,39 @@ function FileTreeNode({
 
 	if (node.type === "folder") {
 		return (
-			<div
-				className={`flex cursor-pointer items-center gap-1 py-0.5 hover:bg-black ${cursorClass}`}
+			<button
+				type="button"
+				className={`${rowBase} ${cursorClass}`}
 				style={{ paddingLeft }}
 				onClick={() => onToggle(node.id)}
 			>
 				{isExpanded ? (
-					<ChevronDown className="h-3 w-3 text-blue" />
+					<ChevronDown aria-hidden="true" className="h-3 w-3 shrink-0 text-blue" />
 				) : (
-					<ChevronRight className="h-3 w-3 text-blue" />
+					<ChevronRight aria-hidden="true" className="h-3 w-3 shrink-0 text-blue" />
 				)}
-				<FolderClosed className="h-3 w-3 text-yellow" />
+				<FolderClosed aria-hidden="true" className="h-3 w-3 shrink-0 text-yellow" />
 				<span className="text-fg">{node.name}</span>
-			</div>
+			</button>
 		)
 	}
 
-	const handleClick = () => {
+	const handleClick = (e: React.MouseEvent) => {
+		if (e.metaKey || e.ctrlKey || e.shiftKey) return
 		openBuffer(node.path)
-		navigate(node.path)
 		unfocusSidebar()
 	}
 
 	return (
-		<div
-			className={`flex cursor-pointer items-center gap-1 py-0.5 hover:bg-black ${isActive ? "bg-black" : ""} ${cursorClass}`}
+		<Link
+			to={node.path}
+			className={`${rowBase} ${isActive ? "border-l-magenta bg-bg-active" : ""} ${cursorClass}`}
 			style={{ paddingLeft }}
 			onClick={handleClick}
 		>
-			<FileText className="h-3 w-3 text-pink" />
+			<FileText aria-hidden="true" className="h-3 w-3 shrink-0 text-pink" />
 			<span className="text-fg">{node.name}</span>
-		</div>
+		</Link>
 	)
 }
 
@@ -112,9 +116,7 @@ export default function Sidebar() {
 			className={`relative hidden flex-col border-r border-border bg-bg md:flex ${sidebarFocused ? "ring-1 ring-inset ring-magenta" : ""}`}
 			style={{ width }}
 		>
-			<div className="px-2 py-1 font-bold text-magenta" style={{ backgroundColor: "#191725" }}>
-				re-invention
-			</div>
+			<div className="bg-bg-dark px-2 py-1 font-bold text-magenta">re-invention</div>
 			<div className="flex-1 space-y-0.5 overflow-y-auto px-2 py-1">
 				{visibleNodes.map((node, index) => (
 					<FileTreeNode

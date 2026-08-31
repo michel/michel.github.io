@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "createdAt": "2026-08-31T17:50:17.613Z",
+        "reason": "User explicitly requested the site's original Roboto Mono font back"
+      }
+    ]
+  }
+}

@@ -1,19 +1,8 @@
 import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import Buffer from "../components/Buffer"
+import { loadProjects, type Project } from "../data/loadProjects"
 import { usePageTitle } from "../hooks/usePageTitle"
-
-type Project = {
-	name: string
-	customer?: string | null
-	language: string
-	framework?: string | null
-	firstCommitDate?: string
-	lastCommitDate?: string
-	totalLinesOfCode: number
-	myLinesOfCode: number
-	myCommitCount: number
-}
 
 const formatNum = (n: number) =>
 	n >= 1_000_000
@@ -66,9 +55,8 @@ export default function About() {
 	const [projects, setProjects] = useState<Project[]>([])
 
 	useEffect(() => {
-		fetch("/projects.json")
-			.then((res) => res.json())
-			.then((data) => setProjects(data.projects))
+		loadProjects()
+			.then(setProjects)
 			.catch(() => {})
 	}, [])
 
@@ -126,6 +114,8 @@ export default function About() {
 			totalLoc,
 			totalCommits,
 			totalProjects: projects.length,
+			soloProjects: projects.filter((p) => p.isPersonalProject).length,
+			activeProjects: projects.filter((p) => p.status === "active").length,
 			customers: customers.size,
 			topLangs,
 			topFrameworks,
@@ -163,11 +153,10 @@ export default function About() {
 		<div key="desc-header" className="font-bold text-magenta uppercase">
 			DESCRIPTION
 		</div>,
-		<div key="desc-content" className="ml-8 max-w-2xl text-justify">
-			Tech lead with 22+ years of experience designing and building complete systems from the ground
-			up, turning complex frontend, backend, and infrastructure challenges into creative, scalable,
-			and high-impact solutions in fast-paced environments. Systems thinker who combines deep
-			technical expertise with leadership, mentoring, and strategic vision.
+		<div key="desc-content" className="ml-8 max-w-2xl">
+			Tech lead, 22 years in. I build whole systems, frontend through infrastructure, and lead the
+			teams that ship them. Mostly fintech and proptech startups; sometimes enterprises like IKEA,
+			ING and Tele2.
 		</div>,
 		"",
 		...(metrics
@@ -176,15 +165,14 @@ export default function About() {
 						METRICS
 					</div>,
 					<div key="metrics-intro" className="ml-8">
-						<span className="text-fg font-semibold">Track record, quantified.</span>{" "}
-						<span className="text-comment italic">Metrics from 22 years of real projects.</span>{" "}
+						<span className="text-comment">SEE ALSO:</span>{" "}
 						<Link to="/projects" className="text-cyan hover:underline">
-							Explore →
+							projects(1)
 						</Link>
 					</div>,
 					"",
 					<div key="metrics-summary" className="ml-8">
-						<span className="text-cyan">{metrics.years}+</span> years •{" "}
+						<span className="text-cyan">{metrics.years}</span> years of recoverable git history •{" "}
 						<span className="text-cyan">{metrics.totalProjects}</span> projects •{" "}
 						<span className="text-cyan">{formatNum(metrics.totalLoc)}</span> LOC •{" "}
 						<span className="text-cyan">{formatNum(metrics.totalCommits)}</span> commits •{" "}
@@ -259,67 +247,21 @@ export default function About() {
 						)
 					}),
 					"",
-					<div key="metrics-leadership-header" className="ml-8 text-yellow font-bold">
-						Leadership Indicators
+					<div key="metrics-stats-header" className="ml-8 text-yellow font-bold">
+						Statistics
 					</div>,
-					<ul key="metrics-leadership" className="ml-8 list-disc list-inside">
+					<ul key="metrics-stats" className="ml-8 list-disc list-inside">
 						<li>
-							<span className="text-cyan">207</span> personal/solo projects — initiative and
-							self-driven development
+							<span className="text-cyan">{metrics.soloProjects}</span> personal/solo projects
 						</li>
 						<li>
 							Worked on teams up to <span className="text-cyan">39</span> engineers (gaudi-portal)
 						</li>
 						<li>Maintained open-source projects</li>
 						<li>
-							<span className="text-cyan">13</span> currently active projects
+							<span className="text-cyan">{metrics.activeProjects}</span> currently active projects
 						</li>
 					</ul>,
-					"",
-					<div key="metrics-talking-header" className="ml-8 text-yellow font-bold">
-						Value Proposition
-					</div>,
-					<ol key="metrics-talking" className="ml-8 list-decimal list-inside">
-						<li>
-							<span className="text-fg font-semibold">Full-stack polyglot</span>
-							<span className="text-comment">
-								{" "}
-								— Proven across Ruby, TypeScript, Java, Elixir, Rust
-							</span>
-						</li>
-						<li>
-							<span className="text-fg font-semibold">Enterprise experience</span>
-							<span className="text-comment">
-								{" "}
-								— IKEA, Tele2, Philips, ING, fintech/proptech startups
-							</span>
-						</li>
-						<li>
-							<span className="text-fg font-semibold">Scale</span>
-							<span className="text-comment">
-								{" "}
-								— 6M+ LOC, 22K commits, 22 years of continuous delivery
-							</span>
-						</li>
-						<li>
-							<span className="text-fg font-semibold">Technical leadership</span>
-							<span className="text-comment">
-								{" "}
-								— Large team collaboration + significant solo ownership
-							</span>
-						</li>
-						<li>
-							<span className="text-fg font-semibold">Modern stack fluency</span>
-							<span className="text-comment">
-								{" "}
-								— React, Next.js, TypeScript, serverless (GraphQL + AWS)
-							</span>
-						</li>
-						<li>
-							<span className="text-fg font-semibold">Domain expertise</span>
-							<span className="text-comment"> — Telecom, fintech, proptech, healthcare</span>
-						</li>
-					</ol>,
 					"",
 				]
 			: []),
@@ -344,9 +286,8 @@ export default function About() {
 					>
 						Peliqan
 					</a>{" "}
-					platform from the ground up: private equity made liquid. Peliqan gives private equity
-					investors what the institutions have always had: full visibility across your portfolio and
-					the freedom to act on it. Sell a position, finance a commitment, plan ahead.
+					platform. Investors see their whole portfolio and can act on it: sell a position, finance
+					a commitment, plan ahead. Institutions have had that for decades; everyone else hasn't.
 				</>
 			),
 		}).map((line, i) => (
@@ -369,7 +310,7 @@ export default function About() {
 			title: "Revive Capital B.V - Tech Lead (Freelance)",
 			date: "2024 - Current",
 			children:
-				"Spearheading the technological development for Revive Capital, a fintech asset leasing company startup, to create a state-of-the-art asset-backed lending platform for brokers from the ground up.",
+				"Leading engineering at Revive Capital, a fintech leasing startup. Built their asset-backed lending platform for brokers from scratch.",
 			tech: [
 				"TypeScript",
 				"TDD",
@@ -396,7 +337,7 @@ export default function About() {
 			title: "Financial Lease - Tech Lead (Freelance)",
 			date: "2023 - 2024",
 			children:
-				"Developing an innovative car dealership portal that empowers dealers to efficiently handle customer lease requests, enabling them to finalize leases and deliver vehicles within the time it takes to enjoy two cups of coffee!",
+				"Built a dealer portal for car leases. A dealer takes a customer's request, finalises the lease and hands over the car in the time it takes to drink two coffees.",
 			tech: [
 				"TypeScript",
 				"GraphQL",
@@ -421,7 +362,7 @@ export default function About() {
 			title: "IKEA - Tech Lead (Freelance)",
 			date: "2022 - 2023",
 			children:
-				"Leading the development and technical implementation of the IKEA Content Coworker Experience program, helping sales coworkers navigate information more effectively and perform their jobs better through hyper-personalization, innovative UI, and knowledge graph technology.",
+				"Led the IKEA Content Coworker Experience program: getting shop-floor coworkers the information they need, personalised per person, on top of a knowledge graph.",
 			tech: ["Neo4J", "TypeScript", "GraphQL", "Apollo", "React", "Azure", "Node.js", "CI/CD"],
 		}).map((line, i) => (
 			<div key={`ikea-${i}`} className="ml-8">
@@ -433,7 +374,7 @@ export default function About() {
 			title: "hypotheekrente.nl - Tech Lead (Freelance)",
 			date: "2022 - 2025",
 			children:
-				"Building a lead processing system from the ground up that matches customers seeking mortgage guidance with qualified advisors, streamlining the advisory process.",
+				"Built the lead system that matches people looking for mortgage advice with an advisor who can take them on.",
 			tech: [
 				"Ruby on Rails",
 				"TypeScript",
@@ -454,7 +395,7 @@ export default function About() {
 			title: "ING / Homigo - CTO (Freelance)",
 			date: "2019 - 2022",
 			children:
-				"At Homigo, a corporate startup backed by ING Neo, I lead the technical implementation from the ground up of a SaaS productivity platform (mobile/web) for contractors and homeowners to manage home renovations. I design and implement technically challenging features, including real-time chat, file sharing, resource planning, and other domain-specific tools.",
+				"At Homigo, a corporate startup backed by ING Neo, I led the technical implementation of a SaaS productivity platform (mobile/web) for contractors and homeowners to manage home renovations. I designed and implemented the hard parts: real-time chat, file sharing, resource planning, and other domain-specific tools.",
 			tech: ["Ruby on Rails", "TypeScript", "React Native", "Apollo", "GraphQL", "Docker", "CI/CD"],
 		}).map((line, i) => (
 			<div key={`homigo-${i}`} className="ml-8">
@@ -536,7 +477,7 @@ export default function About() {
 			title: "Kabisa - Software Engineer / Lead / DevOps / Consultant",
 			date: "2008 - 2015",
 			children:
-				"Kabisa specializes in developing elegant enterprise software solutions using technologies such as Ruby (on Rails) and Java. I have been with Kabisa since its inception, growing into roles including Scrum Master, DevOps engineer, lead developer, consultant, and software architect, contributing to a wide range of exciting projects for clients such as Philips, ViaViela B.V., Media Groep Limburg, Seacon Logistics, and Yellobrick.",
+				"Kabisa builds enterprise software in Ruby on Rails and Java. I joined at the start and worked as scrum master, DevOps engineer, lead developer, consultant and architect for clients including Philips, Media Groep Limburg, Seacon Logistics and Yellobrick.",
 		}).map((line, i) => (
 			<div key={`kabisa-${i}`} className="ml-8">
 				{line}

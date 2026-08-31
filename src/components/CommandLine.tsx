@@ -51,7 +51,7 @@ export default function CommandLine() {
 
 	useEffect(() => {
 		setSelectedIndex(0)
-	}, [])
+	}, [value])
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		e.stopPropagation()
@@ -166,14 +166,15 @@ export default function CommandLine() {
 	const displayItems = value.trim() === "" ? commandList : matches
 
 	return (
-		<div className="absolute bottom-12 left-0 z-50 w-full">
+		<div className="absolute bottom-9 md:bottom-12 left-0 z-50 w-full">
 			{showDropdown && (
 				<div className="border-x border-t border-border bg-bg-dark">
 					{displayItems.map((item, i) => (
-						<div
+						<button
 							key={item.cmd}
-							className={`flex cursor-pointer items-center justify-between px-2 py-0.5 ${
-								i === selectedIndex % displayItems.length ? "bg-[#4a4670]" : ""
+							type="button"
+							className={`flex w-full items-center justify-between px-2 py-0.5 text-left transition-colors duration-100 hover:bg-bg-panel ${
+								i === selectedIndex % displayItems.length ? "bg-bg-active" : ""
 							}`}
 							onClick={() => {
 								setValue(item.cmd)
@@ -182,19 +183,25 @@ export default function CommandLine() {
 						>
 							<span className="text-magenta">{item.cmd}</span>
 							<span className="text-comment">{item.description}</span>
-						</div>
+						</button>
 					))}
 				</div>
 			)}
 			<div className="flex w-full items-center border-t border-border bg-bg-dark p-1 text-fg">
-				<span className="mr-1 text-fg">:</span>
+				<span aria-hidden="true" className="mr-1 text-fg">
+					:
+				</span>
 				<input
 					ref={inputRef}
 					type="text"
 					value={value}
 					onChange={(e) => setValue(e.target.value)}
 					onKeyDown={handleKeyDown}
-					className="m-0 h-4 flex-1 border-none bg-transparent p-0 text-fg outline-none"
+					aria-label=":command"
+					autoComplete="off"
+					autoCorrect="off"
+					spellCheck={false}
+					className="m-0 h-4 flex-1 border-none bg-transparent p-0 text-fg caret-magenta outline-none"
 				/>
 			</div>
 		</div>

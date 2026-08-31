@@ -32,13 +32,11 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		</div>,
 		"",
 		<span key="hook1">
-			On a flight to Costa Rica. 12 hours offline. No internet. No distractions. Just me, my
-			laptop, and Wireshark captures.
+			On a flight to Costa Rica, 12 hours offline with my laptop and a folder of Wireshark captures.
 		</span>,
 		"",
 		<span key="hook2">
-			After months of staring at hex dumps, something clicked. I finally got file transfers
-			working.
+			After months of staring at hex dumps, something clicked. I finally got file transfers working.
 		</span>,
 		"",
 		<span key="hook3" className="text-orange font-bold">
@@ -51,8 +49,8 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		"",
 		<span key="intro1">
 			I wanted to really learn Rust. I needed a challenge after so many years of building systems
-			for the web. Not tutorials. Not toy projects.{" "}
-			<span className="text-green font-bold">Real systems programming.</span>
+			for the web. <span className="text-green font-bold">I wanted real systems programming</span>,
+			not another tutorial.
 		</span>,
 		"",
 		<span key="intro2">
@@ -63,8 +61,10 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		"",
 		<Lightbox
 			key="img1"
-			src="/images/posts/learning-rust-the-hard-way/soulseek_client.png"
+			src="/images/posts/learning-rust-the-hard-way/soulseek_client.webp"
 			alt="Old Soulseek Windows client"
+			width={800}
+			height={600}
 		/>,
 		"",
 		<h2 key="rules" className="text-green font-bold text-lg">
@@ -82,9 +82,8 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		</h2>,
 		"",
 		<span key="p1">
-			The reality? I got stuck on reverse engineering the protocol for months, testing against the
-			real server instead of a stable simulation, because I didn't want to cheat by peeking at
-			existing implementations.
+			I got stuck on the protocol for months, testing against the real server instead of a stable
+			simulation, because I didn't want to cheat by peeking at existing implementations.
 		</span>,
 		"",
 		<span key="p2">
@@ -94,19 +93,23 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		"",
 		<Lightbox
 			key="img2"
-			src="/images/posts/learning-rust-the-hard-way/packet_dump.png"
+			src="/images/posts/learning-rust-the-hard-way/packet_dump.webp"
 			alt="tcpdump and hexyl packet analysis"
+			width={2608}
+			height={1782}
 		/>,
 		"",
 		<span key="p2b">
-			Deep work works. That flight with zero distractions finally broke through what months of
-			fragmented debugging couldn't.
+			That flight with zero distractions finally broke through what months of fragmented debugging
+			couldn't.
 		</span>,
 		"",
 		<Lightbox
 			key="img3"
-			src="/images/posts/learning-rust-the-hard-way/rust_code.png"
+			src="/images/posts/learning-rust-the-hard-way/rust_code.webp"
 			alt="Rust code for message decoding"
+			width={3456}
+			height={2168}
 		/>,
 		"",
 		<h2 key="built" className="text-green font-bold text-lg">
@@ -136,26 +139,28 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		</h2>,
 		"",
 		<span key="p4">
-			The compiler is brutal, but it becomes your friend once you start trusting the process. Once
-			it compiles, it usually works. But productivity-wise? I wouldn't build an information system
-			in it; the kind that captures domain and business logic. Those systems are prone to change and
-			require flexibility. In Rust, once you define an abstraction or structure, it takes work to
-			change it. You become careful upfront because the cost of redesign is high. During this
-			project, I changed my design and abstractions many times. Each time was painful.
+			The compiler is brutal until you stop fighting it. Once it compiles, it usually works. But
+			productivity-wise? I wouldn't build an information system in it; the kind that captures domain
+			and business logic. Those systems are prone to change and require flexibility. In Rust, once
+			you define an abstraction or structure, it takes work to change it. You become careful upfront
+			because the cost of redesign is high. During this project, I changed my design and
+			abstractions many times. Each time was painful.
 		</span>,
 		"",
 		<span key="p5">
-			Am I done? Not even close. My code is riddled with .clone() calls. The multi-threading is
-			naive. The design doesn't gracefully handle tens of thousands of peer connections yet, and you
-			can't even share files, making it a very incomplete client.
+			I'm nowhere near done. My code is riddled with .clone() calls. The multi-threading is naive.
+			The design doesn't gracefully handle tens of thousands of peer connections yet, and you can't
+			even share files, making it a very incomplete client.
 		</span>,
 		"",
 		<span key="p6">But searching and downloading works, and that's a milestone!</span>,
 		"",
 		<Lightbox
 			key="img-costa"
-			src="/images/posts/learning-rust-the-hard-way/costa_rica.png"
+			src="/images/posts/learning-rust-the-hard-way/costa_rica.webp"
 			alt="Hacking in the Costa Rica jungle"
+			width={1280}
+			height={960}
 		/>,
 		"",
 		<span key="link">

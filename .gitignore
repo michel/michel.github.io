@@ -2,7 +2,10 @@
 dist
 docs/plans
 node_modules
+tasks
 
 .env
 tsconfig.tsbuildinfo
-tsconfig.tsbuildinfo
+
+.impeccable/hook.cache.json
+.impeccable/config.local.json

@@ -1,21 +1,10 @@
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import Buffer from "../components/Buffer"
 import { useEditor } from "../context/EditorContext"
 import { content } from "../data/content"
 import { usePageTitle } from "../hooks/usePageTitle"
 import { useTip } from "../hooks/useTip"
-
-const useIsMobile = () => {
-	const [isMobile, setIsMobile] = useState(false)
-	useEffect(() => {
-		const check = () => setIsMobile(window.innerWidth < 768)
-		check()
-		window.addEventListener("resize", check)
-		return () => window.removeEventListener("resize", check)
-	}, [])
-	return isMobile
-}
 
 const logoLines = [
 	"                        -=:        :=",
@@ -55,45 +44,75 @@ const Line = ({ children }: { children: React.ReactNode }) => (
 	</div>
 )
 
-const InfoBox = ({ tip }: { tip: string | null }) => {
+const CmdButton = ({ cmd, className = "" }: { cmd: string; className?: string }) => {
 	const { queueTerminalCommand } = useEditor()
-	const isMobile = useIsMobile()
-
-	const Cmd = ({ cmd, desc }: { cmd: string; desc: string }) => (
-		<Line>
-			{"    "}
-			<span
-				className="text-cyan cursor-pointer hover:underline"
-				onClick={() => queueTerminalCommand(cmd)}
-			>
-				{cmd}
-			</span>
-			<span className="text-comment">
-				{" "}
-				{".".repeat(Math.max(1, 10 - cmd.length))} {desc}
-			</span>
-		</Line>
-	)
-
 	return (
-		<div className="font-mono" style={{ width: `${BOX_CHARS + 2}ch` }}>
+		<button
+			type="button"
+			className={`text-cyan cursor-pointer hover:underline ${className}`}
+			onClick={() => queueTerminalCommand(cmd)}
+		>
+			{cmd}
+		</button>
+	)
+}
+
+const Cmd = ({ cmd, desc }: { cmd: string; desc: string }) => (
+	<Line>
+		{"    "}
+		<CmdButton cmd={cmd} />
+		<span className="text-comment">
+			{" "}
+			{".".repeat(Math.max(1, 10 - cmd.length))} {desc}
+		</span>
+	</Line>
+)
+
+const MobileInfoBox = ({ tip }: { tip: string | null }) => (
+	<div className="max-w-full whitespace-normal border border-green p-3 leading-relaxed">
+		<div className="text-orange font-bold">Best on a desktop with a keyboard.</div>
+		<p className="mt-2">
+			This website simulates a <span className="text-yellow">terminal</span> +{" "}
+			<a
+				href="https://github.com/neovim/neovim"
+				target="_blank"
+				rel="noopener noreferrer"
+				className="text-yellow underline"
+			>
+				nvim
+			</a>{" "}
+			+{" "}
+			<a
+				href="https://github.com/tmux/tmux"
+				target="_blank"
+				rel="noopener noreferrer"
+				className="text-yellow underline"
+			>
+				tmux
+			</a>{" "}
+			setup: a text-only interface to a computer. No icons, no mouse: just the keyboard.
+		</p>
+		<p className="mt-2">
+			To the people who spend decades refining these setups, the terminal is an extension of
+			thought.
+		</p>
+		<p className="mt-2">Tap to run in the terminal:</p>
+		<div className="mt-1 flex flex-wrap gap-2">
+			{["help", "colorscheme", "cowsay hi", "fortune"].map((cmd) => (
+				<CmdButton key={cmd} cmd={cmd} className="min-h-9 border border-border px-2" />
+			))}
+		</div>
+		<div className="mt-2 min-h-5 text-comment">{tip ? `TIP: ${tip}` : ""}</div>
+	</div>
+)
+
+const InfoBox = ({ tip }: { tip: string | null }) => (
+	<>
+		<div className="md:hidden">
+			<MobileInfoBox tip={tip} />
+		</div>
+		<div className="hidden font-mono text-sm md:block" style={{ width: `${BOX_CHARS + 2}ch` }}>
 			<div className="text-green font-bold">╔{"═".repeat(BOX_CHARS)}╗</div>
-			{isMobile && (
-				<>
-					<Line> </Line>
-					<Line>
-						{" "}
-						<span className="text-orange font-bold">
-							For the best experience, use a desktop/laptop
-						</span>
-					</Line>
-					<Line>
-						{" "}
-						<span className="text-orange font-bold">with a keyboard.</span>
-					</Line>
-					<Line> </Line>
-				</>
-			)}
 			<Line>
 				{" "}
 				<span className="text-cyan font-bold">What am I looking at?</span>
@@ -106,7 +125,7 @@ const InfoBox = ({ tip }: { tip: string | null }) => {
 					href="https://github.com/neovim/neovim"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="text-yellow hover:underline"
+					className="text-yellow underline"
 				>
 					nvim
 				</a>{" "}
@@ -115,7 +134,7 @@ const InfoBox = ({ tip }: { tip: string | null }) => {
 					href="https://github.com/tmux/tmux"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="text-yellow hover:underline"
+					className="text-yellow underline"
 				>
 					tmux
 				</a>{" "}
@@ -126,7 +145,7 @@ const InfoBox = ({ tip }: { tip: string | null }) => {
 				{" "}
 				A <span className="text-cyan">terminal</span> is a text-only interface to a computer.
 			</Line>
-			<Line> No icons, no mouse—just pure keyboard efficiency.</Line>
+			<Line> No icons, no mouse: just the keyboard.</Line>
 			<Line> Programmers and hackers have been using terminals for</Line>
 			<Line>
 				{" "}
@@ -135,11 +154,11 @@ const InfoBox = ({ tip }: { tip: string | null }) => {
 			</Line>
 			<Line>
 				{" "}
-				<span className="text-magenta">fast</span>, run anywhere, and work seamlessly over remote
+				<span className="text-magenta">fast</span>, run anywhere, and work over ssh on a box on
 			</Line>
-			<Line> server connections.</Line>
+			<Line> the other side of the world.</Line>
 			<Line> </Line>
-			<Line> Because it takes years to truly master a terminal (and</Line>
+			<Line> Because it takes years to master a terminal (and</Line>
 			<Line> its editors), most people never do. For those who do,</Line>
 			<Line>
 				{" "}
@@ -153,8 +172,7 @@ const InfoBox = ({ tip }: { tip: string | null }) => {
 				{" "}
 				<span className="text-orange">and tweaking</span> their tools to perfection.
 			</Line>
-			<Line> To them, the terminal isn’t a tool. </Line>
-			<Line> It’s an extension of thought. </Line>
+			<Line> To them, the terminal is an extension of thought. </Line>
 			<Line> </Line>
 			<Line>
 				{" "}
@@ -193,86 +211,97 @@ const InfoBox = ({ tip }: { tip: string | null }) => {
 			<div className="flex">
 				<span className="text-green font-bold">║</span>
 				<span className="flex-1 text-fg pl-5 overflow-hidden" style={{ width: `${BOX_CHARS}ch` }}>
-					{tip && <span className="text-comment">💡 {tip}</span>}
+					{tip && <span className="text-comment">TIP: {tip}</span>}
 				</span>
 				<span className="text-green font-bold">║</span>
 			</div>
 			<Line> </Line>
 			<div className="text-green font-bold">╚{"═".repeat(BOX_CHARS)}╝</div>
 		</div>
-	)
-}
+	</>
+)
 
 export default function Home() {
 	usePageTitle()
 	const tip = useTip()
-	const lines = [
-		...logoLines.map((line, i) => (
-			<span key={`logo-${i}`} className="whitespace-pre font-bold text-magenta">
-				{line}
-			</span>
-		)),
-		"",
-		<span key="brand1" className="text-magenta">
-			{"       "}
-			<span className="font-bold">
-				<pre>{`	█▀▄ ██▀      █ █▄ █ █ █ ██▀ █▄ █ ▀█▀ █ █▀█ █▄ █
+	const tipText = tip?.text ?? null
+	const lines = useMemo(
+		() => [
+			...logoLines.map((line, i) => (
+				<span
+					key={`logo-${i}`}
+					aria-hidden="true"
+					className="whitespace-pre font-bold text-magenta text-xs md:text-sm"
+				>
+					{line}
+				</span>
+			)),
+			"",
+			<div key="brand1" aria-hidden="true" className="text-magenta text-[9px] md:text-sm">
+				{"       "}
+				<pre className="font-bold">{`	█▀▄ ██▀      █ █▄ █ █ █ ██▀ █▄ █ ▀█▀ █ █▀█ █▄ █
 	█▀▄ █▄▄  ▀▀  █ █ ▀█ ▀▄▀ █▄▄ █ ▀█  █  █ █▄█ █ ▀█`}</pre>
-			</span>
-		</span>,
-		<span key="brand3">
-			{"       "}
-			<span className="text-fg">&nbsp;&nbsp;&nbsp;&nbsp;re-invention b.v.</span>
-			{"                         "}
-			<span className="text-yellow">v1337</span>
-		</span>,
-		"",
-		<InfoBox key="readme-box" tip={tip?.text ?? null} />,
-		"",
-		<span key="cat-status">
-			<span className="text-green">~</span> <span className="text-magenta">cat status.rs</span>
-		</span>,
-		"",
-		<span key="const">
-			<span className="text-blue">let</span> <span className="text-cyan">status</span> ={" "}
-			<span className="text-yellow">Status</span> {"{"}
-		</span>,
-		<span key="role">
-			&nbsp;&nbsp;role: <span className="text-green">"CTO"</span>,
-		</span>,
-		<span key="loc">
-			&nbsp;&nbsp;loc: <span className="text-green">"NL"</span>,
-		</span>,
-		<span key="remote">
-			&nbsp;&nbsp;remote: <span className="text-orange">true</span>,
-		</span>,
-		<span key="hybrid">
-			&nbsp;&nbsp;hybrid: <span className="text-orange">true</span>,
-		</span>,
-		<span key="open">
-			&nbsp;&nbsp;open_for_work: <span className="text-orange">true</span>,
-		</span>,
-		<span key="close">
-			{"}"}
-			<span className="text-fg">;</span>
-		</span>,
-		"",
-		"",
-		<span key="prompt" className="text-cyan">
-			michel@spaceheater:
-		</span>,
-		<span key="cmd">
-			<span className="text-green">~</span> <span className="text-magenta">ls -la ~/</span>
-		</span>,
-		"",
-		<span key="total" className="text-comment">{`total ${content.length}`}</span>,
-		...content.map((item) => (
-			<Link key={item.slug} to={item.path} className="hover:bg-selection block">
-				<span className="text-comment">-rw-r--r-- michel staff {item.date} </span>
-				<span className="text-cyan">{item.title}</span>
-			</Link>
-		)),
-	]
+			</div>,
+			<span key="brand3">
+				{"       "}
+				<span className="text-fg">&nbsp;&nbsp;&nbsp;&nbsp;re-invention b.v.</span>
+				{"                         "}
+				<span className="text-yellow">v1337</span>
+			</span>,
+			"",
+			<InfoBox key="readme-box" tip={tipText} />,
+			"",
+			<span key="cat-status">
+				<span className="text-green">~</span> <span className="text-magenta">cat status.rs</span>
+			</span>,
+			"",
+			<span key="const">
+				<span className="text-blue">let</span> <span className="text-cyan">status</span> ={" "}
+				<span className="text-yellow">Status</span> {"{"}
+			</span>,
+			<span key="role">
+				&nbsp;&nbsp;role: <span className="text-green">"CTO"</span>,
+			</span>,
+			<span key="loc">
+				&nbsp;&nbsp;loc: <span className="text-green">"NL"</span>,
+			</span>,
+			<span key="remote">
+				&nbsp;&nbsp;remote: <span className="text-orange">true</span>,
+			</span>,
+			<span key="hybrid">
+				&nbsp;&nbsp;hybrid: <span className="text-orange">true</span>,
+			</span>,
+			<span key="open">
+				&nbsp;&nbsp;open_for_work: <span className="text-orange">true</span>,
+			</span>,
+			<span key="close">
+				{"}"}
+				<span className="text-fg">;</span>
+			</span>,
+			"",
+			"",
+			<span key="prompt" className="text-cyan">
+				michel@spaceheater:
+			</span>,
+			<span key="cmd">
+				<span className="text-green">~</span> <span className="text-magenta">ls -la ~/</span>
+			</span>,
+			"",
+			<span key="total" className="text-comment">{`total ${content.length}`}</span>,
+			...content.map((item) => (
+				<Link key={item.slug} to={item.path} className="block hover:bg-black">
+					<span className="text-comment">-rw-r--r-- michel staff {item.date} </span>
+					<span className="text-cyan">{item.title}</span>
+				</Link>
+			)),
+		],
+		[tipText],
+	)
 
-	return <Buffer lines={lines} />
+	return (
+		<>
+			<h1 className="sr-only">Michel de Graaf — CTO and tech lead</h1>
+			<Buffer lines={lines} />
+		</>
+	)
 }

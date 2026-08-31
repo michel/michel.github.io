@@ -1,4 +1,12 @@
-import { createContext, type ReactNode, useCallback, useContext, useState } from "react"
+import {
+	createContext,
+	type ReactNode,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from "react"
 import { type FileId, files, getPreview } from "../data/files"
 import { applyTheme, getStoredTheme, storeTheme, themeNames } from "../data/themes"
 
@@ -138,7 +146,6 @@ const EditorContext = createContext<EditorContextType | null>(null)
 export function EditorProvider({ children }: { children: ReactNode }) {
 	const [state, setState] = useState<EditorState>(() => {
 		const storedTheme = getStoredTheme()
-		applyTheme(storedTheme)
 		return {
 			mode: "NORMAL",
 			openBuffers: ["/"],
@@ -166,6 +173,11 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 			theme: storedTheme,
 		}
 	})
+
+	// Applying the theme is a DOM side effect — keep it out of the render pass (hydration-safe)
+	useEffect(() => {
+		applyTheme(state.theme)
+	}, [state.theme])
 
 	const setMode = useCallback((mode: VimMode) => {
 		setState((s) => ({ ...s, mode }))
@@ -340,58 +352,56 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 
 	const setTheme = useCallback((themeName: string) => {
 		if (themeNames.includes(themeName)) {
-			applyTheme(themeName)
 			storeTheme(themeName)
 			setState((s) => ({ ...s, theme: themeName }))
 		}
 	}, [])
 
-	return (
-		<EditorContext.Provider
-			value={{
-				...state,
-				setMode,
-				openBuffer,
-				closeBuffer,
-				toggleSidebar,
-				focusSidebar,
-				unfocusSidebar,
-				setSidebarCursorIndex,
-				toggleFolder,
-				toggleMobileSidebar,
-				closeMobileSidebar,
-				toggleCommandLine,
-				toggleFuzzyFinder,
-				closeFuzzyFinder,
-				closeCommandLine,
-				toggleHelpPopup,
-				closeHelpPopup,
-				toggleTerminal,
-				openTerminal,
-				closeTerminal,
-				focusTerminal,
-				unfocusTerminal,
-				setActiveTmuxWindow,
-				setTmuxPrefixActive,
-				setMatrixComplete,
-				setIndependenceComplete,
-				setJurassicComplete,
-				setGladosComplete,
-				openSnakeGame,
-				closeSnakeGame,
-				openAdventureGame,
-				closeAdventureGame,
-				setCursorLine,
-				setLineCount,
-				moveCursor,
-				queueTerminalCommand,
-				clearPendingCommand,
-				setTheme,
-			}}
-		>
-			{children}
-		</EditorContext.Provider>
+	const value = useMemo(
+		() => ({
+			...state,
+			setMode,
+			openBuffer,
+			closeBuffer,
+			toggleSidebar,
+			focusSidebar,
+			unfocusSidebar,
+			setSidebarCursorIndex,
+			toggleFolder,
+			toggleMobileSidebar,
+			closeMobileSidebar,
+			toggleCommandLine,
+			toggleFuzzyFinder,
+			closeFuzzyFinder,
+			closeCommandLine,
+			toggleHelpPopup,
+			closeHelpPopup,
+			toggleTerminal,
+			openTerminal,
+			closeTerminal,
+			focusTerminal,
+			unfocusTerminal,
+			setActiveTmuxWindow,
+			setTmuxPrefixActive,
+			setMatrixComplete,
+			setIndependenceComplete,
+			setJurassicComplete,
+			setGladosComplete,
+			openSnakeGame,
+			closeSnakeGame,
+			openAdventureGame,
+			closeAdventureGame,
+			setCursorLine,
+			setLineCount,
+			moveCursor,
+			queueTerminalCommand,
+			clearPendingCommand,
+			setTheme,
+		}),
+		[state],
 	)
+
+	return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>
 }
 
 export function useEditor() {

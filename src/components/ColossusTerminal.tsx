@@ -73,24 +73,29 @@ export default function ColossusTerminal() {
 	const [lines, setLines] = useState<string[]>([])
 	const [phase, setPhase] = useState<"ssh" | "gpu" | "training">("ssh")
 	const [currentEpoch, setCurrentEpoch] = useState(47)
-	const [currentBatch, setCurrentBatch] = useState(2847291)
+	const epochRef = useRef(47)
+	const batchRef = useRef(2847291)
 	const containerRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		// Phase 1: SSH banner
 		const sshLines = sshBanner.split("\n")
 		let idx = 0
+		let phaseTimeout: ReturnType<typeof setTimeout> | undefined
 		const sshInterval = setInterval(() => {
 			if (idx < sshLines.length) {
 				setLines((prev) => [...prev, sshLines[idx] ?? ""])
 				idx++
-			} else {
-				clearInterval(sshInterval)
-				setTimeout(() => setPhase("gpu"), 500)
+				return
 			}
+			clearInterval(sshInterval)
+			phaseTimeout = setTimeout(() => setPhase("gpu"), 500)
 		}, 80)
 
-		return () => clearInterval(sshInterval)
+		return () => {
+			clearInterval(sshInterval)
+			if (phaseTimeout) clearTimeout(phaseTimeout)
+		}
 	}, [])
 
 	useEffect(() => {
@@ -102,21 +107,29 @@ export default function ColossusTerminal() {
 			...generateGpuLines(),
 			"+-----------------------------------------------------------------------------+",
 		]
+		const timeouts: ReturnType<typeof setTimeout>[] = []
 		gpuLines.forEach((line, i) => {
-			setTimeout(() => {
-				setLines((prev) => [...prev, line])
-				if (i === gpuLines.length - 1) setTimeout(() => setPhase("training"), 800)
-			}, i * 40)
+			timeouts.push(
+				setTimeout(() => {
+					setLines((prev) => [...prev, line])
+					if (i === gpuLines.length - 1) timeouts.push(setTimeout(() => setPhase("training"), 800))
+				}, i * 40),
+			)
 		})
+
+		return () => {
+			for (const timeout of timeouts) clearTimeout(timeout)
+		}
 	}, [phase])
 
 	useEffect(() => {
 		if (phase !== "training") return
 
 		// Phase 3: Training header
+		const timeouts: ReturnType<typeof setTimeout>[] = []
 		const headerLines = trainingHeader.split("\n")
 		headerLines.forEach((line, i) => {
-			setTimeout(() => setLines((prev) => [...prev, line]), i * 30)
+			timeouts.push(setTimeout(() => setLines((prev) => [...prev, line]), i * 30))
 		})
 
 		// Training loop
@@ -125,15 +138,17 @@ export default function ColossusTerminal() {
 		const separator =
 			"---------|-----------|---------|---------|---------|---------|---------|---------|--------|------------"
 
-		setTimeout(
-			() => {
-				setLines((prev) => [...prev, "", columnHeader, separator])
-			},
-			headerLines.length * 30 + 100,
+		timeouts.push(
+			setTimeout(
+				() => {
+					setLines((prev) => [...prev, "", columnHeader, separator])
+				},
+				headerLines.length * 30 + 100,
+			),
 		)
 
 		const trainingInterval = setInterval(() => {
-			const line = generateTrainingLine(currentEpoch, currentBatch)
+			const line = generateTrainingLine(epochRef.current, batchRef.current)
 			const formatted = `    ${line.epoch}   | ${line.batch} | ${line.loss}  | ${line.boxLoss}  | ${line.clsLoss}  | ${line.dflLoss}  | ${line.mAP50}  | ${line.mAP95}  | ${line.gpuMem} | ${line.speed}`
 
 			setLines((prev) => {
@@ -141,18 +156,21 @@ export default function ColossusTerminal() {
 				return newLines.length > 60 ? newLines.slice(-60) : newLines
 			})
 
-			setCurrentBatch((b) => {
-				const newBatch = b + Math.floor(Math.random() * 200) + 100
-				if (newBatch > 3000000) {
-					setCurrentEpoch((e) => e + 1)
-					return 0
-				}
-				return newBatch
-			})
+			const nextBatch = batchRef.current + Math.floor(Math.random() * 200) + 100
+			if (nextBatch > 3000000) {
+				batchRef.current = 0
+				epochRef.current += 1
+				setCurrentEpoch(epochRef.current)
+				return
+			}
+			batchRef.current = nextBatch
 		}, 1200)
 
-		return () => clearInterval(trainingInterval)
-	}, [phase, currentEpoch, currentBatch])
+		return () => {
+			for (const timeout of timeouts) clearTimeout(timeout)
+			clearInterval(trainingInterval)
+		}
+	}, [phase])
 
 	useEffect(() => {
 		if (containerRef.current) containerRef.current.scrollTop = containerRef.current.scrollHeight

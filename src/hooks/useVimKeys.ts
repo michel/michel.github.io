@@ -45,6 +45,8 @@ export function useVimKeys() {
 	)
 
 	const prefixTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+	const gPrefixRef = useRef(false)
+	const handlerRef = useRef<(e: KeyboardEvent) => void>(() => {})
 
 	const cycleBuffer = useCallback(
 		(direction: 1 | -1) => {
@@ -80,201 +82,192 @@ export function useVimKeys() {
 		})
 	}, [openBuffers, location.pathname, closeBuffer])
 
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			const target = e.target as HTMLElement
-			const isInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA"
+	const handleKeyDown = (e: KeyboardEvent) => {
+		const target = e.target as HTMLElement
+		const isInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA"
 
-			// Ctrl+` toggles terminal panel
-			if (e.ctrlKey && e.code === "Backquote") {
-				e.preventDefault()
-				toggleTerminal()
-				return
+		// Ctrl+` toggles terminal panel
+		if (e.ctrlKey && e.code === "Backquote") {
+			e.preventDefault()
+			toggleTerminal()
+			return
+		}
+
+		// Ctrl+a activates tmux prefix mode
+		if (e.ctrlKey && e.key === "a") {
+			e.preventDefault()
+			if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
+			setTmuxPrefixActive(true)
+			prefixTimeoutRef.current = setTimeout(() => setTmuxPrefixActive(false), 500)
+			return
+		}
+
+		// When tmux prefix is active, 0-9 switches windows
+		if (tmuxPrefixActive && e.key >= "0" && e.key <= "6") {
+			e.preventDefault()
+			if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
+			setTmuxPrefixActive(false)
+			setActiveTmuxWindow(Number.parseInt(e.key, 10) as 0 | 1 | 2 | 3 | 4 | 5 | 6)
+			return
+		}
+
+		// Any other key cancels tmux prefix mode
+		if (tmuxPrefixActive) {
+			if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
+			setTmuxPrefixActive(false)
+		}
+
+		if (
+			commandLineOpen ||
+			fuzzyFinderOpen ||
+			helpPopupOpen ||
+			adventureGameOpen ||
+			snakeGameOpen ||
+			activeTmuxWindow !== 1 ||
+			document.querySelector('[aria-modal="true"]')
+		)
+			return
+
+		if (e.ctrlKey && e.key === "p") {
+			e.preventDefault()
+			toggleFuzzyFinder()
+			return
+		}
+
+		// Ctrl+w cycles focus: buffer → sidebar → terminal → buffer
+		if (e.ctrlKey && e.key === "w") {
+			e.preventDefault()
+			if (terminalFocused) {
+				unfocusTerminal()
+			} else if (sidebarFocused) {
+				unfocusSidebar()
+				if (terminalOpen) focusTerminal()
+			} else {
+				if (sidebarOpen) focusSidebar()
+				else if (terminalOpen) focusTerminal()
 			}
+			return
+		}
 
-			// Ctrl+a activates tmux prefix mode
-			if (e.ctrlKey && e.key === "a") {
-				e.preventDefault()
-				if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
-				setTmuxPrefixActive(true)
-				prefixTimeoutRef.current = setTimeout(() => setTmuxPrefixActive(false), 500)
-				return
-			}
+		// Typing in an input belongs to that input — each input handles its own keys
+		if (isInput) return
 
-			// When tmux prefix is active, 0-9 switches windows
-			if (tmuxPrefixActive && e.key >= "0" && e.key <= "6") {
-				e.preventDefault()
-				if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
-				setTmuxPrefixActive(false)
-				setActiveTmuxWindow(Number.parseInt(e.key, 10) as 0 | 1 | 2 | 3 | 4 | 5 | 6)
-				return
-			}
-
-			// Any other key cancels tmux prefix mode
-			if (tmuxPrefixActive) {
-				if (prefixTimeoutRef.current) clearTimeout(prefixTimeoutRef.current)
-				setTmuxPrefixActive(false)
-			}
-
-			if (
-				commandLineOpen ||
-				fuzzyFinderOpen ||
-				helpPopupOpen ||
-				adventureGameOpen ||
-				snakeGameOpen ||
-				activeTmuxWindow !== 1
-			)
-				return
-			if (isInput && mode !== "NORMAL") return
-
-			if (e.ctrlKey && e.key === "p") {
-				e.preventDefault()
-				toggleFuzzyFinder()
-				return
-			}
-
-			// Ctrl+w cycles focus: buffer → sidebar → terminal → buffer
-			if (e.ctrlKey && e.key === "w") {
-				e.preventDefault()
-				if (terminalFocused) {
-					unfocusTerminal()
-				} else if (sidebarFocused) {
-					unfocusSidebar()
-					if (terminalOpen) focusTerminal()
-				} else {
-					if (sidebarOpen) focusSidebar()
-					else if (terminalOpen) focusTerminal()
-				}
-				return
-			}
-
-			if (mode === "NORMAL") {
-				// Sidebar-focused navigation
-				if (sidebarFocused) {
-					switch (e.key) {
-						case "j": {
-							e.preventDefault()
-							const newIndex = Math.min(sidebarCursorIndex + 1, visibleNodes.length - 1)
-							setSidebarCursorIndex(newIndex)
-							break
-						}
-						case "k": {
-							e.preventDefault()
-							const newIndex = Math.max(sidebarCursorIndex - 1, 0)
-							setSidebarCursorIndex(newIndex)
-							break
-						}
-						case "Enter": {
-							e.preventDefault()
-							const node = visibleNodes[sidebarCursorIndex]
-							if (node) {
-								if (node.type === "folder") {
-									toggleFolder(node.id)
-								} else {
-									openBuffer(node.path)
-									navigate(node.path)
-									unfocusSidebar()
-								}
-							}
-							break
-						}
-						case "Escape":
-							e.preventDefault()
-							unfocusSidebar()
-							break
-						case "?":
-							e.preventDefault()
-							toggleHelpPopup()
-							break
-					}
-					return
-				}
-
-				// Buffer-focused navigation
+		if (mode === "NORMAL") {
+			// Sidebar-focused navigation
+			if (sidebarFocused) {
 				switch (e.key) {
-					case "i":
+					case "j": {
 						e.preventDefault()
-						setMode("INSERT")
+						const newIndex = Math.min(sidebarCursorIndex + 1, visibleNodes.length - 1)
+						setSidebarCursorIndex(newIndex)
 						break
-					case "v":
+					}
+					case "k": {
 						e.preventDefault()
-						setMode("VISUAL")
+						const newIndex = Math.max(sidebarCursorIndex - 1, 0)
+						setSidebarCursorIndex(newIndex)
 						break
-					case ":":
+					}
+					case "Enter": {
 						e.preventDefault()
-						toggleCommandLine()
+						const node = visibleNodes[sidebarCursorIndex]
+						if (node) {
+							if (node.type === "folder") {
+								toggleFolder(node.id)
+							} else {
+								openBuffer(node.path)
+								navigate(node.path)
+								unfocusSidebar()
+							}
+						}
 						break
-					case "Tab":
+					}
+					case "Escape":
 						e.preventDefault()
-						if (e.shiftKey) cycleBuffer(-1)
-						else cycleBuffer(1)
+						unfocusSidebar()
 						break
 					case "?":
 						e.preventDefault()
 						toggleHelpPopup()
 						break
-					case "x":
-						e.preventDefault()
-						closeCurrentBuffer()
-						break
-					case "X":
-						e.preventDefault()
-						closeOtherBuffers()
-						break
-					case "j":
-					case "ArrowDown":
-						e.preventDefault()
-						moveCursor("down")
-						break
-					case "k":
-					case "ArrowUp":
-						e.preventDefault()
-						moveCursor("up")
-						break
 				}
-			} else if (mode === "INSERT" || mode === "VISUAL") {
-				if (e.key === "Escape") {
+				return
+			}
+
+			// Buffer-focused navigation
+			switch (e.key) {
+				case "i":
 					e.preventDefault()
-					setMode("NORMAL")
-				}
+					setMode("INSERT")
+					break
+				case "v":
+					e.preventDefault()
+					setMode("VISUAL")
+					break
+				case ":":
+					e.preventDefault()
+					toggleCommandLine()
+					break
+				// gt / gT cycle buffers, vim-style; Tab stays native so focus navigation works
+				case "g":
+					e.preventDefault()
+					gPrefixRef.current = true
+					setTimeout(() => {
+						gPrefixRef.current = false
+					}, 600)
+					break
+				case "t":
+					if (gPrefixRef.current) {
+						e.preventDefault()
+						gPrefixRef.current = false
+						cycleBuffer(1)
+					}
+					break
+				case "T":
+					if (gPrefixRef.current) {
+						e.preventDefault()
+						gPrefixRef.current = false
+						cycleBuffer(-1)
+					}
+					break
+				case "?":
+					e.preventDefault()
+					toggleHelpPopup()
+					break
+				case "x":
+					e.preventDefault()
+					closeCurrentBuffer()
+					break
+				case "X":
+					e.preventDefault()
+					closeOtherBuffers()
+					break
+				case "j":
+				case "ArrowDown":
+					e.preventDefault()
+					moveCursor("down")
+					break
+				case "k":
+				case "ArrowUp":
+					e.preventDefault()
+					moveCursor("up")
+					break
+			}
+		} else if (mode === "INSERT" || mode === "VISUAL") {
+			if (e.key === "Escape") {
+				e.preventDefault()
+				setMode("NORMAL")
 			}
 		}
+	}
 
-		window.addEventListener("keydown", handleKeyDown)
-		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [
-		mode,
-		setMode,
-		cycleBuffer,
-		closeCurrentBuffer,
-		closeOtherBuffers,
-		toggleCommandLine,
-		toggleFuzzyFinder,
-		toggleHelpPopup,
-		commandLineOpen,
-		fuzzyFinderOpen,
-		helpPopupOpen,
-		adventureGameOpen,
-		snakeGameOpen,
-		sidebarOpen,
-		sidebarFocused,
-		sidebarCursorIndex,
-		visibleNodes,
-		setSidebarCursorIndex,
-		toggleFolder,
-		openBuffer,
-		navigate,
-		focusSidebar,
-		unfocusSidebar,
-		toggleTerminal,
-		terminalOpen,
-		terminalFocused,
-		focusTerminal,
-		unfocusTerminal,
-		moveCursor,
-		activeTmuxWindow,
-		setActiveTmuxWindow,
-		tmuxPrefixActive,
-		setTmuxPrefixActive,
-	])
+	useEffect(() => {
+		handlerRef.current = handleKeyDown
+	})
+
+	useEffect(() => {
+		const listener = (e: KeyboardEvent) => handlerRef.current(e)
+		window.addEventListener("keydown", listener)
+		return () => window.removeEventListener("keydown", listener)
+	}, [])
 }

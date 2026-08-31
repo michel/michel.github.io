@@ -31,7 +31,7 @@ export const themes: Record<string, Theme> = {
 			bgPanel: "#2a273f",
 			bgActive: "#2d2a3b",
 			fg: "#e0def4",
-			comment: "#817c9c",
+			comment: "#9a95b5",
 			red: "#eb6f92",
 			green: "#a3be8c",
 			yellow: "#f6c177",
@@ -136,34 +136,45 @@ export const themes: Record<string, Theme> = {
 
 export const themeNames = Object.keys(themes)
 
-export function applyTheme(themeName: string) {
+export function themeVars(themeName: string): Record<string, string> {
 	const theme = themes[themeName] ?? themes.default
-	if (!theme) return
-	const root = document.documentElement
+	if (!theme) return {}
 	const c = theme.colors
+	return {
+		"--color-bg": c.bg,
+		"--color-bg-dark": c.bgDark,
+		"--color-bg-panel": c.bgPanel,
+		"--color-bg-active": c.bgActive,
+		"--color-fg": c.fg,
+		"--color-comment": c.comment,
+		"--color-red": c.red,
+		"--color-green": c.green,
+		"--color-yellow": c.yellow,
+		"--color-blue": c.blue,
+		"--color-magenta": c.magenta,
+		"--color-cyan": c.cyan,
+		"--color-orange": c.orange,
+		"--color-black": c.black,
+		"--color-border": c.border,
+		"--color-pink": c.pink,
+	}
+}
 
-	root.style.setProperty("--color-bg", c.bg)
-	root.style.setProperty("--color-bg-dark", c.bgDark)
-	root.style.setProperty("--color-bg-panel", c.bgPanel)
-	root.style.setProperty("--color-bg-active", c.bgActive)
-	root.style.setProperty("--color-fg", c.fg)
-	root.style.setProperty("--color-comment", c.comment)
-	root.style.setProperty("--color-red", c.red)
-	root.style.setProperty("--color-green", c.green)
-	root.style.setProperty("--color-yellow", c.yellow)
-	root.style.setProperty("--color-blue", c.blue)
-	root.style.setProperty("--color-magenta", c.magenta)
-	root.style.setProperty("--color-cyan", c.cyan)
-	root.style.setProperty("--color-orange", c.orange)
-	root.style.setProperty("--color-black", c.black)
-	root.style.setProperty("--color-border", c.border)
-	root.style.setProperty("--color-pink", c.pink)
+export function applyTheme(themeName: string) {
+	if (typeof document === "undefined") return
+	const root = document.documentElement
+	for (const [prop, value] of Object.entries(themeVars(themeName)))
+		root.style.setProperty(prop, value)
 }
 
 export function getStoredTheme(): string {
+	if (typeof localStorage === "undefined") return "default"
 	return localStorage.getItem("theme") || "default"
 }
 
 export function storeTheme(themeName: string) {
 	localStorage.setItem("theme", themeName)
+	// Mirrored vars let index.html's boot script re-theme before first paint
+	// without shipping the palette table; applyTheme corrects any stale copy on mount
+	localStorage.setItem("themeVars", JSON.stringify(themeVars(themeName)))
 }
