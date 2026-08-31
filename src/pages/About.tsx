@@ -330,9 +330,11 @@ export default function About() {
 		...ManEntry({
 			id: "peliqan",
 			title: "Peliqan - Chief Technology Officer",
-			date: "2026 - Current",
+			date: "Apr 2026 - Present",
 			children: (
 				<>
+					<img src="/images/peliqan-logo.svg" alt="PELIQAN logo" className="h-4 my-1.5" />
+					<div className="text-comment">Amsterdam, North Holland, Netherlands · On-site</div>
 					Building the{" "}
 					<a
 						href="https://peliqan.eu/"
