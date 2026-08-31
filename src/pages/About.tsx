@@ -328,6 +328,31 @@ export default function About() {
 		</div>,
 		"",
 		...ManEntry({
+			id: "peliqan",
+			title: "Peliqan - Chief Technology Officer",
+			date: "2026 - Current",
+			children: (
+				<>
+					Building the{" "}
+					<a
+						href="https://peliqan.eu/"
+						target="_blank"
+						rel="noreferrer"
+						className="underline hover:text-cyan"
+					>
+						Peliqan
+					</a>{" "}
+					platform from the ground up: private equity made liquid. Peliqan gives private equity
+					investors what the institutions have always had: full visibility across your portfolio and
+					the freedom to act on it. Sell a position, finance a commitment, plan ahead.
+				</>
+			),
+		}).map((line, i) => (
+			<div key={`peliqan-${i}`} className="ml-8">
+				{line}
+			</div>
+		)),
+		...ManEntry({
 			id: "reinvention",
 			title: "Re-invention (Founder)",
 			date: "2004 - Current",

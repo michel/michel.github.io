@@ -87,6 +87,11 @@ const StatBar = ({ color, width }: { color: string; width: number }) => (
 
 // Customer metadata from CV
 const CUSTOMER_DATA: Record<string, { role: string; period: string; activities: string }> = {
+	Peliqan: {
+		role: "CTO",
+		period: "2026 - Current",
+		activities: "Building the Peliqan platform from the ground up: private equity made liquid",
+	},
 	"Revive Capital": {
 		role: "Tech lead",
 		period: "2024 - Current",
