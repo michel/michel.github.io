@@ -1,9 +1,8 @@
 import { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
+import { createRoot, hydrateRoot } from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import "./index.css"
-import { PostHogProvider } from "posthog-js/react"
 
 // ASCII art easter egg for curious developers
 console.log(
@@ -27,32 +26,15 @@ console.log(
 	"color:#64748b",
 )
 
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root")!
+const app = (
 	<StrictMode>
-		<PostHogProvider
-			apiKey="phc_Xiya7U8hHyMIzYg6YCQ8ZJEN3dnfCNTyIRJWr1mdO1J"
-			options={{
-				api_host: "https://eu.i.posthog.com",
-				ui_host: "https://eu.posthog.com",
-				defaults: "2025-05-24",
-				capture_pageview: false, // Manual pageview tracking via usePostHogPageview
-				capture_pageleave: true,
-				capture_exceptions: true,
-				session_recording: {
-					maskAllInputs: false,
-					maskInputFn: (text, element) => {
-						const input = element as HTMLInputElement | null
-						return input?.type === "password" || input?.autocomplete === "cc-number"
-							? "*".repeat(text.length)
-							: text
-					},
-				},
-				debug: import.meta.env.MODE === "development",
-			}}
-		>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</PostHogProvider>
-	</StrictMode>,
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</StrictMode>
 )
+
+// Production index.html is prerendered (scripts/prerender.tsx); dev serves an empty root
+if (root.hasChildNodes()) hydrateRoot(root, app)
+else createRoot(root).render(app)

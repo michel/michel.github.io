@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { memo, useEffect, useMemo, useRef, useState } from "react"
 import { useEditor } from "../context/EditorContext"
 import { themeNames } from "../data/themes"
 import {
@@ -60,6 +60,25 @@ const generateId = () =>
 	typeof crypto !== "undefined" && crypto.randomUUID
 		? crypto.randomUUID()
 		: Math.random().toString(36).slice(2)
+
+const TerminalRow = memo(function TerminalRow({ line }: { line: TerminalLine }) {
+	if (line.type === "input") {
+		return (
+			<div className="whitespace-pre break-all">
+				<span className="text-green">michel@spaceheater</span>
+				<span className="text-fg">:</span>
+				<span className="text-cyan">{toDisplayPath(line.cwd ?? "/home/michel/blog")}</span>
+				<span className="text-fg">$ {line.content}</span>
+			</div>
+		)
+	}
+
+	return (
+		<div className="whitespace-pre break-all">
+			<span className="text-fg">{parseColoredText(line.content)}</span>
+		</div>
+	)
+})
 
 export default function Terminal() {
 	const {
@@ -153,7 +172,7 @@ export default function Terminal() {
 	// Reset tab index when input changes
 	useEffect(() => {
 		setTabIndex(0)
-	}, [])
+	}, [input])
 
 	// Current suggestion based on tab index
 	const suggestion = matches[tabIndex % Math.max(1, matches.length)] ?? null
@@ -274,18 +293,7 @@ export default function Terminal() {
 		<div className="flex h-full flex-col bg-bg-dark" onClick={handleClick}>
 			<div ref={containerRef} className="flex-1 overflow-auto p-2 font-mono">
 				{history.map((line) => (
-					<div key={line.id} className="whitespace-pre break-all">
-						{line.type === "input" ? (
-							<>
-								<span className="text-green">michel@spaceheater</span>
-								<span className="text-fg">:</span>
-								<span className="text-cyan">{toDisplayPath(line.cwd ?? "/home/michel/blog")}</span>
-								<span className="text-fg">$ {line.content}</span>
-							</>
-						) : (
-							<span className="text-fg">{parseColoredText(line.content)}</span>
-						)}
-					</div>
+					<TerminalRow key={line.id} line={line} />
 				))}
 
 				<div className="flex whitespace-pre-wrap break-all">
@@ -297,6 +305,9 @@ export default function Terminal() {
 						<input
 							ref={inputRef}
 							type="text"
+							aria-label="Terminal input"
+							autoComplete="off"
+							spellCheck={false}
 							value={input}
 							onChange={(e) => setInput(e.target.value)}
 							onKeyDown={handleKeyDown}

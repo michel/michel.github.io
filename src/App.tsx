@@ -1,11 +1,13 @@
+import { lazy, Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
 import Layout from "./components/Layout"
 import { EditorProvider } from "./context/EditorContext"
-import About from "./pages/About"
-import Contact from "./pages/Contact"
 import Home from "./pages/Home"
-import Post from "./pages/Post"
-import Projects from "./pages/Projects"
+
+const About = lazy(() => import("./pages/About"))
+const Contact = lazy(() => import("./pages/Contact"))
+const Projects = lazy(() => import("./pages/Projects"))
+const Post = lazy(() => import("./pages/Post"))
 
 export default function App() {
 	return (
@@ -13,10 +15,38 @@ export default function App() {
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />
-					<Route path="about" element={<About />} />
-					<Route path="contact" element={<Contact />} />
-					<Route path="projects" element={<Projects />} />
-					<Route path="posts/:slug" element={<Post />} />
+					<Route
+						path="about"
+						element={
+							<Suspense fallback={null}>
+								<About />
+							</Suspense>
+						}
+					/>
+					<Route
+						path="contact"
+						element={
+							<Suspense fallback={null}>
+								<Contact />
+							</Suspense>
+						}
+					/>
+					<Route
+						path="projects"
+						element={
+							<Suspense fallback={null}>
+								<Projects />
+							</Suspense>
+						}
+					/>
+					<Route
+						path="posts/:slug"
+						element={
+							<Suspense fallback={null}>
+								<Post />
+							</Suspense>
+						}
+					/>
 				</Route>
 			</Routes>
 		</EditorProvider>

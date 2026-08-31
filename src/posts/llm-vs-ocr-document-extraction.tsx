@@ -31,11 +31,6 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		<span key="hook2">This is the problem with "just use GPT for document extraction."</span>,
 		"",
-		// STAKES - Why this matters
-		<h3 key="stakes" className="text-cyan font-bold">
-			### Why this matters
-		</h3>,
-		"",
 		<span key="p1">
 			I'm building invoice validation for{" "}
 			<span className="text-blue font-bold">Revive Capital</span>, a B2B car financing company. We
@@ -46,8 +41,10 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		<div key="img1-wrapper" className="flex flex-col gap-1">
 			<Lightbox
 				key="img1"
-				src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.png"
+				src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.webp"
 				alt="Redacted Dutch car invoice"
+				width={2473}
+				height={3497}
 			/>
 			<span className="text-comment text-sm">
 				{"// typical Dutch car invoice with VIN, IBAN, prices, and tax fields"}
@@ -73,16 +70,14 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		<span key="p3b">
 			This is the core problem:{" "}
 			<span className="text-green font-bold">
-				LLMs excel at semantic aggregation but fail at symbol fidelity
+				LLMs aggregate meaning well and transcribe symbols badly
 			</span>
-			. They understand what a VIN means. They can't reliably transcribe one. Token-based models
-			don't see characters, they see probability distributions. And for checksummed identifiers,
-			close is useless.
+			. They understand what a VIN is. They can't copy one out. Tokens are probability
+			distributions, not characters, and for a checksummed identifier close is useless.
 		</span>,
 		"",
-		// BACKGROUND - Now that reader cares
 		<h3 key="background" className="text-cyan font-bold">
-			### I've Seen This Before
+			### I've seen this before
 		</h3>,
 		"",
 		<span key="bg1">
@@ -94,8 +89,8 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</span>,
 		"",
 		<span key="bg3">
-			When field extraction goes wrong? End customers, vendors, and internal stakeholders all lose
-			trust. That's the real cost.
+			When field extraction goes wrong, end customers, vendors, and internal stakeholders all lose
+			trust.
 		</span>,
 		"",
 		// THE SOLUTION
@@ -125,8 +120,10 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		<Lightbox
 			key="img2"
-			src="/images/posts/llm-vs-ocr-document-extraction/extraction_prompts.png"
+			src="/images/posts/llm-vs-ocr-document-extraction/extraction_prompts.webp"
 			alt="Extraction prompts and extractor code"
+			width={1819}
+			height={1552}
 		/>,
 		"",
 		<h3 key="prompts" className="text-cyan font-bold">
@@ -154,9 +151,8 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</span>,
 		"",
 		<span key="p8">
-			But here's the reality: remember the symbol fidelity problem? Prompts can't fix it. You can
-			tell the LLM to double-check, to verify, to be careful. It still operates on tokens, not
-			characters. The failure mode is architectural, not instructional.
+			Prompts can't fix symbol fidelity. You can tell the model to double-check and verify all you
+			want; it still operates on tokens, not characters. The fix has to be architectural.
 		</span>,
 		"",
 		<h3 key="normalization" className="text-cyan font-bold">
@@ -174,20 +170,22 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		<span key="p10">
 			I built field-specific normalizers for everything: amounts, invoice numbers, company names,
 			addresses, dates, mileage. Each with their own parsing logic, tolerance thresholds, and
-			comparison strategies. This harness is what makes the system actually work.
+			comparison strategies.
 		</span>,
 		"",
 		<Lightbox
 			key="img3"
-			src="/images/posts/llm-vs-ocr-document-extraction/normalizers_code.png"
+			src="/images/posts/llm-vs-ocr-document-extraction/normalizers_code.webp"
 			alt="Field normalizers and extractors code"
+			width={1819}
+			height={1552}
 		/>,
 		"",
 		<h3 key="degradation" className="text-cyan font-bold">
 			### Building for failure
 		</h3>,
 		"",
-		<span key="p11">Systems fail. The question is how gracefully. My approach:</span>,
+		<span key="p11">Everything here fails eventually. Here's what happens when it does:</span>,
 		"",
 		<span key="b4">
 			• <span className="text-blue font-bold">Textract fails?</span> Fall back to GPT values. Still
@@ -215,36 +213,26 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</h3>,
 		"",
 		<span key="p12">
-			Here's the full-circle moment. Remember 2016? Per-vendor regex extractors were too
-			labor-intensive to maintain. But the approach was{" "}
+			In 2016 the per-vendor regex extractors were too labour-intensive to maintain. But they were{" "}
 			<span className="text-green font-bold">deterministic and reliable</span> for known formats.
 		</span>,
 		"",
 		<span key="p13">
 			In 2025-2026, AI coding agents change the economics. Instead of writing vendor-specific
 			extractors by hand, you can use LLMs to <span className="text-blue font-bold">generate</span>{" "}
-			them. Then run the generated code deterministically. Best of both worlds: LLM creativity for
-			code generation, deterministic execution for reliability.
+			them. The LLM writes the extractor once. After that it runs deterministically, every time.
 		</span>,
 		"",
 		<span key="p13b">
-			Concrete example: new supplier sends invoices with VIN in a table on page 2. Instead of
-			prompt-engineering GPT to find it, generate a vendor-specific extractor—pure regex patterns
-			and spatial relations in actual code—a regex validates the VIN format, table coordinates
-			locate it on page 2. When their format changes, regenerate the code. Minutes of work instead
-			of hours of prompt debugging, burning tokens, and non-deterministic results. In the past this
-			approach would have been too cost-intensive. But with genAI, you can even automate away this
-			whole process and end up with deterministic, performant extraction code.
+			Concrete example: a new supplier sends invoices with the VIN in a table on page 2. Instead of
+			prompt-engineering GPT to find it, generate a vendor-specific extractor: real code, with regex
+			patterns and spatial relations. The regex validates the VIN format; table coordinates find it
+			on page 2. When their format changes, regenerate the code. Minutes of work instead of hours of
+			prompt debugging, burning tokens, and non-deterministic results.
 		</span>,
 		"",
 		<span key="p14">
 			The "old" approach might win again, now that the tooling makes it maintainable.
-		</span>,
-		"",
-		<span key="p15">
-			Ten years later, same problem, more tools. Neither LLM nor OCR alone is sufficient for
-			production. The hybrid approach works: let each tool do what it's best at. Know your failure
-			modes. Design for graceful degradation.
 		</span>,
 		"",
 		<span key="p15b" className="text-comment">

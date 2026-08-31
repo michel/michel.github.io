@@ -1,12 +1,11 @@
 import { Home, Palette } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { allFiles, useEditor } from "../context/EditorContext"
 import { themeNames, themes } from "../data/themes"
 
 export default function TabLine() {
-	const navigate = useNavigate()
 	const location = useLocation()
-	const { openBuffers, toggleMobileSidebar, theme, setTheme } = useEditor()
+	const { openBuffers, toggleMobileSidebar, mobileSidebarOpen, theme, setTheme } = useEditor()
 
 	const cycleTheme = () => {
 		const currentIndex = themeNames.indexOf(theme)
@@ -15,13 +14,16 @@ export default function TabLine() {
 	}
 
 	return (
-		<div className="flex select-none overflow-x-auto" style={{ backgroundColor: "#191725" }}>
+		<div className="flex select-none overflow-x-auto bg-bg-dark">
 			<button
 				type="button"
-				className="flex items-center px-2 py-1 hover:bg-black md:hidden"
+				aria-label="File tree"
+				aria-expanded={mobileSidebarOpen}
+				aria-controls="mobile-sidebar"
+				className="flex min-h-7 min-w-9 items-center justify-center px-2 py-1 text-magenta transition-colors duration-100 hover:bg-bg-panel md:hidden"
 				onClick={toggleMobileSidebar}
 			>
-				<Home className="h-4 w-4 text-magenta" />
+				<Home aria-hidden="true" className="h-4 w-4 text-magenta" />
 			</button>
 			{openBuffers.map((path, idx) => {
 				const file = allFiles.find((f) => f.path === path)
@@ -32,14 +34,19 @@ export default function TabLine() {
 
 				return (
 					<div key={path} className="flex items-center">
-						<div
-							onClick={() => navigate(path)}
-							className={`cursor-pointer py-1 pl-3 pr-2 ${
-								isActive ? "bg-magenta font-bold text-black pl-6" : "text-magenta"
+						<Link
+							to={path}
+							className={`flex items-center gap-1 py-1 pl-3 pr-2 transition-colors duration-100 ${
+								isActive
+									? "bg-magenta font-bold text-black focus-visible:outline-bg-dark"
+									: "text-magenta hover:bg-bg-panel"
 							}`}
 						>
+							<span aria-hidden="true" className="w-[1ch] shrink-0">
+								{isActive ? "●" : ""}
+							</span>
 							{name}
-						</div>
+						</Link>
 						{isActive ? (
 							<div
 								className="h-0 w-0"
@@ -65,7 +72,7 @@ export default function TabLine() {
 										top: "var(--tab-arrow-inset)",
 										borderTop: "var(--tab-arrow-inner) solid transparent",
 										borderBottom: "var(--tab-arrow-inner) solid transparent",
-										borderLeft: "var(--tab-arrow-left) solid #191725",
+										borderLeft: "var(--tab-arrow-left) solid var(--color-bg-dark)",
 									}}
 								/>
 							</div>
@@ -85,7 +92,7 @@ export default function TabLine() {
 										top: "var(--tab-arrow-inset)",
 										borderTop: "var(--tab-arrow-inner) solid transparent",
 										borderBottom: "var(--tab-arrow-inner) solid transparent",
-										borderLeft: "var(--tab-arrow-left) solid #191725",
+										borderLeft: "var(--tab-arrow-left) solid var(--color-bg-dark)",
 									}}
 								/>
 							</div>
@@ -94,17 +101,19 @@ export default function TabLine() {
 				)
 			})}
 			{/* Theme toggle */}
-			<div
-				className="group relative ml-auto cursor-pointer px-3 py-1 text-comment hover:text-fg"
+			<button
+				type="button"
+				aria-label="Cycle color theme"
+				className="group relative ml-auto px-3 py-1 text-comment transition-colors duration-100 hover:text-fg"
 				onClick={cycleTheme}
 			>
-				<Palette className="h-4 w-4" />
-				<div className="pointer-events-none absolute right-0 top-full z-20 mt-1 opacity-0 transition-opacity group-hover:opacity-100">
-					<div className="whitespace-nowrap rounded border border-border bg-bg-dark px-2 py-1 text-xs text-fg shadow-lg">
+				<Palette aria-hidden="true" className="h-4 w-4" />
+				<span className="pointer-events-none absolute right-0 top-full z-20 mt-1 block opacity-0 transition-opacity group-hover:opacity-100">
+					<span className="block whitespace-nowrap border border-border bg-bg-dark px-2 py-1 text-xs text-fg">
 						Theme: <span className="text-cyan">{themes[theme]?.label ?? theme}</span>
-					</div>
-				</div>
-			</div>
+					</span>
+				</span>
+			</button>
 		</div>
 	)
 }

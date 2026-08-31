@@ -23,14 +23,14 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		</h1>,
 		"",
 		// THE HOOK
-		<span key="hook1">1.2 million lines of code. 200+ projects. 17 years.</span>,
+		<span key="hook1">4.3 million lines. 250+ projects. 17 years.</span>,
 		"",
 		<span key="hook2">I had no idea until I built a tool to count them.</span>,
 		"",
 		<span key="hook3">
-			Turns out most of it is TypeScript. The Ruby years are a distant memory. And I average{" "}
-			<span className="text-orange font-bold">67 lines per day</span>, every day, for 17 years
-			straight.
+			Turns out most of it is JavaScript and Ruby; TypeScript is where the last six years went. That
+			works out to <span className="text-orange font-bold">about 700 lines a day</span>, every day,
+			for 17 years straight.
 		</span>,
 		"",
 		<h2 key="problem" className="text-green font-bold text-lg">
@@ -38,15 +38,12 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		</h2>,
 		"",
 		<span key="p1">
-			My portfolio was scattered. Git repos in ~/src. Old projects in ~/archive. Client work mixed
-			with side projects. Some with git history, some without. Different languages, different eras,
-			different me.
+			My portfolio was scattered across git repos in ~/src and old projects in ~/archive, client
+			work mixed in with side projects, some of it with git history and some without. Different
+			languages, different eras, different me.
 		</span>,
 		"",
-		<span key="p2">
-			I wanted to see the whole picture. Not just a list of repos. The actual shape of my career in
-			code.
-		</span>,
+		<span key="p2">I wanted the shape of the whole thing, not a list of repos.</span>,
 		"",
 		<h2 key="analyzer" className="text-green font-bold text-lg">
 			## The analyzer
@@ -86,8 +83,10 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		"",
 		<Lightbox
 			key="analyzer-screenshot"
-			src="/images/posts/visualizing-17-years-of-code/analyzer_output.png"
+			src="/images/posts/visualizing-17-years-of-code/analyzer_output.webp"
 			alt="CLI analyzer output showing project analysis with language detection, LOC counting, and metadata extraction"
+			width={1213}
+			height={780}
 		/>,
 		"",
 		<h2 key="dashboard" className="text-green font-bold text-lg">
@@ -121,8 +120,10 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		"",
 		<Lightbox
 			key="img-dashboard"
-			src="/images/posts/visualizing-17-years-of-code/projects_dashboard.png"
+			src="/images/posts/visualizing-17-years-of-code/projects_dashboard.webp"
 			alt="Projects dashboard showing 17 years of code"
+			width={1818}
+			height={1552}
 		/>,
 		"",
 		<span key="p9">
@@ -153,8 +154,8 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		</span>,
 		"",
 		<span key="l4">
-			<span className="text-cyan font-bold">2024-now:</span> Rust curiosity. Systems programming
-			after years of web work. Different muscles.
+			<span className="text-cyan font-bold">2024-now:</span> Rust curiosity. After years of web
+			work, systems programming uses completely different muscles.
 		</span>,
 		"",
 		<span key="p10">
@@ -185,18 +186,12 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		</span>,
 		"",
 		<span key="w4">
-			We're at the end of an era. From now on, most code will be written by AI. The craft of
-			hand-writing complex systems is becoming a historical skill.
+			My bet: in a few years hardly anyone will hand-write a system this size. So I wanted the
+			record — the decades I spent doing it by hand, debugging at 3am, learning languages the hard
+			way.
 		</span>,
 		"",
-		<span key="w5">
-			I wanted a record. Evidence that I spent decades building things by hand. Line by line.
-			Debugging at 3am. Learning languages the hard way. Before the machines took over.
-		</span>,
-		"",
-		<span key="w6">
-			The irony isn't lost on me: I used AI to build the tool that documents my pre-AI work.
-		</span>,
+		<span key="w6">I used AI to build the tool that documents my pre-AI work.</span>,
 		"",
 		<span key="link">
 			Try it:{" "}

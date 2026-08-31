@@ -1,14 +1,42 @@
 @import "tailwindcss";
 
+/* Roboto Mono (wght 400-700 variable) with box-drawing/block/geometric glyphs
+   merged in from JetBrains Mono at the identical 0.6em advance, so the ASCII art
+   ships in the same single preloaded file and stays column-aligned */
+@font-face {
+	font-family: "Roboto Mono";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/roboto-mono.woff2") format("woff2");
+}
+
+/* Static 400, like the original Google Fonts setup: bold italic stays synthesized */
+@font-face {
+	font-family: "Roboto Mono";
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/roboto-mono-italic.woff2") format("woff2");
+}
+
+/* Slightly oversized fallback: the swap to Roboto Mono can only shrink text,
+   so late font arrival never produces a larger layout (no CLS, no late LCP entry) */
+@font-face {
+	font-family: "Roboto Mono Fallback";
+	src: local("Menlo"), local("Consolas"), local("Courier New");
+	size-adjust: 103%;
+}
+
 @theme {
-	--font-mono: "Roboto Mono", monospace;
+	--font-mono: "Roboto Mono", "Roboto Mono Fallback", ui-monospace, monospace;
 
 	--color-bg: #232135;
 	--color-bg-dark: #191724;
 	--color-bg-panel: #2a273f;
 	--color-bg-active: #2d2a3b;
 	--color-fg: #e0def4;
-	--color-comment: #817c9c;
+	--color-comment: #9a95b5;
 	--color-red: #eb6f92;
 	--color-green: #a3be8c;
 	--color-yellow: #f6c177;
@@ -21,12 +49,9 @@
 	--color-pink: #eb98c3;
 }
 
-* {
-	box-sizing: border-box;
-	transition:
-		background-color 200ms ease,
-		border-color 200ms ease,
-		color 200ms ease;
+html {
+	color-scheme: dark;
+	-webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -38,18 +63,51 @@ body,
 	padding: 0;
 }
 
+body,
+#root {
+	height: 100dvh;
+}
+
 body {
 	background-color: var(--color-bg);
 	color: var(--color-fg);
 	font-family: var(--font-mono);
-	font-size: 9px;
+	font-size: 12px;
 	line-height: 1.4;
 	overflow: hidden;
+	transition: background-color 200ms ease;
 }
 
 @media (min-width: 768px) {
 	body {
 		font-size: 14px;
+	}
+}
+
+/* 16px inputs stop iOS Safari's zoom-on-focus */
+@media (max-width: 767px) {
+	input,
+	textarea {
+		font-size: 16px;
+	}
+}
+
+a,
+button,
+[role="button"] {
+	touch-action: manipulation;
+}
+
+::selection {
+	background: var(--color-magenta);
+	color: var(--color-bg-dark);
+}
+
+/* In @layer base so utility opt-outs (outline-none) and per-element rings still win */
+@layer base {
+	:focus-visible {
+		outline: 1px solid var(--color-magenta);
+		outline-offset: -1px;
 	}
 }
 
@@ -71,9 +129,22 @@ body {
 	}
 }
 
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-border) transparent;
+}
+
 ::-webkit-scrollbar {
-	width: 0;
-	height: 0;
+	width: 6px;
+	height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
 }
 
 .cursor-blink {
@@ -90,13 +161,13 @@ body {
 	}
 }
 
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
 	}
 }
