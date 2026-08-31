@@ -1,7 +1,7 @@
 {
-	"generatedAt": "2026-01-13T13:14:38.279Z",
+	"generatedAt": "2026-08-31T12:25:36.000Z",
 	"rootPath": "/Users/micheldegraaf/src",
-	"totalProjects": 255,
+	"totalProjects": 256,
 	"projects": [
 		{
 			"name": "internetbode",
@@ -5888,21 +5888,41 @@
 			"languages": [
 				{
 					"language": "Rust",
-					"files": 57,
-					"lines": 9704,
-					"percentage": 100
+					"files": 134,
+					"lines": 45817,
+					"percentage": 85
+				},
+				{
+					"language": "TypeScript",
+					"files": 43,
+					"lines": 4169,
+					"percentage": 8
+				},
+				{
+					"language": "JavaScript",
+					"files": 1,
+					"lines": 3893,
+					"percentage": 7
+				},
+				{
+					"language": "Shell",
+					"files": 3,
+					"lines": 287,
+					"percentage": 1
 				}
 			],
 			"framework": null,
-			"firstCommitDate": "2020-01-01T00:00:00.000Z",
-			"lastCommitDate": "2020-12-31T23:59:59.000Z",
-			"totalLinesOfCode": 9704,
-			"myLinesOfCode": 3798,
-			"myCommitCount": 103,
-			"totalCommitCount": 103,
-			"contributorCount": 3,
+			"firstCommitDate": "2024-09-09T06:32:37.000Z",
+			"lastCommitDate": "2026-08-18T14:18:27.000Z",
+			"totalLinesOfCode": 54166,
+			"myLinesOfCode": 35647,
+			"myCommitCount": 359,
+			"totalCommitCount": 372,
+			"contributorCount": 6,
 			"commitYearStats": {
-				"2020": 103
+				"2024": 5,
+				"2025": 93,
+				"2026": 261
 			},
 			"isPersonalProject": true,
 			"repository": "git@github.com:michel/soulseek-rs.git",
@@ -5918,22 +5938,21 @@
 					"languages": [
 						{
 							"language": "Rust",
-							"files": 41,
-							"lines": 6659,
+							"files": 68,
+							"lines": 18867,
 							"percentage": 100
 						}
 					],
 					"framework": null,
-					"firstCommitDate": "2025-11-23T17:47:23.874Z",
-					"lastCommitDate": "2026-01-04T19:36:00.103Z",
-					"totalLinesOfCode": 6659,
-					"myLinesOfCode": 6659,
-					"myCommitCount": 4,
-					"totalCommitCount": 4,
+					"firstCommitDate": "2026-07-28T09:07:21.549Z",
+					"lastCommitDate": "2026-08-29T13:45:30.172Z",
+					"totalLinesOfCode": 18867,
+					"myLinesOfCode": 18867,
+					"myCommitCount": 5,
+					"totalCommitCount": 5,
 					"contributorCount": 1,
 					"commitYearStats": {
-						"2025": 3,
-						"2026": 1
+						"2026": 5
 					},
 					"isPersonalProject": true,
 					"repository": null,
@@ -5949,22 +5968,21 @@
 					"languages": [
 						{
 							"language": "Rust",
-							"files": 16,
-							"lines": 3045,
+							"files": 66,
+							"lines": 26950,
 							"percentage": 100
 						}
 					],
 					"framework": null,
-					"firstCommitDate": "2025-11-23T17:47:23.886Z",
-					"lastCommitDate": "2026-01-04T19:36:00.071Z",
-					"totalLinesOfCode": 3045,
-					"myLinesOfCode": 3045,
-					"myCommitCount": 2,
-					"totalCommitCount": 2,
+					"firstCommitDate": "2026-07-28T09:07:21.561Z",
+					"lastCommitDate": "2026-08-29T13:46:02.226Z",
+					"totalLinesOfCode": 26950,
+					"myLinesOfCode": 26950,
+					"myCommitCount": 5,
+					"totalCommitCount": 5,
 					"contributorCount": 1,
 					"commitYearStats": {
-						"2025": 1,
-						"2026": 1
+						"2026": 5
 					},
 					"isPersonalProject": true,
 					"repository": null,
@@ -8460,6 +8478,728 @@
 			"isPersonalProject": false,
 			"repository": "git@github.com:basikon2/implementation-finlease.git",
 			"path": "/Users/micheldegraaf/src/financial_lease/hyperfront/implementation-finlease",
+			"status": "active",
+			"isMonorepo": false
+		},
+		{
+			"name": "peliqan-platform",
+			"description": "Private equity made liquid: full portfolio visibility and the freedom to act on it",
+			"customer": "Peliqan",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 1107,
+					"lines": 148368,
+					"percentage": 97
+				},
+				{
+					"language": "JavaScript",
+					"files": 14,
+					"lines": 2890,
+					"percentage": 2
+				},
+				{
+					"language": "Python",
+					"files": 19,
+					"lines": 1545,
+					"percentage": 1
+				},
+				{
+					"language": "Shell",
+					"files": 2,
+					"lines": 34,
+					"percentage": 0
+				}
+			],
+			"framework": null,
+			"firstCommitDate": "2026-04-01T11:11:35.000Z",
+			"lastCommitDate": "2026-08-28T12:30:11.000Z",
+			"totalLinesOfCode": 152837,
+			"myLinesOfCode": 245543,
+			"myCommitCount": 1370,
+			"totalCommitCount": 1370,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2026": 1370
+			},
+			"isPersonalProject": true,
+			"repository": "git@github.com:peliqan-platform/peliqan-platform.git",
+			"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform",
+			"status": "active",
+			"isMonorepo": true,
+			"subProjects": [
+				{
+					"name": "@peliqan/app",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 59,
+							"lines": 3914,
+							"percentage": 100
+						}
+					],
+					"framework": "React",
+					"firstCommitDate": "2026-04-07T14:59:43.524Z",
+					"lastCommitDate": "2026-08-28T12:30:11.166Z",
+					"totalLinesOfCode": 3914,
+					"myLinesOfCode": 3914,
+					"myCommitCount": 13,
+					"totalCommitCount": 13,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 13
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/apps/app",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/website-forms",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 3,
+							"lines": 184,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-08-17T08:26:37.162Z",
+					"lastCommitDate": "2026-08-24T07:14:58.089Z",
+					"totalLinesOfCode": 184,
+					"myLinesOfCode": 184,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/apps/website-forms",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/admin",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 131,
+							"lines": 8639,
+							"percentage": 100
+						}
+					],
+					"framework": "React",
+					"firstCommitDate": "2026-04-08T13:10:18.273Z",
+					"lastCommitDate": "2026-08-28T12:30:11.165Z",
+					"totalLinesOfCode": 8639,
+					"myLinesOfCode": 8639,
+					"myCommitCount": 20,
+					"totalCommitCount": 20,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 20
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/apps/admin",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/docling",
+					"description": "Docling layout parsing + bge-m3 embeddings (Python/FastAPI). Bun workspace stub for script ergonomics only.",
+					"customer": null,
+					"language": "Python",
+					"languages": [
+						{
+							"language": "Python",
+							"files": 19,
+							"lines": 1545,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-06-16T13:37:12.244Z",
+					"lastCommitDate": "2026-08-20T08:27:09.728Z",
+					"totalLinesOfCode": 1545,
+					"myLinesOfCode": 1545,
+					"myCommitCount": 4,
+					"totalCommitCount": 4,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 4
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/apps/docling",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/api",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 113,
+							"lines": 18182,
+							"percentage": 100
+						}
+					],
+					"framework": "Hono",
+					"firstCommitDate": "2026-04-02T12:25:20.112Z",
+					"lastCommitDate": "2026-08-30T15:00:34.044Z",
+					"totalLinesOfCode": 18182,
+					"myLinesOfCode": 18182,
+					"myCommitCount": 17,
+					"totalCommitCount": 17,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 17
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/apps/api",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/ui",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 290,
+							"lines": 34508,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-04-07T14:59:43.541Z",
+					"lastCommitDate": "2026-08-28T12:30:11.180Z",
+					"totalLinesOfCode": 34508,
+					"myLinesOfCode": 34508,
+					"myCommitCount": 22,
+					"totalCommitCount": 22,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 22
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/ui",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/bench",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 26,
+							"lines": 3953,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-06-27T01:02:50.399Z",
+					"lastCommitDate": "2026-08-20T15:24:06.933Z",
+					"totalLinesOfCode": 3953,
+					"myLinesOfCode": 3953,
+					"myCommitCount": 47,
+					"totalCommitCount": 47,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 47
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/bench",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/test-setup",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 5,
+							"lines": 93,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-05-01T09:49:51.353Z",
+					"lastCommitDate": "2026-07-22T13:36:32.776Z",
+					"totalLinesOfCode": 93,
+					"myLinesOfCode": 93,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/test-setup",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/auth",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 26,
+							"lines": 1460,
+							"percentage": 100
+						}
+					],
+					"framework": "Hono",
+					"firstCommitDate": "2026-04-13T15:03:40.469Z",
+					"lastCommitDate": "2026-08-28T12:30:11.167Z",
+					"totalLinesOfCode": 1460,
+					"myLinesOfCode": 1460,
+					"myCommitCount": 2,
+					"totalCommitCount": 2,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 2
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/auth",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/contracts",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 87,
+							"lines": 8918,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-05-01T09:31:16.498Z",
+					"lastCommitDate": "2026-08-27T12:51:37.589Z",
+					"totalLinesOfCode": 8918,
+					"myLinesOfCode": 8918,
+					"myCommitCount": 6,
+					"totalCommitCount": 6,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 6
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/contracts",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/runtime",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 10,
+							"lines": 519,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-05-01T09:31:16.510Z",
+					"lastCommitDate": "2026-08-28T11:51:19.424Z",
+					"totalLinesOfCode": 519,
+					"myLinesOfCode": 519,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/runtime",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/storage",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 11,
+							"lines": 817,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-04-20T14:44:37.564Z",
+					"lastCommitDate": "2026-08-28T12:30:11.177Z",
+					"totalLinesOfCode": 817,
+					"myLinesOfCode": 817,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/storage",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/realtime",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 10,
+							"lines": 1501,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-06-27T01:02:50.485Z",
+					"lastCommitDate": "2026-08-20T08:20:46.390Z",
+					"totalLinesOfCode": 1501,
+					"myLinesOfCode": 1501,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/realtime",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/audit",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 11,
+							"lines": 1291,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-05-03T12:19:33.891Z",
+					"lastCommitDate": "2026-08-20T08:20:46.373Z",
+					"totalLinesOfCode": 1291,
+					"myLinesOfCode": 1291,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/audit",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/db",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 37,
+							"lines": 14162,
+							"percentage": 83
+						},
+						{
+							"language": "JavaScript",
+							"files": 13,
+							"lines": 2838,
+							"percentage": 17
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-04-07T15:09:10.883Z",
+					"lastCommitDate": "2026-08-28T11:51:19.424Z",
+					"totalLinesOfCode": 17000,
+					"myLinesOfCode": 17000,
+					"myCommitCount": 9,
+					"totalCommitCount": 9,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 9
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/db",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/jobs",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 30,
+							"lines": 2290,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-04-20T11:48:58.268Z",
+					"lastCommitDate": "2026-08-28T12:30:11.169Z",
+					"totalLinesOfCode": 2290,
+					"myLinesOfCode": 2290,
+					"myCommitCount": 3,
+					"totalCommitCount": 3,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 3
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/jobs",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/access-control",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 5,
+							"lines": 1130,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-05-01T09:47:41.586Z",
+					"lastCommitDate": "2026-08-20T08:20:46.373Z",
+					"totalLinesOfCode": 1130,
+					"myLinesOfCode": 1130,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/access-control",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/jobs-admin",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 8,
+							"lines": 651,
+							"percentage": 100
+						}
+					],
+					"framework": "Hono",
+					"firstCommitDate": "2026-07-22T08:12:55.114Z",
+					"lastCommitDate": "2026-08-20T08:20:46.387Z",
+					"totalLinesOfCode": 651,
+					"myLinesOfCode": 651,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/jobs-admin",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/email",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 7,
+							"lines": 282,
+							"percentage": 100
+						}
+					],
+					"framework": "React",
+					"firstCommitDate": "2026-04-02T16:46:12.288Z",
+					"lastCommitDate": "2026-08-28T12:30:11.169Z",
+					"totalLinesOfCode": 282,
+					"myLinesOfCode": 282,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/email",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/services",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 229,
+							"lines": 44117,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-04-20T11:48:58.273Z",
+					"lastCommitDate": "2026-08-28T12:30:11.176Z",
+					"totalLinesOfCode": 44117,
+					"myLinesOfCode": 44117,
+					"myCommitCount": 16,
+					"totalCommitCount": 16,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 16
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/packages/services",
+					"status": "unknown",
+					"isMonorepo": false
+				},
+				{
+					"name": "@peliqan/worker",
+					"description": null,
+					"customer": null,
+					"language": "TypeScript",
+					"languages": [
+						{
+							"language": "TypeScript",
+							"files": 2,
+							"lines": 98,
+							"percentage": 100
+						}
+					],
+					"framework": null,
+					"firstCommitDate": "2026-04-20T11:48:58.266Z",
+					"lastCommitDate": "2026-08-27T12:51:37.587Z",
+					"totalLinesOfCode": 98,
+					"myLinesOfCode": 98,
+					"myCommitCount": 1,
+					"totalCommitCount": 1,
+					"contributorCount": 1,
+					"commitYearStats": {
+						"2026": 1
+					},
+					"isPersonalProject": true,
+					"repository": null,
+					"path": "/Users/micheldegraaf/src/peliqan/peliqan_platform/jobs/worker",
+					"status": "unknown",
+					"isMonorepo": false
+				}
+			]
+		},
+		{
+			"name": "peliqan-website",
+			"description": "Marketing website for Peliqan (peliqan.eu)",
+			"customer": "Peliqan",
+			"language": "TypeScript",
+			"languages": [
+				{
+					"language": "TypeScript",
+					"files": 43,
+					"lines": 3709,
+					"percentage": 54
+				},
+				{
+					"language": "JavaScript",
+					"files": 1,
+					"lines": 3146,
+					"percentage": 46
+				}
+			],
+			"framework": "React",
+			"firstCommitDate": "2026-08-11T15:01:59.000Z",
+			"lastCommitDate": "2026-08-27T11:08:51.000Z",
+			"totalLinesOfCode": 6855,
+			"myLinesOfCode": 4769,
+			"myCommitCount": 49,
+			"totalCommitCount": 49,
+			"contributorCount": 1,
+			"commitYearStats": {
+				"2026": 49
+			},
+			"isPersonalProject": true,
+			"repository": "git@github.com:peliqan-platform/peliqan-website.git",
+			"path": "/Users/micheldegraaf/src/peliqan/peliqan_website",
 			"status": "active",
 			"isMonorepo": false
 		}
