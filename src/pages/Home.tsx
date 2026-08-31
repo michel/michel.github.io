@@ -238,7 +238,7 @@ export default function Home() {
 			<span className="text-yellow">Status</span> {"{"}
 		</span>,
 		<span key="role">
-			&nbsp;&nbsp;role: <span className="text-green">"Tech Lead"</span>,
+			&nbsp;&nbsp;role: <span className="text-green">"CTO"</span>,
 		</span>,
 		<span key="loc">
 			&nbsp;&nbsp;loc: <span className="text-green">"NL"</span>,

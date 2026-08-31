@@ -160,8 +160,12 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		"",
 		<span key="link">
 			Find the project on:{" "}
+			<a href="https://re-invention.nl/soulseek-rs/" className="text-blue hover:underline">
+				https://re-invention.nl/soulseek-rs/
+			</a>{" "}
+			or{" "}
 			<a href="https://github.com/michel/soulseek-rs" className="text-blue hover:underline">
-				https://github.com/michel/soulseek-rs
+				GitHub
 			</a>
 		</span>,
 		"",
