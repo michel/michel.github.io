@@ -12,7 +12,7 @@
       {
         "rule": "layout-transition",
         "value": "*",
-        "file": "src/posts/the-model-never-types-the-number.tsx",
+        "file": "src/posts/ask-the-model-where-not-what-document-extraction.tsx",
         "createdAt": "2026-08-31T20:20:00.000Z",
         "reason": "SVG stroke-width transition on the pipeline animation's skip-arc. The rule matches the substring 'width', but stroke-width is an SVG painting property: it repaints inside the SVG layer and never triggers document reflow. User confirmed intentional."
       }

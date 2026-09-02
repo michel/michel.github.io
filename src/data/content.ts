@@ -44,10 +44,10 @@ export const content: ContentItem[] = [
 		path: "/posts/visualizing-17-years-of-code",
 	},
 	{
-		slug: "the-model-never-types-the-number",
-		title: "the_model_never_types_the_number.md",
+		slug: "ask-the-model-where-not-what-document-extraction",
+		title: "ask_the_model_where_not_what_document_extraction.md",
 		date: "2026-08-31",
 		type: "post",
-		path: "/posts/the-model-never-types-the-number",
+		path: "/posts/ask-the-model-where-not-what-document-extraction",
 	},
 ]
