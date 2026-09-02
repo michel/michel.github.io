@@ -29,6 +29,12 @@ export const fileTree: FileNode[] = [
 		type: "folder",
 		children: [
 			{
+				id: files.askwhere.id,
+				name: files.askwhere.name,
+				path: files.askwhere.path,
+				type: "file",
+			},
+			{
 				id: files.rust.id,
 				name: files.rust.name,
 				path: files.rust.path,
