@@ -1194,9 +1194,9 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 			<a href="/posts/llm-vs-ocr-document-extraction" className="text-blue hover:underline">
 				combining language models with text recognition for invoice validation
 			</a>
-			. Working on software for private equity has kept me thinking about the problem: the financial
-			reports mix investment values with pages of commentary and notes. The example below follows a
-			number through the design, including the checks it still needs.
+			. Now, working on software for private equity, I keep coming back to the same problem. You
+			need one investment value, but the report has pages of tables, commentary and notes. Getting a
+			number out is the easy part. Checking that it's the number you asked for takes more work.
 		</p>,
 		"",
 		<h3 key="example" className="text-cyan font-bold">
@@ -1204,17 +1204,18 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		</h3>,
 		"",
 		<p key="document">
-			The fictional financial statement below shows an investor's money in a fund: what they put in,
-			what they received back and what their investment is worth at the reporting date. This kind of
-			document is called a capital account statement.
+			Take this fictional financial statement. It shows how much an investor put into a fund, what
+			they got back and what their investment is worth at the reporting date. In finance, you'd call
+			it a capital account statement. For this example, all we want is the value at the end of the
+			period.
 		</p>,
 		"",
 		<p key="walkthrough">
-			Suppose you want the closing value of the investment. The model selects the table cell
-			containing <span className="text-yellow">£544</span>. Code reads those digits and checks the
-			surrounding context. A note at the top says the amounts are in thousands of pounds, so the
-			conversion is <span className="text-green">544 × 1,000 = £544,000</span>. Keep both the
-			selected cell and the scale note with that result.
+			The model points at the cell containing <span className="text-yellow">£544</span>. Code reads
+			the digits. So, £544? There's a note at the top of the page: amounts are in thousands of
+			pounds. Apply that scale and you get{" "}
+			<span className="text-green">544 × 1,000 = £544,000</span>. That's quite a difference for one
+			small note. I want to keep both the cell and that note attached to the result.
 		</p>,
 		"",
 		<Figure
@@ -1225,10 +1226,10 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		</Figure>,
 		"",
 		<p key="constraint">
-			The constraint matters. The model's answer can contain a reference to an existing piece of the
-			document, but it has no field for a calculated amount. Code checks that the reference exists
-			and reads the source text itself. In this design, you never accept a number just because the
-			model wrote it in its answer.
+			To make this work, I give the model a form with a place for a source reference, but no place
+			to write an amount. Code checks that the reference exists, then reads the text from that part
+			of the document. If the model invents a reference, the check rejects it. The digits have to
+			come from the source.
 		</p>,
 		"",
 		<h3 key="limits" className="text-cyan font-bold">
@@ -1236,21 +1237,23 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		</h3>,
 		"",
 		<p key="review">
-			A reviewer can see £544,000 alongside the original page, with £544 and the scale note
-			highlighted. If the value looks wrong, they have somewhere to start: did the model select the
-			wrong cell, did text recognition misread a digit, or did the conversion apply the wrong scale?
-			The same checks matter when one document uses 1.234,56 and another uses 1,234.56.
+			Now imagine reviewing that £544,000. You can open the original page and see £544 and the scale
+			note highlighted. If something looks off, you can check the cell the model picked, the digits
+			the text-recognition tool read and the scale the code applied. I'd want the same trail for
+			decimal separators: 1.234,56 and 1,234.56 should give you the same amount, but the code needs
+			to handle both.
 		</p>,
 		"",
 		<p key="verification">
-			Reading the selected cell again can confirm that the conversion produces the same result. It
-			cannot prove that the model selected the right cell. A beginning balance will still give you
-			the wrong answer when you wanted the ending balance, however consistently the code reads it.
-			Human review and testing against documents with known answers remain part of the job.
+			There's still a catch. Code can read the same cell ten times and get the same answer ten
+			times. If the model picked the beginning balance when you asked for the ending balance, you've
+			reproduced the wrong number ten times. So I'd still check this against documents with known
+			answers and keep human review in the process. Being able to trace a mistake helps you fix it;
+			it doesn't stop the model from making one.
 		</p>,
 		"",
 		<p key="research-summary">
-			For long reports, first finding the relevant pages can also help. In a{" "}
+			Long reports add another problem: finding the right page in the first place. In a{" "}
 			<a
 				href="https://arxiv.org/abs/2604.26462"
 				className="text-blue hover:underline"
@@ -1259,26 +1262,28 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 			>
 				study of scanned financial documents
 			</a>
-			, researchers found that locating relevant pages before extraction accounted for the largest
-			performance improvement in their experiments. That supports dividing the work into steps; it
-			doesn't establish the accuracy of the design described here.
+			, researchers got their largest performance improvement from locating the relevant pages
+			before extracting the values. That matches the decision to split up the job in my system.
+			Their results aren't an accuracy score for mine, though; that needs its own evaluation.
 		</p>,
 		"",
 		<section key="technical" className="max-w-full">
 			<h3 className="text-cyan font-bold">Technical details: the pipeline and tools</h3>
 			<div className="flex flex-col gap-4 pt-4">
 				<p>
-					The following is one implementation option. The tools can change while the source
-					references and conversion checks stay in place.
+					In a recent document extraction system I built, I used this approach to keep each value
+					tied to its source.
 				</p>
-				<p key="p1">
-					One possible design has five processing stages, followed by human review where needed:
-				</p>
-				<Figure key="fig-pipeline" caption="the extraction pipeline">
+				<p key="p1">The pipeline has five stages, with human review where needed:</p>
+				<Figure
+					key="fig-pipeline"
+					caption="five stages, from the uploaded PDF to a value you can check"
+				>
 					<PipelineDiagram />
 				</Figure>
 				<p key="p2">
-					<span className="text-blue font-bold">1. Parse.</span> The PDF goes to{" "}
+					<span className="text-blue font-bold">1. Parse.</span> First, turn the PDF into pieces you
+					can refer to. For this, I use{" "}
 					<a
 						href="https://github.com/docling-project/docling"
 						className="text-blue hover:underline"
@@ -1287,7 +1292,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						Docling
 					</a>
-					, an open-source document parser, which finds the layout of each page and, with its{" "}
+					, an open-source document parser that identifies page layout and uses{" "}
 					<a
 						href="https://arxiv.org/abs/2203.01017"
 						className="text-blue hover:underline"
@@ -1296,17 +1301,16 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						TableFormer
 					</a>{" "}
-					model, table structure. Keep the text and coordinates together so later steps can refer
-					back to the page. OCR and layout errors can still enter here; downstream checks need to
-					account for them.
+					to recover table structure. Keep each piece of text together with its coordinates on the
+					page. You'll need those later to show where a value came from. This is also where text
+					recognition can misread a digit or the parser can put it in the wrong cell, so the source
+					text still needs checking.
 				</p>
 				<p key="p2b">
-					Everything the model gets to choose from is a tree of pieces cut from the page. At the top
-					is the page. Under it are the headings, paragraphs and tables the page contains. Each
-					table splits into its rows, and each row into its cells. A number on the page is not a
-					thing of its own; it is simply the text inside one cell, like the £544 in the example
-					below. The model can point at any piece but cannot make a new one. Docling's own name for
-					this tree is the{" "}
+					Think of the parsed document as a tree. Pages contain headings, paragraphs and tables;
+					tables contain rows and cells. Our £544 is text inside one of those cells. Give each piece
+					a reference and the model can choose from what's there. Code then checks that its choice
+					exists. Docling stores its structured document in a{" "}
 					<a
 						href="https://docling-project.github.io/docling/concepts/docling_document/"
 						className="text-blue hover:underline"
@@ -1315,31 +1319,30 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						DoclingDocument
 					</a>
-					.
+					; the diagrams below show how you can organise the pieces and connect them back to the
+					page.
 				</p>
-				<Figure key="fig-tree" caption="the DoclingDocument tree">
+				<Figure key="fig-tree" caption="pages, tables and cells: the pieces the model can point to">
 					<TreeExample />
 				</Figure>
 				<Figure
 					key="fig-graph"
-					caption="the same tree, drawn on the page it came from. Autoplays; click a level."
+					caption="see where each piece sits on the original page; click a level to explore"
 				>
 					<BlockGraph />
 				</Figure>
 				<p key="p3">
-					<span className="text-blue font-bold">2. Classify.</span> This step decides what kind of
-					document was uploaded, such as a quarterly fund report or an individual investor's
-					statement, since each needs a different list of fields. You can start with rules that
-					inspect titles, headings and table headers, then ask a model to resolve ambiguous cases.
+					<span className="text-blue font-bold">2. Classify.</span> Work out what you're looking at
+					before asking for values. A report about the whole fund and a statement for one investor
+					need different fields. I start with rules that check the title, headings and table
+					headers, and ask a model when those leave room for doubt.
 				</p>
 				<p key="p4">
-					<span className="text-blue font-bold">3. Find relevant passages.</span> For long
-					documents, first find the passages most likely to contain the answer. A two-page statement
-					turns into a few dozen pieces; a sixty-page report turns into thousands. Thousands of
-					candidates can make selection harder: more to read, more look-alike numbers, more chances
-					to point at the wrong one. So for long reports you can first search for the pieces each
-					field is likely to be in. One option is a keyword search in Postgres plus a meaning-based
-					search (
+					<span className="text-blue font-bold">3. Find relevant passages.</span> A short statement
+					can fit in one model request, so I send all the parsed pieces in page order when it does.
+					A sixty-page report gives the model a lot more to sort through, including plenty of
+					numbers that look like the one you want. For those reports, I search for likely passages
+					first. I combine keyword search in Postgres with a search for similar meaning, using{" "}
 					<a
 						href="https://github.com/pgvector/pgvector"
 						className="text-blue hover:underline"
@@ -1348,7 +1351,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						pgvector
 					</a>{" "}
-					over{" "}
+					and{" "}
 					<a
 						href="https://huggingface.co/BAAI/bge-m3"
 						className="text-blue hover:underline"
@@ -1357,7 +1360,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						bge-m3
 					</a>{" "}
-					embeddings), merged with{" "}
+					embeddings. I use{" "}
 					<a
 						href="https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf"
 						className="text-blue hover:underline"
@@ -1366,56 +1369,56 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						reciprocal rank fusion
 					</a>{" "}
-					so the two rankings combine without their scores having to agree. A statement of a few
-					pages has a few hundred pieces at most, which fits in a single request, so it skips this
-					step entirely: every piece goes to the LLM, in page order.
+					to combine the two result lists by rank, so you don't have to make their different scoring
+					systems agree.
 				</p>
 				<p key="p4b">
-					This is the retrieval half of what is usually called{" "}
-					<span className="text-green font-bold">RAG, retrieval-augmented generation</span>: find
-					the parts of a document that matter and give the model only those. The one difference is
-					that in RAG the model then writes an answer; here it only points. The search itself is
-					simple. An embedding model, bge-m3, turns every piece of the document into a vector, a
-					list of numbers that captures what the text means rather than which words it uses. Each
-					field's description becomes a vector the same way, and the database returns the pieces
-					closest to it. With pgvector, you can store those vectors alongside the text and page
-					positions in Postgres.
+					If you've worked with{" "}
+					<span className="text-green font-bold">RAG, retrieval-augmented generation</span>, this
+					part will look familiar. You find relevant passages and give them to the model. For the
+					meaning-based search, bge-m3 turns each piece of text into a vector: a list of numbers
+					that represents aspects of its meaning. Do the same for the description of the field you
+					want, then search for nearby vectors. With pgvector, you can keep those vectors in
+					Postgres alongside the text and page coordinates. Here, the model uses the results to pick
+					source references. Search can miss the right passage, though, so this step needs testing
+					too.
 				</p>
 				<p key="p5">
-					<span className="text-blue font-bold">4. Extract.</span> One call to the model per
-					document, asking for the fields together. That gives the model context for distinguishing
-					related figures, such as beginning and ending balances. The answer comes back as{" "}
-					<span className="text-green font-bold">structured output</span>: a fixed form the model
-					has to fill in rather than free text, and what that form holds is which piece holds each
-					value.
+					<span className="text-blue font-bold">4. Extract.</span> Ask for the fields together in
+					one model call per document, so the model can use the surrounding figures to tell, for
+					example, a beginning balance from an ending balance. Request{" "}
+					<span className="text-green font-bold">structured output</span>: a form with a defined set
+					of fields. Each field holds a reference to the piece containing the value. Code validates
+					that reference, reads the text and applies the currency and scale.
 				</p>
 				<p key="p5b">
-					You can define the requested fields in one list per document type. Each entry says what
-					the field is, what kind of value it holds, whether it is required, and the words it is
-					usually labelled with, in English, Dutch, German and French. The same entry can supply the
-					search terms, the question to the model and the expected value type.
+					I keep one field list per document type. Each entry describes what you're looking for, its
+					value type, whether it's required and the labels you might see in the document. Those
+					labels can cover English, Dutch, German and French, for example. Then you can reuse the
+					same definition for the search terms, the model's instructions and the checks on the
+					returned value. Fewer places to update when you add a field.
 				</p>
 				<p key="p6">
-					<span className="text-blue font-bold">5. Verify.</span> In step 4 the model pointed at a
-					cell for each field, and code read the value out of it. This step reads that same cell
-					again, with deterministic code and no model involved, and checks that it gets the same
-					value. If it does not, the field is rejected. This checks that the stored value follows
-					from the selected cell and its scale and currency context. It does not establish that the
-					model chose the right cell: if it points at a beginning balance instead of an ending
-					balance, code can reproduce the wrong figure too.
+					<span className="text-blue font-bold">5. Verify.</span> Read the selected cell again with
+					code, without asking the model, and check that the text, currency and scale reproduce the
+					stored value. Reject the field if they don't. This catches a mismatch between the stored
+					result and its source. It still won't catch a model choosing the beginning balance instead
+					of the ending balance. That mistake can pass this check, which is why I wouldn't treat a
+					successful re-read as proof that the answer is right.
 				</p>
 				<p key="p7">
-					To evaluate this design, use labelled documents with known answers. Fictional statements
-					let you vary layouts, currencies and scale notes while controlling the expected values.
-					Hold out whole layout families from tuning, then check performance on representative real
-					documents that you have permission to use. Score source selection and value conversion
-					separately: a correct conversion cannot rescue a wrong cell. Report missing values and
-					wrong values separately too, because they have different consequences for the reviewer.
+					To find out how well this works, I'd start with documents where I already know the
+					answers. Fictional statements let you change the layout, currency or scale note and see
+					what breaks. Keep some whole layout families out of tuning, then test on representative
+					real documents you have permission to use. I'd score the cell selection and the value
+					conversion separately, so a conversion bug doesn't get mixed up with a wrong-cell mistake.
+					And I'd count missing answers separately from wrong ones. An empty field asks for
+					attention; a plausible wrong number can slip into a report.
 				</p>
 
 				<Figure
 					key="fig-trace"
-					caption="the trail behind one stored number; the bottom row exists only for extracted values"
+					caption="follow a stored number back to its source; extracted values also keep the conversion details"
 				>
 					<ProvenanceChain />
 				</Figure>
@@ -1426,10 +1429,8 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 			<h3 className="text-cyan font-bold">Further reading: the research behind the approach</h3>
 			<div className="flex flex-col gap-4 pt-4">
 				<p key="c0">
-					Language research has long split its methods into these two families. A generative model
-					writes its answer as new text. An extractive model can only point at text that is already
-					in the source; its answer is the position of that text. One neural mechanism for pointing
-					is the{" "}
+					There's a research history behind asking a model to point. A generative model writes an
+					answer; an extractive question-answering model selects text from the source. The{" "}
 					<a
 						href="https://arxiv.org/abs/1506.03134"
 						className="text-blue hover:underline"
@@ -1438,8 +1439,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						pointer network
 					</a>{" "}
-					(2015), whose outputs are positions in its input rather than words of its own. The idea
-					carries over to generative models: a{" "}
+					paper from 2015 describes a neural mechanism that outputs positions in its input. A{" "}
 					<a
 						href="https://arxiv.org/abs/2110.06393"
 						className="text-blue hover:underline"
@@ -1448,9 +1448,9 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						2021 paper
 					</a>{" "}
-					gets hallucination-free answers out of a generative question-answering model by reading
-					the answer span off the model's attention instead of trusting its written output. And a
-					2026 document-parsing benchmark scores{" "}
+					explores extracting answer spans from a generative model's attention instead of using its
+					generated answer. That constrains the answer to source text, but selecting the right text
+					is still a separate problem. A 2026 document-parsing benchmark also evaluates{" "}
 					<a
 						href="https://arxiv.org/abs/2604.08538"
 						className="text-blue hover:underline"
@@ -1459,13 +1459,12 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					>
 						visual grounding
 					</a>
-					, whether a parser can connect what it produced back to the right region of the page. The
-					design below uses explicit references to pieces of a page. It shares the idea of pointing
-					to evidence, without using the same neural mechanism as those papers.
+					: connecting parsed content to the right region of the page. I'm using explicit source
+					references here, rather than implementing those papers' neural mechanisms. The connection
+					is the ability to point back to the evidence.
 				</p>
 				<p key="r0">
-					It was published in April 2026 by the AI team at OCBC, one of the largest banks in
-					South-East Asia:{" "}
+					The OCBC team's April 2026 paper,{" "}
 					<a
 						href="https://arxiv.org/abs/2604.26462"
 						className="text-blue hover:underline"
@@ -1473,22 +1472,23 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 						rel="noopener noreferrer"
 					>
 						A Multistage Extraction Pipeline for Long Scanned Financial Documents
-					</a>{" "}
-					The authors studied pulling structured data out of long, scanned financial documents in
-					several languages. They found that breaking the job into stages, clean up the image, read
-					the text, find the right pages, then extract, beats giving the whole document to a model
-					in one go, by up to 31.9 percentage points. Finding the right pages first made the biggest
-					difference in their evaluation. The design below uses a similar division of work, with an
-					additional constraint: the model returns source references and code derives the values.
+					</a>
+					, is closer to the financial-report problem. They tested extraction from long, scanned
+					documents in several languages. Their pipeline cleans up the image, reads the text, finds
+					the relevant pages and then extracts the data. In their evaluation, this improved
+					performance by up to 31.9 percentage points over giving the model the whole document at
+					once. Finding the right pages made the biggest difference. My system also separates
+					finding the relevant passages from extracting the values, with the source-reference
+					constraint described above.
 				</p>
 			</div>
 		</section>,
 		"",
 		<p key="ending">
-			What I want from document extraction is a value I can investigate. With the page, the selected
-			text and the conversion attached, a reviewer can check where a number came from and correct
-			the step that went wrong. That makes the result more useful than an answer I have to take on
-			trust.
+			I still want the convenience of uploading a report and getting the values back. I also want to
+			click a number and see the cell, the page and the conversion that produced it. If the model
+			picks the wrong balance or the code misses a scale note, I need enough information to find the
+			mistake before that number ends up in someone else's report.
 		</p>,
 		"",
 		<span key="tags" className="text-comment">
