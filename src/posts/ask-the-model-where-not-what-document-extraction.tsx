@@ -1176,16 +1176,16 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		</h1>,
 		"",
 		<p key="hook">
-			You can use AI to extract financial numbers without letting the model write the amount. That
-			constraint is useful when a plausible but invented number could end up in someone's investment
-			report. Even if newer models hallucinate less often, you still need to check the answer.
+			More learnings from using LLMs for document extraction. A convincing answer is great. A
+			convincing but wrong financial number… less great 😅 A made-up amount or a missed "amounts in
+			thousands" note can end up in someone's investment report.
 		</p>,
 		"",
 		<p key="idea">
-			Give the model a different job: locate the value. Each piece of the document has a reference.
-			The model selects one, then code reads the text and applies the currency and scale. Keep the
-			source attached so a reviewer can inspect the choice. The model can still pick the wrong cell;
-			this makes that choice traceable.
+			This time, I've been exploring asking the model to point at the source and letting code read
+			the value. The model picks a cell; code reads the digits and applies the currency and scale.
+			The model can still pick the wrong cell, so I want the original text and page attached to the
+			result. That gives me something to check when a number looks off.
 		</p>,
 		"",
 		<p key="history">
