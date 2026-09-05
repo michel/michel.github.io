@@ -1,5 +1,4 @@
 import { type ReactNode, useEffect, useState } from "react"
-import Lightbox from "../components/Lightbox"
 
 const CHART_W = 660
 
@@ -261,7 +260,7 @@ const PipelineDiagram = () => {
 				</circle>
 			</g>
 			<text x={4} y={144} style={{ fill: "var(--color-fg)", fontSize: 10 }}>
-				{skipping ? "→ fits one prompt: embed skipped, 100% recall" : `→ ${STAGES[active]?.status}`}
+				{skipping ? "→ fits one prompt: all parsed pieces included" : `→ ${STAGES[active]?.status}`}
 			</text>
 			<text
 				x={CHART_W - 4}
@@ -345,72 +344,70 @@ type PanelLine = [text: string, tone?: Tone]
 const WALK: { name: string; status: string; panel: PanelLine[] }[] = [
 	{
 		name: "page",
-		status: "a PDF arrives. No value will be returned from it, only a location.",
+		status: "start with the document and the value you need",
 		panel: [
-			["document.pdf", "cyan"],
-			["1 page · 612 × 792 pt", "comment"],
+			["Financial statement", "cyan"],
+			["One page", "comment"],
 			[""],
-			["field wanted", "comment"],
-			["navValue", "yellow"],
-			["the ending capital balance", "comment"],
+			["What we want", "comment"],
+			["Closing investment value", "yellow"],
+			["at the reporting date", "comment"],
 		],
 	},
 	{
-		name: "parse",
-		status: "docling turns the page into 57 blocks: an id, a type and a bounding box each",
+		name: "read",
+		status: "read the page into pieces, each with a reference and a location",
 		panel: [
-			["57 blocks", "cyan"],
-			["b2   P  (amounts in thousands…"],
-			["b14  T  9 rows × 4 cols"],
-			["b16  C  Quarter to Date (GBP)"],
-			["b52  C  Partner's capital, end…"],
-			["b53  C  £544", "pink"],
-			["b54  C  £544"],
-			["b55  C  £544"],
-			["…", "comment"],
+			["57 pieces of the page", "cyan"],
+			["b2   scale note: thousands"],
+			["b14  investment table"],
+			["b16  column heading"],
+			["b52  closing balance label"],
+			["b53  £544", "pink"],
+			[""],
+			["b53 is a reference to a cell,", "comment"],
+			["so we can find it again.", "comment"],
 		],
 	},
 	{
-		name: "select",
-		status:
-			"one forced tool call returns a pointer. The schema has no property that can hold a number.",
+		name: "locate",
+		status: "the model selects a source cell; it does not supply the final amount",
 		panel: [
-			["select_evidence({", "cyan"],
-			['  field: "navValue",'],
-			['  evidenceIds: ["b53"],', "pink"],
-			['  quote: "£544",'],
-			['  why: "…"'],
-			["})", "cyan"],
+			["Ask the model to locate", "cyan"],
+			["the closing value."],
+			["Selected cell: b53", "pink"],
 			[""],
-			["values emitted: 0", "comment"],
+			["Code reads its text: £544"],
+			[""],
+			["The reference leads back", "comment"],
+			["to the highlighted cell.", "comment"],
 		],
 	},
 	{
-		name: "derive",
-		status:
-			"pure functions read the block: digits, a scale walk (cell → row → table → page), currency",
+		name: "convert",
+		status: "code reads £544 and applies the page's note: amounts in thousands",
 		panel: [
-			['b53.text     "£544"', "pink"],
-			["digits       544"],
-			["currency     £ → GBP"],
-			["scale  cell ✗  row ✗  table ✗"],
-			["       page  b2  ×1000", "yellow"],
+			["Cell text: £544", "pink"],
+			["Number:    544"],
+			["Currency:  pounds"],
+			["Check the scale note:"],
+			["b2 says thousands → ×1,000", "yellow"],
 			[""],
-			["navValue     544000 GBP", "green"],
+			["Result: £544,000", "green"],
 		],
 	},
 	{
-		name: "verify",
-		status: "a second pure pass re-derives from the same blocks. Fail to reproduce → REJECTED.",
+		name: "check",
+		status: "repeating the conversion checks consistency, not whether the cell was right",
 		panel: [
-			["re-derive(b53, b2)", "cyan"],
-			["→ 544000 GBP"],
-			["stored 544000 GBP"],
+			["Read the cell and note again", "cyan"],
+			["Result: £544,000"],
+			["Stored: £544,000"],
 			[""],
-			["equal ✓", "green"],
-			["status  VERIFIED", "green"],
+			["Same result ✓", "green"],
+			["Conversion reproduced", "green"],
 			[""],
-			["mismatch → REJECTED", "comment"],
+			["Wrong cell still possible", "yellow"],
 		],
 	},
 ]
@@ -702,195 +699,6 @@ const ProvenanceChain = () => (
 		</text>
 	</svg>
 )
-
-type FlowStep = { name: string; title: string; status: string; panel: PanelLine[] }
-const RETRIEVAL_ROWS: PanelLine[] = [
-	["rank  lex  sem   score  type  page  text", "comment"],
-	["   1    1    1  0.0328  P       3  Internal Rate of Return (IRR) - The IRR…", "cyan"],
-	["   3    -    2  0.0161  ROW    32  Multiples"],
-	["   7  199    4  0.0156  CELL   32  Net IRR (%)   header"],
-	["  13  200    7  0.0149  ROW    32  Net IRR (%) 18,9%", "yellow"],
-	["  17    -    9  0.0145  CELL   32  18,9%", "pink"],
-	[""],
-	["lexical loves the glossary; semantic finds the table.", "comment"],
-	["the cell ranks 17th, one past the cap of 16. its row (13th) expands to cells.", "comment"],
-]
-const JUDGE_ROWS: PanelLine[] = [
-	['field  { key: "netIrr", required: false, quotable: true,', "cyan"],
-	['         prompt: "Net IRR: Net internal rate of return to'],
-	['         investors, after fees … Also appears labeled: net IRR, …" }'],
-	['block  { id: "9e70…244e", page: 32, type: "TABLE_CELL",', "pink"],
-	['         text: "18,9%",', "pink"],
-	['         context: "section: 08 Cash flows & Net IRR >> column:', "yellow"],
-	['                   Net IRR (%) >> Net IRR (%) 18,9%" }', "yellow"],
-	["↓ select_evidence", "comment"],
-	['{ field: "netIrr", evidenceIds: ["9e70…244e"], quote: "18,9%" }', "green"],
-	["derive 18.9 PERCENT · verify VERIFIED", "green"],
-]
-const FIELD_FLOW: FlowStep[] = [
-	{
-		name: "definition",
-		title: "gp-quarterly-report-fields.ts",
-		status: "one entry in the schema. Nothing else in the pipeline knows this field by name.",
-		panel: [
-			["key        netIrr", "cyan"],
-			["label      Net IRR"],
-			["prompt     Net internal rate of return to investors,"],
-			["           after fees and carried interest"],
-			["valueType  PERCENT         required  false"],
-			["synonyms   net IRR · net internal rate of return ·", "yellow"],
-			["           netto IRR · Netto-IRR · TRI net", "yellow"],
-			["appliesTo  FundQuarterlyReport.netIrr", "comment"],
-		],
-	},
-	{
-		name: "query",
-		title: "fieldQueryText(field): one string, two legs",
-		status:
-			"label, prompt and synonyms become one string. bge-m3 embeds it once; Postgres splits it into OR-terms.",
-		panel: [
-			['"Net IRR. Net internal rate of return to investors,', "yellow"],
-			[" after fees and carried interest. net IRR. net internal", "yellow"],
-			[' rate of return. netto IRR. Netto-IRR. TRI net"', "yellow"],
-			[""],
-			["→ bge-m3        1024-d vector          semantic leg", "cyan"],
-			["→ to_tsquery    34 OR-terms            lexical leg", "cyan"],
-			["  net | irr | internal | rate | … | netto | tri", "comment"],
-			["  + adjacent pairs: netirr | irrnet | carriedinterest …", "comment"],
-		],
-	},
-	{
-		name: "retrieve",
-		title: "hybrid retrieval, 31-page GP report, 2,684 blocks",
-		status:
-			"fused by reciprocal rank, 1/(60+r) per leg. Top 16 per field survive, then rows expand to cells.",
-		panel: RETRIEVAL_ROWS,
-	},
-	{
-		name: "LLM",
-		title: "what the LLM receives, and the only shape it may answer in",
-		status:
-			"the field spec and the candidates, both JSON. The legal answer is block ids and a verbatim quote.",
-		panel: JUDGE_ROWS,
-	},
-]
-
-const FLOW_NODES = ["definition", "query", "retrieve", "LLM"]
-const FLOW_W = 148
-const FLOW_GAP = 18
-const flowX = (i: number) => 4 + i * (FLOW_W + FLOW_GAP)
-
-const FieldToJudge = () => {
-	const [step, setStep] = useState(0)
-	const [playing, setPlaying] = useState(
-		() =>
-			!(
-				typeof window !== "undefined" &&
-				window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-			),
-	)
-	useEffect(() => {
-		if (!playing) return
-		const t = setInterval(() => setStep((s) => (s + 1) % FIELD_FLOW.length), 3800)
-		return () => clearInterval(t)
-	}, [playing])
-	const inspect = (i: number) => {
-		setPlaying(false)
-		setStep(i)
-	}
-	const current = FIELD_FLOW[step] ?? { name: "", title: "", status: "", panel: [] }
-	return (
-		<svg
-			viewBox="0 0 660 304"
-			width="100%"
-			style={{ minWidth: 560 }}
-			role="group"
-			aria-label="One field definition flowing through query building, hybrid retrieval, and the LLM call"
-		>
-			{FLOW_NODES.map((name, i) => {
-				const active = i === step
-				return (
-					<g
-						key={name}
-						role="button"
-						tabIndex={0}
-						aria-pressed={active}
-						onClick={() => inspect(i)}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") inspect(i)
-						}}
-						style={{ cursor: "pointer" }}
-					>
-						<rect
-							x={flowX(i)}
-							y={6}
-							width={FLOW_W}
-							height={26}
-							rx={3}
-							style={{
-								fill: active ? "var(--color-bg-active)" : "var(--color-bg)",
-								stroke: active ? "var(--color-pink)" : "var(--color-border)",
-								strokeWidth: active ? 1.5 : 1,
-								transition: "stroke .3s, fill .3s",
-							}}
-						/>
-						<text
-							x={flowX(i) + FLOW_W / 2}
-							y={23}
-							textAnchor="middle"
-							style={{ ...stageText, fontSize: 11 }}
-						>
-							{i + 1} {name}
-						</text>
-						{i < FLOW_NODES.length - 1 && (
-							<line
-								x1={flowX(i) + FLOW_W + 3}
-								y1={19}
-								x2={flowX(i) + FLOW_W + FLOW_GAP - 3}
-								y2={19}
-								style={arrow}
-								markerEnd="url(#parr)"
-							/>
-						)}
-					</g>
-				)
-			})}
-			<rect x={4} y={44} width={652} height={222} rx={3} style={box} />
-			<g key={step} style={{ animation: "walkIn .35s ease-out" }}>
-				<text
-					x={14}
-					y={60}
-					style={{ fill: "var(--color-comment)", fontSize: 9.5, fontFamily: mono }}
-				>
-					{current.title}
-				</text>
-				{current.panel.map(([text, tone = "fg"], i) => (
-					<text
-						key={`${step}-${i}-${text}`}
-						x={14}
-						y={78 + i * 14.5}
-						xmlSpace="preserve"
-						style={{ fill: `var(--color-${tone})`, fontSize: 10.5, fontFamily: mono }}
-					>
-						{text}
-					</text>
-				))}
-			</g>
-			<text x={4} y={288} style={{ fill: "var(--color-fg)", fontSize: 10 }}>
-				→ {current.status}
-			</text>
-			<text
-				x={656}
-				y={288}
-				textAnchor="end"
-				onClick={() => setPlaying((p) => !p)}
-				style={{ fill: "var(--color-cyan)", fontSize: 10, cursor: "pointer" }}
-			>
-				{playing ? "⏸ pause" : "▶ play"}
-			</text>
-		</svg>
-	)
-}
 
 const WORDS: [number, number, number, number][] = [
 	[235, 62, 410, 74],
@@ -1347,14 +1155,14 @@ const TreeExample = () => (
 )
 
 export const askTheModelWhereNotWhat: { title: string; date: string; lines: ReactNode[] } = {
-	title: "Ask the Model Where, Not What: Extractive Document AI",
+	title: "Ask the Model Where, Not What",
 	date: "2026-08-31",
 	lines: [
 		<span key="fm1" className="text-comment">
 			---
 		</span>,
 		<span key="fm2" className="text-comment">
-			title: "Ask the Model Where, Not What: Extractive Document AI"
+			title: "Ask the Model Where, Not What"
 		</span>,
 		<span key="fm3" className="text-comment">
 			date: "2026-08-31"
@@ -1364,439 +1172,327 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		</span>,
 		"",
 		<h1 key="title" className="text-pink font-bold text-xl">
-			# Ask the Model Where, Not What: Extractive Document AI
+			# Ask the Model Where, Not What
 		</h1>,
 		"",
-		<span key="hook1">
-			A quarterly report from a private equity fund runs to sixty pages, arrives in Dutch, and
-			somewhere around page forty holds the one number that decides what an investor's position is
-			worth. You have probably dropped a PDF into ChatGPT or Claude, asked it a question and got a
-			good answer, so how hard can it be? Not hard, most of the time. But now and then the model
-			makes the number up, or hallucinates an extra zero. With financial documents a wrong number is
-			worse than no number. What you want is trust: every number traceable to where it came from,
-			and a system that says "not sure" instead of guessing.
-		</span>,
+		<p key="hook">
+			You can use AI to extract financial numbers without letting the model write the amount. That
+			constraint is useful when a plausible but invented number could end up in someone's investment
+			report. Even if newer models hallucinate less often, you still need to check the answer.
+		</p>,
 		"",
-		<span key="hook1b">
-			That is why the system in this post never asks the model for a number. The document is first
-			cut into small pieces, every heading, paragraph and table cell, each with its position on the
-			page. The model is asked only which piece holds the value we want, and it answers by pointing
-			at one. In the AI field this is a form of what is called{" "}
-			<span className="text-green font-bold">grounding</span>: an answer tied to something you can
-			check, here a specific spot on a specific page. Ordinary code then reads the number out of
-			that piece, and a second check reads it again to make sure it gets the same result. The whole
-			approach is called{" "}
-			<span className="text-green font-bold">extractive rather than generative</span>: the model can
-			only choose from what is on the page, so it has nowhere to put an extra zero.
-		</span>,
+		<p key="idea">
+			Give the model a different job: locate the value. Each piece of the document has a reference.
+			The model selects one, then code reads the text and applies the currency and scale. Keep the
+			source attached so a reviewer can inspect the choice. The model can still pick the wrong cell;
+			this makes that choice traceable.
+		</p>,
 		"",
-		<span key="hook2">
-			In{" "}
+		<p key="history">
+			I've been working on AI document extraction for a while. In 2016 I was writing extractors for
+			travel voucher PDFs. More recently, I wrote about{" "}
 			<a href="/posts/llm-vs-ocr-document-extraction" className="text-blue hover:underline">
-				an earlier post
-			</a>{" "}
-			I described how we extracted data from invoices at{" "}
-			<span className="text-blue font-bold">Revive Capital</span>: a language model for the parts
-			that need understanding, plain text recognition for the parts that need exact characters.
-			There the model produced the values itself. This post is about the next version of that idea,
-			built at{" "}
-			<a
-				href="https://peliqan.eu/"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				PELIQAN
+				combining language models with text recognition for invoice validation
 			</a>
-			, where I am now CTO. Here the model never returns a value, only where the value is.
-		</span>,
+			. Working on software for private equity has kept me thinking about the problem: the financial
+			reports mix investment values with pages of commentary and notes. The example below follows a
+			number through the design, including the checks it still needs.
+		</p>,
 		"",
-		<h3 key="docs" className="text-cyan font-bold">
-			### The documents
+		<h3 key="example" className="text-cyan font-bold">
+			### How £544 becomes £544,000
 		</h3>,
 		"",
-		<span key="d1">
-			PELIQAN is a platform for private equity investors. Every quarter their fund managers send
-			them two kinds of document. A capital account statement is a page or two reporting one
-			investor's position in one fund. A quarterly report from the GP, the general partner who
-			manages the fund, runs past sixty pages of commentary, disclaimers and rows of headline
-			metrics, with a portfolio table somewhere inside. They come as clean PDFs, as scans, and as
-			iPhone photos; in English, Dutch, German and French; in every layout a fund administrator can
-			invent. And every new investor brings fund managers we have never seen, so the extraction has
-			to work on layouts it has never met, from the first document on. Building a template per fund
-			manager is not an option. <span className="text-yellow">1.234.567,89</span> and{" "}
-			<span className="text-yellow">1,234,567.89</span> are the same number, and "amounts in
-			thousands" is stated once on page one or not at all. An investor's holdings are valued from
-			these numbers. Get one wrong and the investor sees a wrong portfolio value, and once that has
-			happened they stop trusting every other number on the screen.
-		</span>,
+		<p key="document">
+			The fictional financial statement below shows an investor's money in a fund: what they put in,
+			what they received back and what their investment is worth at the reporting date. This kind of
+			document is called a capital account statement.
+		</p>,
 		"",
-		<h3 key="trace" className="text-cyan font-bold">
-			### Every value has a source
-		</h3>,
-		"",
-		<span key="t1">
-			One of PELIQAN's system design principles, and one any proper financial system should hold to,
-			is that{" "}
-			<span className="text-green font-bold">
-				any number you see, you can ask where it came from, and get an answer
-			</span>
-			. If someone typed it, you see who and when. If it arrived through an import, you see which
-			one. If it was read from a document, you can open that document and see the exact spot on the
-			page it was read from, the text as it was printed there, and what the system made of it.
-		</span>,
-		"",
-		<Figure
-			key="fig-trace"
-			caption="the trail behind one stored number; the bottom row exists only for extracted values"
-		>
-			<ProvenanceChain />
-		</Figure>,
-		"",
-		<span key="t1b">
-			In the PELIQAN platform that means every field read from a document is traced back to the
-			coordinates in the uploaded PDF, as the screenshot of the PDF review screen below shows: the
-			value on the right, the spot it was read from highlighted on the page, and the printed text
-			quoted under it. The screen only opens when there is something to review, a required field the
-			pipeline could not find or a value its own checks rejected; the person confirms or corrects
-			those, and everything that verified cleanly goes through on its own. You can click through it
-			yourself in the{" "}
-			<a
-				href="https://app.staging.peliqan.eu/demo"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				PELIQAN demo
-			</a>
-			.
-		</span>,
-		"",
-		<div key="fig-review" className="max-w-full py-1">
-			<Lightbox
-				src="/images/posts/ask-the-model-where-not-what-document-extraction/review-screen.webp"
-				alt="PELIQAN review screen: a capital account statement on the left with the commitment cell highlighted, and on the right the extracted Commitment field showing 5,000,000 with the quoted source text and page number"
-				width={1500}
-				height={1158}
-			/>
-		</div>,
-		"",
-		<h3 key="constraint" className="text-cyan font-bold">
-			### Extractive, not generative
-		</h3>,
-		"",
-		<span key="c0">
-			Language research has long split its methods into these two families. A generative model
-			writes its answer as new text. An extractive model can only point at text that is already in
-			the source; its answer is the position of that text. One neural mechanism for pointing is the{" "}
-			<a
-				href="https://arxiv.org/abs/1506.03134"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				pointer network
-			</a>{" "}
-			(2015), whose outputs are positions in its input rather than words of its own. The idea
-			carries over to generative models: a{" "}
-			<a
-				href="https://arxiv.org/abs/2110.06393"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				2021 paper
-			</a>{" "}
-			gets hallucination-free answers out of a generative question-answering model by reading the
-			answer span off the model's attention instead of trusting its written output. And a 2026
-			document-parsing benchmark scores{" "}
-			<a
-				href="https://arxiv.org/abs/2604.08538"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				visual grounding
-			</a>
-			, whether a parser can connect what it produced back to the right region of the page.
-			PELIQAN's pipeline applies the same idea to a whole extraction system, with the pointer aimed
-			at a piece of the page.
-		</span>,
-		"",
-		<span key="c1">
-			The rule is enforced by the form the model must answer through, which has no field for an
-			answer of its own: it holds the ids of pieces, and at most a verbatim copy of what is printed
-			there, which code checks against the piece before anything is used.
-		</span>,
+		<p key="walkthrough">
+			Suppose you want the closing value of the investment. The model selects the table cell
+			containing <span className="text-yellow">£544</span>. Code reads those digits and checks the
+			surrounding context. A note at the top says the amounts are in thousands of pounds, so the
+			conversion is <span className="text-green">544 × 1,000 = £544,000</span>. Keep both the
+			selected cell and the scale note with that result.
+		</p>,
 		"",
 		<Figure
 			key="fig-point"
-			caption="one field, end to end, on a synthetic statement; every step shown is real pipeline output. Autoplays; click a step."
+			caption="follow one value through a fictional statement; click a step to pause and inspect it"
 		>
 			<PointDontType />
 		</Figure>,
 		"",
-		<h3 key="research" className="text-cyan font-bold">
-			### Built on research, tuned to our documents
+		<p key="constraint">
+			The constraint matters. The model's answer can contain a reference to an existing piece of the
+			document, but it has no field for a calculated amount. Code checks that the reference exists
+			and reads the source text itself. In this design, you never accept a number just because the
+			model wrote it in its answer.
+		</p>,
+		"",
+		<h3 key="limits" className="text-cyan font-bold">
+			### A source you can check
 		</h3>,
 		"",
-		<span key="r-1">
-			There is no shortage of tools for this, open-source and commercial, and some are good. I still
-			built our own, for two reasons. These documents hold investors' financial positions, so I
-			wanted every step to run inside our own cloud environment, with no document sent to an outside
-			extraction service. And I wanted to understand the problem well enough to know where each
-			approach fails, which meant reading the research rather than the feature lists. The setup that
-			came out of it rests on recent computer-science research, and on one paper in particular.
-		</span>,
+		<p key="review">
+			A reviewer can see £544,000 alongside the original page, with £544 and the scale note
+			highlighted. If the value looks wrong, they have somewhere to start: did the model select the
+			wrong cell, did text recognition misread a digit, or did the conversion apply the wrong scale?
+			The same checks matter when one document uses 1.234,56 and another uses 1,234.56.
+		</p>,
 		"",
-		<span key="r0">
-			It was published in April 2026 by the AI team at OCBC, one of the largest banks in South-East
-			Asia:{" "}
+		<p key="verification">
+			Reading the selected cell again can confirm that the conversion produces the same result. It
+			cannot prove that the model selected the right cell. A beginning balance will still give you
+			the wrong answer when you wanted the ending balance, however consistently the code reads it.
+			Human review and testing against documents with known answers remain part of the job.
+		</p>,
+		"",
+		<p key="research-summary">
+			For long reports, first finding the relevant pages can also help. In a{" "}
 			<a
 				href="https://arxiv.org/abs/2604.26462"
 				className="text-blue hover:underline"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				A Multistage Extraction Pipeline for Long Scanned Financial Documents
-			</a>{" "}
-			(Han, Zhang, Wang, Jin, Ke and Zhao). Their problem was close to ours: pulling structured data
-			out of long, scanned financial documents in several languages. They found that breaking the
-			job into stages, clean up the image, read the text, find the right pages, then extract, beats
-			giving the whole document to a model in one go, by up to 31.9 percentage points. Finding the
-			right pages first made the biggest difference. I took that shape, tuned it to capital account
-			statements and GP reports, and added the rule above: the model points, code reads.
-		</span>,
-		"",
-		<h3 key="pipeline" className="text-cyan font-bold">
-			### The pipeline
-		</h3>,
-		"",
-		<span key="p1">Five stages, each of which can be re-run on its own:</span>,
-		"",
-		<Figure key="fig-pipeline" caption="the extraction pipeline">
-			<PipelineDiagram />
-		</Figure>,
-		"",
-		<span key="p2">
-			<span className="text-blue font-bold">1. Parse.</span> The PDF goes to{" "}
-			<a
-				href="https://github.com/docling-project/docling"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				Docling
+				study of scanned financial documents
 			</a>
-			, an open-source document parser, which finds the layout of each page and, with its{" "}
-			<a
-				href="https://arxiv.org/abs/2203.01017"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				TableFormer
-			</a>{" "}
-			model, the structure of every table. One thing cost me a day. By default Docling treats logos
-			as pictures and drops their text, and on plenty of statements the logo is the only place the
-			fund manager's name appears. So logos are read separately, at higher resolution, and that text
-			is kept outside the tree where only the brand lookup can see it.
-		</span>,
+			, researchers found that locating relevant pages before extraction accounted for the largest
+			performance improvement in their experiments. That supports dividing the work into steps; it
+			doesn't establish the accuracy of the design described here.
+		</p>,
 		"",
-		<span key="p2b">
-			Everything the model gets to choose from is a tree of pieces cut from the page. At the top is
-			the page. Under it are the headings, paragraphs and tables the page contains. Each table
-			splits into its rows, and each row into its cells. A number on the page is not a thing of its
-			own; it is simply the text inside one cell, like the £544 in the example below. The model can
-			point at any piece but cannot make a new one. Docling's own name for this tree is the{" "}
-			<a
-				href="https://docling-project.github.io/docling/concepts/docling_document/"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				DoclingDocument
-			</a>
-			.
-		</span>,
+		<section key="technical" className="max-w-full">
+			<h3 className="text-cyan font-bold">Technical details: the pipeline and tools</h3>
+			<div className="flex flex-col gap-4 pt-4">
+				<p>
+					The following is one implementation option. The tools can change while the source
+					references and conversion checks stay in place.
+				</p>
+				<p key="p1">
+					One possible design has five processing stages, followed by human review where needed:
+				</p>
+				<Figure key="fig-pipeline" caption="the extraction pipeline">
+					<PipelineDiagram />
+				</Figure>
+				<p key="p2">
+					<span className="text-blue font-bold">1. Parse.</span> The PDF goes to{" "}
+					<a
+						href="https://github.com/docling-project/docling"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Docling
+					</a>
+					, an open-source document parser, which finds the layout of each page and, with its{" "}
+					<a
+						href="https://arxiv.org/abs/2203.01017"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						TableFormer
+					</a>{" "}
+					model, table structure. Keep the text and coordinates together so later steps can refer
+					back to the page. OCR and layout errors can still enter here; downstream checks need to
+					account for them.
+				</p>
+				<p key="p2b">
+					Everything the model gets to choose from is a tree of pieces cut from the page. At the top
+					is the page. Under it are the headings, paragraphs and tables the page contains. Each
+					table splits into its rows, and each row into its cells. A number on the page is not a
+					thing of its own; it is simply the text inside one cell, like the £544 in the example
+					below. The model can point at any piece but cannot make a new one. Docling's own name for
+					this tree is the{" "}
+					<a
+						href="https://docling-project.github.io/docling/concepts/docling_document/"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						DoclingDocument
+					</a>
+					.
+				</p>
+				<Figure key="fig-tree" caption="the DoclingDocument tree">
+					<TreeExample />
+				</Figure>
+				<Figure
+					key="fig-graph"
+					caption="the same tree, drawn on the page it came from. Autoplays; click a level."
+				>
+					<BlockGraph />
+				</Figure>
+				<p key="p3">
+					<span className="text-blue font-bold">2. Classify.</span> This step decides what kind of
+					document was uploaded, such as a quarterly fund report or an individual investor's
+					statement, since each needs a different list of fields. You can start with rules that
+					inspect titles, headings and table headers, then ask a model to resolve ambiguous cases.
+				</p>
+				<p key="p4">
+					<span className="text-blue font-bold">3. Find relevant passages.</span> For long
+					documents, first find the passages most likely to contain the answer. A two-page statement
+					turns into a few dozen pieces; a sixty-page report turns into thousands. Thousands of
+					candidates can make selection harder: more to read, more look-alike numbers, more chances
+					to point at the wrong one. So for long reports you can first search for the pieces each
+					field is likely to be in. One option is a keyword search in Postgres plus a meaning-based
+					search (
+					<a
+						href="https://github.com/pgvector/pgvector"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						pgvector
+					</a>{" "}
+					over{" "}
+					<a
+						href="https://huggingface.co/BAAI/bge-m3"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						bge-m3
+					</a>{" "}
+					embeddings), merged with{" "}
+					<a
+						href="https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						reciprocal rank fusion
+					</a>{" "}
+					so the two rankings combine without their scores having to agree. A statement of a few
+					pages has a few hundred pieces at most, which fits in a single request, so it skips this
+					step entirely: every piece goes to the LLM, in page order.
+				</p>
+				<p key="p4b">
+					This is the retrieval half of what is usually called{" "}
+					<span className="text-green font-bold">RAG, retrieval-augmented generation</span>: find
+					the parts of a document that matter and give the model only those. The one difference is
+					that in RAG the model then writes an answer; here it only points. The search itself is
+					simple. An embedding model, bge-m3, turns every piece of the document into a vector, a
+					list of numbers that captures what the text means rather than which words it uses. Each
+					field's description becomes a vector the same way, and the database returns the pieces
+					closest to it. With pgvector, you can store those vectors alongside the text and page
+					positions in Postgres.
+				</p>
+				<p key="p5">
+					<span className="text-blue font-bold">4. Extract.</span> One call to the model per
+					document, asking for the fields together. That gives the model context for distinguishing
+					related figures, such as beginning and ending balances. The answer comes back as{" "}
+					<span className="text-green font-bold">structured output</span>: a fixed form the model
+					has to fill in rather than free text, and what that form holds is which piece holds each
+					value.
+				</p>
+				<p key="p5b">
+					You can define the requested fields in one list per document type. Each entry says what
+					the field is, what kind of value it holds, whether it is required, and the words it is
+					usually labelled with, in English, Dutch, German and French. The same entry can supply the
+					search terms, the question to the model and the expected value type.
+				</p>
+				<p key="p6">
+					<span className="text-blue font-bold">5. Verify.</span> In step 4 the model pointed at a
+					cell for each field, and code read the value out of it. This step reads that same cell
+					again, with deterministic code and no model involved, and checks that it gets the same
+					value. If it does not, the field is rejected. This checks that the stored value follows
+					from the selected cell and its scale and currency context. It does not establish that the
+					model chose the right cell: if it points at a beginning balance instead of an ending
+					balance, code can reproduce the wrong figure too.
+				</p>
+				<p key="p7">
+					To evaluate this design, use labelled documents with known answers. Fictional statements
+					let you vary layouts, currencies and scale notes while controlling the expected values.
+					Hold out whole layout families from tuning, then check performance on representative real
+					documents that you have permission to use. Score source selection and value conversion
+					separately: a correct conversion cannot rescue a wrong cell. Report missing values and
+					wrong values separately too, because they have different consequences for the reviewer.
+				</p>
+
+				<Figure
+					key="fig-trace"
+					caption="the trail behind one stored number; the bottom row exists only for extracted values"
+				>
+					<ProvenanceChain />
+				</Figure>
+			</div>
+		</section>,
 		"",
-		<Figure key="fig-tree" caption="the DoclingDocument tree">
-			<TreeExample />
-		</Figure>,
+		<section key="research" className="max-w-full">
+			<h3 className="text-cyan font-bold">Further reading: the research behind the approach</h3>
+			<div className="flex flex-col gap-4 pt-4">
+				<p key="c0">
+					Language research has long split its methods into these two families. A generative model
+					writes its answer as new text. An extractive model can only point at text that is already
+					in the source; its answer is the position of that text. One neural mechanism for pointing
+					is the{" "}
+					<a
+						href="https://arxiv.org/abs/1506.03134"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						pointer network
+					</a>{" "}
+					(2015), whose outputs are positions in its input rather than words of its own. The idea
+					carries over to generative models: a{" "}
+					<a
+						href="https://arxiv.org/abs/2110.06393"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						2021 paper
+					</a>{" "}
+					gets hallucination-free answers out of a generative question-answering model by reading
+					the answer span off the model's attention instead of trusting its written output. And a
+					2026 document-parsing benchmark scores{" "}
+					<a
+						href="https://arxiv.org/abs/2604.08538"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						visual grounding
+					</a>
+					, whether a parser can connect what it produced back to the right region of the page. The
+					design below uses explicit references to pieces of a page. It shares the idea of pointing
+					to evidence, without using the same neural mechanism as those papers.
+				</p>
+				<p key="r0">
+					It was published in April 2026 by the AI team at OCBC, one of the largest banks in
+					South-East Asia:{" "}
+					<a
+						href="https://arxiv.org/abs/2604.26462"
+						className="text-blue hover:underline"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						A Multistage Extraction Pipeline for Long Scanned Financial Documents
+					</a>{" "}
+					The authors studied pulling structured data out of long, scanned financial documents in
+					several languages. They found that breaking the job into stages, clean up the image, read
+					the text, find the right pages, then extract, beats giving the whole document to a model
+					in one go, by up to 31.9 percentage points. Finding the right pages first made the biggest
+					difference in their evaluation. The design below uses a similar division of work, with an
+					additional constraint: the model returns source references and code derives the values.
+				</p>
+			</div>
+		</section>,
 		"",
-		<Figure
-			key="fig-graph"
-			caption="the same tree, drawn on the page it came from. Autoplays; click a level."
-		>
-			<BlockGraph />
-		</Figure>,
-		"",
-		<span key="p3">
-			<span className="text-blue font-bold">2. Classify.</span> This step decides what kind of
-			document was uploaded, in our case a GP quarterly report or a capital account statement, since
-			each has its own list of fields to extract. It works from a fingerprint of the layout (title,
-			headings, table headers) and a set of weighted rules. The model is only asked about the cases
-			the rules can't settle. Code answers what code can answer.
-		</span>,
-		"",
-		<span key="p4">
-			<span className="text-blue font-bold">3. Embed and retrieve, or skip both.</span> This step
-			exists because of big documents. A two-page statement turns into a few dozen pieces; a
-			sixty-page report turns into thousands. An LLM handed thousands of candidates does worse: more
-			to read, more look-alike numbers, more chances to point at the wrong one. So for long reports
-			the pipeline first searches for the pieces each field is likely to be in: a keyword search in
-			Postgres plus a meaning-based search (
-			<a
-				href="https://github.com/pgvector/pgvector"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				pgvector
-			</a>{" "}
-			over{" "}
-			<a
-				href="https://huggingface.co/BAAI/bge-m3"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				bge-m3
-			</a>{" "}
-			embeddings), merged with{" "}
-			<a
-				href="https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				reciprocal rank fusion
-			</a>{" "}
-			so the two rankings combine without their scores having to agree. A statement of a few pages
-			has a few hundred pieces at most, which fits in a single request, so it skips this step
-			entirely: every piece goes to the LLM, in page order.
-		</span>,
-		"",
-		<span key="p4b">
-			This is the retrieval half of what is usually called{" "}
-			<span className="text-green font-bold">RAG, retrieval-augmented generation</span>: find the
-			parts of a document that matter and give the model only those. The one difference is that in
-			RAG the model then writes an answer; here it only points. The search itself is simple. An
-			embedding model, bge-m3, turns every piece of the document into a vector, a list of numbers
-			that captures what the text means rather than which words it uses. Each field's description
-			becomes a vector the same way, and the database returns the pieces closest to it. We keep
-			those vectors in the Postgres database we already have, next to the text and page positions,
-			so the search is a single query.
-		</span>,
-		"",
-		<span key="p5">
-			<span className="text-blue font-bold">4. Extract.</span> One call to the model per document,
-			asking for every field at once. Asking for all of them together is what lets the model tell a
-			beginning balance from an ending one. The answer comes back as{" "}
-			<span className="text-green font-bold">structured output</span>: a fixed form the model has to
-			fill in rather than free text, and what that form holds is which piece holds each value.
-		</span>,
-		"",
-		<span key="p5b">
-			What the model is asked for comes from one list of fields per document type. Each entry says
-			what the field is, what kind of value it holds, whether it is required, and the words it is
-			usually labelled with, in English, Dutch, German and French. That same entry drives the
-			search, the question to the model, and where the value is stored. Adding a field means adding
-			an entry.
-		</span>,
-		"",
-		<Figure
-			key="fig-field"
-			caption="one field definition, followed through the retrieval path a 31-page GP report takes; every rank and id is from a real run. Autoplays; click a step."
-		>
-			<FieldToJudge />
-		</Figure>,
-		"",
-		<span key="p6">
-			<span className="text-blue font-bold">5. Verify.</span> In step 4 the model pointed at a cell
-			for each field, and code read the value out of it. This step reads that same cell again, with
-			deterministic code and no model involved, and checks that it gets the same value. If it does
-			not, the field is rejected. The reason for this step is that pointing can still go wrong: the
-			model can pick a cell that looks right but holds a different figure, or a cell whose text does
-			not actually contain the number. A value only enters the system when the cell the model chose
-			still produces that value when read cold, by code, with no model in the loop.
-		</span>,
-		"",
-		<span key="p7">
-			The pipeline was tuned against a large labelled corpus of synthetic documents: real,
-			anonymised layouts filled with generated numbers, so every right answer is known before the
-			page exists. Part of that corpus is kept back from tuning, so the score reflects layouts the
-			pipeline has never seen, which is the situation it is in with every uploaded GP document we
-			have not seen before. Run the pipeline, score it, fix the step that lost a field, run again:
-			the measure-first loop Karpathy describes for neural networks in his{" "}
-			<a
-				href="https://karpathy.github.io/2019/04/25/recipe/"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				training recipe
-			</a>
-			. Eight rounds of that in one day took accuracy on capital account statements from 40% to 98%.
-		</span>,
-		"",
-		<h3 key="circle" className="text-cyan font-bold">
-			### Full circle
-		</h3>,
-		"",
-		<span key="fc2">
-			Back to the question at the top: how hard can it be? Getting a number out of a sixty-page
-			report is not hard. A good model with a good prompt gets most of the way there, and dropping a
-			PDF into a chat window feels like it works. What is hard is getting a number you can put in
-			front of an investor: one that came from a specific cell on a specific page, was read by code
-			that cannot invent, and was checked by code that cannot be talked into anything. In the{" "}
-			<a href="/posts/llm-vs-ocr-document-extraction" className="text-blue hover:underline">
-				earlier post
-			</a>{" "}
-			the model still produced the values. Here it produces none.{" "}
-			<span className="text-green font-bold">It points</span>, and everything after the pointer can
-			be traced and re-run.
-		</span>,
-		"",
-		<span key="fc3">
-			A hallucinated number in a financial system is a trust problem before it is a quality problem,
-			and a better prompt does not fix trust. You fix it by taking the number out of the model's
-			hands.
-		</span>,
-		"",
-		<span key="fc5">
-			What comes next is incorporating human feedback. Every correction someone makes on the review
-			screen is a labelled example of where the right value was, and we will use those corrections
-			to automatically fine-tune the search queries and the extraction itself, so the pipeline
-			learns from every document it got wrong.
-		</span>,
-		"",
-		<span key="coda" className="text-comment">
-			Note: this article reflects Docling with{" "}
-			<a
-				href="https://github.com/RapidAI/RapidOCR"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				RapidOCR
-			</a>{" "}
-			and TableFormer, plus Claude Sonnet on{" "}
-			<a
-				href="https://aws.amazon.com/bedrock/"
-				className="text-blue hover:underline"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				AWS Bedrock
-			</a>
-			, as of mid-2026. These tools evolve fast. The architecture is deliberately model-agnostic:
-			swap the model, keep the derivation.
-		</span>,
-		"",
+		<p key="ending">
+			What I want from document extraction is a value I can investigate. With the page, the selected
+			text and the conversion attached, a reviewer can check where a number came from and correct
+			the step that went wrong. That makes the result more useful than an answer I have to take on
+			trust.
+		</p>,
 		"",
 		<span key="tags" className="text-comment">
-			#llm #ocr #documentai #privateequity #syntheticdata #benchmarks #evals #ai
+			#ai #documentextraction #softwareengineering
 		</span>,
 	],
 }
