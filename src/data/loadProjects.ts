@@ -36,5 +36,3 @@ type ProjectsData = {
 // Bundled rather than fetched so About can render its metrics during prerender and
 // hydrate without a layout shift
 export const projects = (data as unknown as ProjectsData).projects
-
-export const loadProjects = () => Promise.resolve(projects)

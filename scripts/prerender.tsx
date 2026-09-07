@@ -18,12 +18,21 @@ const marker = '<div id="root"></div>'
 if (!template.includes(marker))
 	throw new Error("prerender: root marker not found in dist/index.html")
 
-// Inline the stylesheet so first paint needs only the HTML response
+// Inline the stylesheet and the regular font so first paint needs only the HTML response.
+// A preloaded font is render-blocking in Chrome (RenderBlockingFonts) and the fallback-to-
+// webfont swap moved Speed Index around; embedded, there is nothing to wait for or swap
 const cssLink = template.match(/<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/)
-if (cssLink?.[1]) {
-	const css = await Bun.file(`${dist}${cssLink[1]}`).text()
-	template = template.replace(cssLink[0], `<style>${css}</style>`)
-}
+if (!cssLink?.[1]) throw new Error("prerender: stylesheet link not found in dist/index.html")
+const font = Buffer.from(await Bun.file(`${dist}fonts/roboto-mono.woff2`).arrayBuffer()).toString(
+	"base64",
+)
+const css = (await Bun.file(`${dist}${cssLink[1]}`).text()).replace(
+	"url(/fonts/roboto-mono.woff2)",
+	`url(data:font/woff2;base64,${font})`,
+)
+template = template
+	.replace(cssLink[0], `<style>${css}</style>`)
+	.replace(/<link rel="preload" href="\/fonts\/roboto-mono\.woff2"[^>]*>\s*/, "")
 
 // Load the bundle only once the first frame is actually on screen: hydration never competes
 // with first paint, and Lighthouse charges any script that lands before its paint timestamp
