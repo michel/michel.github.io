@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs"
 import { renderToReadableStream } from "react-dom/server.browser"
 import { MemoryRouter } from "react-router-dom"
 import App from "../src/App"
@@ -20,15 +21,16 @@ if (!template.includes(marker))
 
 // Inline the stylesheet and the regular font so first paint needs only the HTML response.
 // A preloaded font is render-blocking in Chrome (RenderBlockingFonts) and the fallback-to-
-// webfont swap moved Speed Index around; embedded, there is nothing to wait for or swap
+// webfont swap moved Speed Index around. Embedded bytes still decode asynchronously, so the
+// face blocks (a few ms) rather than swaps: a swap re-wrapped text before first paint (CLS)
 const cssLink = template.match(/<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/)
 if (!cssLink?.[1]) throw new Error("prerender: stylesheet link not found in dist/index.html")
 const font = Buffer.from(await Bun.file(`${dist}fonts/roboto-mono.woff2`).arrayBuffer()).toString(
 	"base64",
 )
 const css = (await Bun.file(`${dist}${cssLink[1]}`).text()).replace(
-	"url(/fonts/roboto-mono.woff2)",
-	`url(data:font/woff2;base64,${font})`,
+	"font-display:swap;src:url(/fonts/roboto-mono.woff2)",
+	`font-display:block;src:url(data:font/woff2;base64,${font})`,
 )
 template = template
 	.replace(cssLink[0], `<style>${css}</style>`)
@@ -37,7 +39,7 @@ template = template
 // Load the bundle only once the first frame is actually on screen: hydration never competes
 // with first paint, and Lighthouse charges any script that lands before its paint timestamp
 // to FCP/LCP, whether or not it blocked anything (a rAF+setTimeout fires before the paint
-// timestamp on large pages)
+// timestamp on large pages; a low-priority modulepreload is charged just the same)
 const entry = template.match(/<script type="module" crossorigin src="([^"]+)"><\/script>/)
 if (!entry?.[1]) throw new Error("prerender: entry script not found in dist/index.html")
 template = template.replace(
@@ -59,8 +61,15 @@ for (const route of routes) {
 	await stream.allReady
 	const html = await new Response(stream).text()
 	const title = titles[route] ? `${titles[route]} | ${BASE_TITLE}` : BASE_TITLE
+	// A small video poster becomes a data URI: it is that page's largest paint, so it should
+	// need no request
+	const inlined = html.replace(/poster="(\/images\/[^"]+)"/g, (m, src) => {
+		const f = Bun.file(`${dist}${src}`)
+		if (f.size > 16_000) return m
+		return `poster="data:${f.type};base64,${Buffer.from(readFileSync(`${dist}${src}`)).toString("base64")}"`
+	})
 	const page = template
-		.replace(marker, `<div id="root">${html}</div>`)
+		.replace(marker, `<div id="root">${inlined}</div>`)
 		.replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
 		.replace('content="https://re-invention.nl/"', `content="https://re-invention.nl${route}"`)
 	// about.html serves /about on GitHub Pages without the trailing-slash redirect a directory gets
