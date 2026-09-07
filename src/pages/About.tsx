@@ -145,9 +145,9 @@ export default function About() {
 			DESCRIPTION
 		</div>,
 		<div key="desc-content" className="ml-8 max-w-2xl">
-			CTO at Peliqan, 22 years in. I design and build complete systems from the ground up, frontend
-			through infrastructure, and lead the teams that ship them. Mostly fintech startups, where I
-			build financial information systems; sometimes enterprises like IKEA, ING and Tele2.
+			22 years in. I design and build complete systems from the ground up, frontend through
+			infrastructure, and lead the teams that ship them. Mostly fintech startups, where I build
+			financial information systems; sometimes enterprises like IKEA, ING and Tele2.
 		</div>,
 		"",
 		...(metrics
