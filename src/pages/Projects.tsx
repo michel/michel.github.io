@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { useEditor } from "../context/EditorContext"
-import { loadProjects, type Project } from "../data/loadProjects"
+import { projects } from "../data/loadProjects"
 import { usePageTitle } from "../hooks/usePageTitle"
 
 type Filter = {
@@ -183,13 +182,6 @@ const getCustomerInfo = (customer: string | null | undefined) => {
 
 export default function Projects() {
 	usePageTitle("projects")
-	const { openBuffer } = useEditor()
-	useEffect(() => {
-		openBuffer("/projects")
-	}, [openBuffer])
-
-	const [projects, setProjects] = useState<Project[]>([])
-	const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading")
 	const [selectedIndex, setSelectedIndex] = useState(0)
 	// Rows mount in batches: a 256-row DOM made PostHog's session-recorder snapshot a long task
 	const [rowLimit, setRowLimit] = useState(60)
@@ -212,21 +204,6 @@ export default function Projects() {
 	}, [searchParams])
 
 	const searchQuery = searchParams.get("q") || ""
-
-	// Fetch projects data
-	const load = useCallback(() => {
-		setLoadState("loading")
-		loadProjects()
-			.then((data) => {
-				setProjects(data)
-				setLoadState("ready")
-			})
-			.catch(() => setLoadState("error"))
-	}, [])
-
-	useEffect(() => {
-		load()
-	}, [load])
 
 	// Global stats
 	const globalStats = useMemo(() => {
@@ -531,29 +508,6 @@ export default function Projects() {
 		const row = container.children[selectedIndex] as HTMLElement
 		if (row) row.scrollIntoView({ block: "nearest", behavior: "auto" })
 	}, [selectedIndex])
-
-	if (loadState === "error") {
-		return (
-			<div className="flex h-full flex-col items-center justify-center gap-3 px-4 text-center">
-				<div className="text-red">E484: Can't open file projects.json</div>
-				<button
-					type="button"
-					className="cursor-pointer border border-border px-2 py-1 text-comment hover:text-fg"
-					onClick={load}
-				>
-					:e! to retry
-				</button>
-			</div>
-		)
-	}
-
-	if (loadState === "loading") {
-		return (
-			<div role="status" className="flex h-full items-center justify-center text-comment">
-				:e projects.json
-			</div>
-		)
-	}
 
 	const maxLangLines = languageStats[0]?.[1] || 1
 
