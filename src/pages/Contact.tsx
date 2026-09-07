@@ -20,7 +20,7 @@ export default function Contact() {
 							michel@re-invention.nl
 						</a>
 					</span>
-					<span className="text-yellow">Irene Vorrinkplein 17</span>
+					<span className="text-yellow">Nida Senffstraat 173</span>
 					<span>
 						<span className="text-cyan">⌂</span>{" "}
 						<a
@@ -32,7 +32,7 @@ export default function Contact() {
 							re-invention.nl
 						</a>
 					</span>
-					<span className="text-yellow">1506WR Zaandam</span>
+					<span className="text-yellow">1095 MX Amsterdam</span>
 					<span>
 						<span className="text-cyan">☏</span>{" "}
 						<a href="tel:+31636427407" className="inline-block py-1 underline hover:text-cyan">
