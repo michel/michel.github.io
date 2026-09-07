@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react"
+import { lazy, Suspense, startTransition, useCallback, useEffect, useRef, useState } from "react"
 import { Outlet, useLocation } from "react-router-dom"
 import { allFiles, useEditor } from "../context/EditorContext"
 import { usePostHogPageview } from "../hooks/usePostHogPageview"
@@ -82,9 +82,11 @@ export default function Layout() {
 		}
 	}, [isResizing, handleMouseMove, handleMouseUp])
 
-	// A deep link or refresh opens its file as a tab, like navigating from the tree does
+	// A deep link or refresh opens its file as a tab, like navigating from the tree does. As a
+	// transition so the update does not force the still-hydrating route boundary to client-render
 	useEffect(() => {
-		if (allFiles.some((f) => f.path === location.pathname)) openBuffer(location.pathname)
+		if (!allFiles.some((f) => f.path === location.pathname)) return
+		startTransition(() => openBuffer(location.pathname))
 	}, [location.pathname, openBuffer])
 
 	// Scroll to top on route change
