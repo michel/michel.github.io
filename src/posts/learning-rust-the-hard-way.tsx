@@ -22,6 +22,17 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 			# Learning Rust the hard way: reverse engineering a 2000s P2P protocol
 		</h1>,
 		"",
+		<div key="update" className="border-l-2 border-yellow pl-3">
+			<span className="text-yellow font-bold">Update, September 2026:</span> soulseek-rs has matured
+			a lot since I wrote this. It shares files now, browses other people's collections, resumes
+			dead transfers, and does chat rooms and private messages. There is a TUI, a CLI built for
+			scripts and agents, a daemon mode, and a Homebrew tap. Check it out at{" "}
+			<a href="https://re-invention.nl/soulseek-rs/" className="text-blue underline">
+				re-invention.nl/soulseek-rs
+			</a>
+			.
+		</div>,
+		"",
 		<div key="video" className="flex flex-col gap-1">
 			<video
 				src="/images/posts/learning-rust-the-hard-way/soulseek-rs-demo.webm"

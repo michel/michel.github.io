@@ -36,15 +36,16 @@ template = template
 	.replace(cssLink[0], `<style>${css}</style>`)
 	.replace(/<link rel="preload" href="\/fonts\/roboto-mono\.woff2"[^>]*>\s*/, "")
 
-// Load the bundle only once the first frame is actually on screen: hydration never competes
-// with first paint, and Lighthouse charges any script that lands before its paint timestamp
-// to FCP/LCP, whether or not it blocked anything (a rAF+setTimeout fires before the paint
+// Load the bundle only once the first frame is on screen and the page's high-priority image
+// (its largest paint, when it has one) has arrived: hydration never competes with either, and
+// Lighthouse charges any script that lands before its paint timestamps to FCP/LCP, whether
+// or not it blocked anything (a rAF+setTimeout fires before the paint
 // timestamp on large pages; a low-priority modulepreload is charged just the same)
 const entry = template.match(/<script type="module" crossorigin src="([^"]+)"><\/script>/)
 if (!entry?.[1]) throw new Error("prerender: entry script not found in dist/index.html")
 template = template.replace(
 	entry[0],
-	`<script type="module">var h=function(){h=function(){};import("${entry[1]}")};if(PerformanceObserver.supportedEntryTypes.includes("paint")){new PerformanceObserver(function(){h()}).observe({type:"paint",buffered:true});setTimeout(function(){h()},1500)}else h()</script>`,
+	`<script type="module">var h=function(){h=function(){};import("${entry[1]}")};var i=document.querySelector("img[fetchpriority=high]");var g=function(){if(i&&!i.complete){i.addEventListener("load",h);i.addEventListener("error",h)}else h()};if(PerformanceObserver.supportedEntryTypes.includes("paint")){new PerformanceObserver(g).observe({type:"paint",buffered:true});setTimeout(h,1500)}else g()</script>`,
 )
 
 // Apply the stored theme vars before first paint so the prerendered markup never flashes Rose Pine
