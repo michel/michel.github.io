@@ -1191,7 +1191,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		<p key="history">
 			I've been working on AI document extraction for a while. In 2016 I was writing extractors for
 			travel voucher PDFs. More recently, I wrote about{" "}
-			<a href="/posts/llm-vs-ocr-document-extraction" className="text-blue hover:underline">
+			<a href="/posts/llm-vs-ocr-document-extraction" className="text-blue underline">
 				combining language models with text recognition for invoice validation
 			</a>
 			. Now, working on software for private equity, I keep coming back to the same problem. You
@@ -1199,9 +1199,9 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 			number out is the easy part. Checking that it's the number you asked for takes more work.
 		</p>,
 		"",
-		<h3 key="example" className="text-cyan font-bold">
+		<h2 key="example" className="text-cyan font-bold">
 			### How £544 becomes £544,000
-		</h3>,
+		</h2>,
 		"",
 		<p key="document">
 			Take this fictional financial statement. It shows how much an investor put into a fund, what
@@ -1232,9 +1232,9 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 			come from the source.
 		</p>,
 		"",
-		<h3 key="limits" className="text-cyan font-bold">
+		<h2 key="limits" className="text-cyan font-bold">
 			### A source you can check
-		</h3>,
+		</h2>,
 		"",
 		<p key="review">
 			Now imagine reviewing that £544,000. You can open the original page and see £544 and the scale
@@ -1256,7 +1256,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 			Long reports add another problem: finding the right page in the first place. In a{" "}
 			<a
 				href="https://arxiv.org/abs/2604.26462"
-				className="text-blue hover:underline"
+				className="text-blue underline"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
@@ -1268,7 +1268,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		</p>,
 		"",
 		<section key="technical" className="max-w-full">
-			<h3 className="text-cyan font-bold">Technical details: the pipeline and tools</h3>
+			<h2 className="text-cyan font-bold">Technical details: the pipeline and tools</h2>
 			<div className="flex flex-col gap-4 pt-4">
 				<p>
 					In a recent document extraction system I built, I used this approach to keep each value
@@ -1286,7 +1286,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					can refer to. For this, I use{" "}
 					<a
 						href="https://github.com/docling-project/docling"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1295,7 +1295,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					, an open-source document parser that identifies page layout and uses{" "}
 					<a
 						href="https://arxiv.org/abs/2203.01017"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1313,7 +1313,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					exists. Docling stores its structured document in a{" "}
 					<a
 						href="https://docling-project.github.io/docling/concepts/docling_document/"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1345,7 +1345,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					first. I combine keyword search in Postgres with a search for similar meaning, using{" "}
 					<a
 						href="https://github.com/pgvector/pgvector"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1354,7 +1354,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					and{" "}
 					<a
 						href="https://huggingface.co/BAAI/bge-m3"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1363,7 +1363,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					embeddings. I use{" "}
 					<a
 						href="https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1426,14 +1426,14 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		</section>,
 		"",
 		<section key="research" className="max-w-full">
-			<h3 className="text-cyan font-bold">Further reading: the research behind the approach</h3>
+			<h2 className="text-cyan font-bold">Further reading: the research behind the approach</h2>
 			<div className="flex flex-col gap-4 pt-4">
 				<p key="c0">
 					There's a research history behind asking a model to point. A generative model writes an
 					answer; an extractive question-answering model selects text from the source. The{" "}
 					<a
 						href="https://arxiv.org/abs/1506.03134"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1442,7 +1442,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					paper from 2015 describes a neural mechanism that outputs positions in its input. A{" "}
 					<a
 						href="https://arxiv.org/abs/2110.06393"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1453,7 +1453,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					is still a separate problem. A 2026 document-parsing benchmark also evaluates{" "}
 					<a
 						href="https://arxiv.org/abs/2604.08538"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -1467,7 +1467,7 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 					The OCBC team's April 2026 paper,{" "}
 					<a
 						href="https://arxiv.org/abs/2604.26462"
-						className="text-blue hover:underline"
+						className="text-blue underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>

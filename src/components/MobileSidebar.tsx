@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom"
 import { type FileNode, fileTree, useEditor } from "../context/EditorContext"
 
 const rowBase =
-	"flex min-h-11 w-full items-center gap-1 border-l-2 border-l-transparent py-2 text-left transition-colors duration-100 hover:bg-black"
+	"flex min-h-9 w-full items-center gap-1 border-l-2 border-l-transparent py-1 text-left transition-colors duration-100 hover:bg-black"
 
 function FileTreeNode({
 	node,
@@ -61,7 +61,9 @@ function FileTreeNode({
 			onClick={handleClick}
 		>
 			<FileText aria-hidden="true" className="h-3 w-3 shrink-0 text-pink" />
-			<span className="text-fg">{node.name}</span>
+			<span className="marquee min-w-0 flex-1 text-fg">
+				<span>{node.name}</span>
+			</span>
 		</Link>
 	)
 }
@@ -75,14 +77,24 @@ export default function MobileSidebar() {
 		<div id="mobile-sidebar" className="fixed inset-0 z-50 md:hidden">
 			<div className="absolute inset-0 bg-black/50" onClick={closeMobileSidebar} />
 			<aside className="absolute left-0 top-0 flex h-full w-80 flex-col border-r border-border bg-bg">
-				<div className="bg-bg-dark px-2 py-1 font-bold text-magenta">re-invention</div>
+				<div className="flex items-center justify-between bg-bg-dark pl-2 font-bold text-magenta">
+					re-invention
+					<button
+						type="button"
+						aria-label="Close file tree"
+						className="min-h-11 min-w-11 px-3 text-lg text-comment transition-colors duration-100 hover:text-fg"
+						onClick={closeMobileSidebar}
+					>
+						×
+					</button>
+				</div>
 				<div className="flex-1 overflow-y-auto px-2 py-1">
 					{fileTree.map((node) => (
 						<FileTreeNode key={node.id} node={node} depth={0} onSelect={closeMobileSidebar} />
 					))}
 				</div>
 				<div className="border-t border-border p-1 text-center text-comment">
-					"Press ? for help"
+					"Tap a file to open it"
 				</div>
 			</aside>
 		</div>

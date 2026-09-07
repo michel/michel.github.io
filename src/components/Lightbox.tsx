@@ -5,9 +5,13 @@ interface LightboxProps {
 	alt: string
 	width?: number
 	height?: number
+	/** For the image that is the page's largest paint: lazy-loading it delays LCP */
+	eager?: boolean
+	/** Full-resolution source for the dialog when `src` is a downscaled inline version */
+	full?: string
 }
 
-export default function Lightbox({ src, alt, width, height }: LightboxProps) {
+export default function Lightbox({ src, alt, width, height, eager, full }: LightboxProps) {
 	const [isOpen, setIsOpen] = useState(false)
 	const dialogRef = useRef<HTMLDivElement>(null)
 
@@ -37,7 +41,8 @@ export default function Lightbox({ src, alt, width, height }: LightboxProps) {
 						alt={alt}
 						width={width}
 						height={height}
-						loading="lazy"
+						loading={eager ? "eager" : "lazy"}
+						fetchPriority={eager ? "high" : undefined}
 						decoding="async"
 						className="max-w-full outline outline-1 -outline-offset-1 outline-white/10 transition-opacity duration-100 hover:opacity-80"
 					/>
@@ -60,7 +65,7 @@ export default function Lightbox({ src, alt, width, height }: LightboxProps) {
 						className="relative flex max-h-full max-w-full flex-col border border-magenta bg-bg-dark p-2"
 					>
 						<img
-							src={src}
+							src={full ?? src}
 							alt={alt}
 							className="max-h-[calc(100vh-8rem)] max-w-full object-contain"
 						/>

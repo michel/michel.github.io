@@ -48,7 +48,7 @@ export default function TmuxLine() {
 	return (
 		<div className="flex md:h-6 select-none items-stretch justify-between overflow-hidden bg-bg-dark pb-[env(safe-area-inset-bottom)] font-mono text-[10px] md:text-sm text-nowrap">
 			{/* Left: Session + Windows */}
-			<div className="flex min-w-0 flex-1 items-stretch overflow-hidden">
+			<div className="flex min-w-0 flex-1 items-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 				<span className={`flex bg-magenta ${statusSegment}`}>michel</span>
 
 				{windows.map((win) => {

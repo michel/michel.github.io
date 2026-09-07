@@ -1,7 +1,7 @@
-import { type ReactNode, useEffect, useMemo, useState } from "react"
+import { type ReactNode, useMemo } from "react"
 import { Link } from "react-router-dom"
 import Buffer from "../components/Buffer"
-import { loadProjects, type Project } from "../data/loadProjects"
+import { type Project, projects } from "../data/loadProjects"
 import { usePageTitle } from "../hooks/usePageTitle"
 
 const formatNum = (n: number) =>
@@ -52,14 +52,6 @@ const ManEntry = ({
 
 export default function About() {
 	usePageTitle("About")
-	const [projects, setProjects] = useState<Project[]>([])
-
-	useEffect(() => {
-		loadProjects()
-			.then(setProjects)
-			.catch(() => {})
-	}, [])
-
 	const metrics = useMemo(() => {
 		if (projects.length === 0) return null
 
@@ -122,7 +114,7 @@ export default function About() {
 			topProjects,
 			enterpriseStats,
 		}
-	}, [projects])
+	}, [])
 
 	const lines: ReactNode[] = [
 		<h1 key="title" className="text-2xl font-bold text-fg">
@@ -137,16 +129,15 @@ export default function About() {
 			NAME
 		</div>,
 		<div key="name-content" className="ml-8">
-			Michel de Graaf - Tech Lead / Software Engineer
+			Michel de Graaf - CTO / Tech Lead
 		</div>,
 		"",
 		<div key="synopsis-header" className="font-bold text-magenta uppercase">
 			SYNOPSIS
 		</div>,
 		<div key="synopsis-content" className="ml-8">
-			<span className="text-pink">michel</span> [--role{" "}
-			<span className="text-yellow">tech_lead</span>] [--exp{" "}
-			<span className="text-yellow">22_years</span>] [--stack{" "}
+			<span className="text-pink">michel</span> [--role <span className="text-yellow">cto</span>]
+			[--exp <span className="text-yellow">22_years</span>] [--stack{" "}
 			<span className="text-blue">full_stack</span>]
 		</div>,
 		"",
@@ -154,9 +145,9 @@ export default function About() {
 			DESCRIPTION
 		</div>,
 		<div key="desc-content" className="ml-8 max-w-2xl">
-			Tech lead, 22 years in. I build whole systems, frontend through infrastructure, and lead the
-			teams that ship them. Mostly fintech and proptech startups; sometimes enterprises like IKEA,
-			ING and Tele2.
+			CTO at Peliqan, 22 years in. I design and build complete systems from the ground up, frontend
+			through infrastructure, and lead the teams that ship them. Mostly fintech and proptech
+			startups; sometimes enterprises like IKEA, ING and Tele2.
 		</div>,
 		"",
 		...(metrics
@@ -275,7 +266,13 @@ export default function About() {
 			date: "Apr 2026 - Present",
 			children: (
 				<>
-					<img src="/images/peliqan-logo.svg" alt="PELIQAN logo" className="h-4 my-1.5" />
+					<img
+						src="/images/peliqan-logo.svg"
+						alt="PELIQAN logo"
+						width={79}
+						height={16}
+						className="h-4 my-1.5"
+					/>
 					<div className="text-comment">Amsterdam, North Holland, Netherlands · On-site</div>
 					Building the{" "}
 					<a

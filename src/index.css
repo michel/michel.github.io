@@ -171,3 +171,26 @@ button,
 		scroll-behavior: auto !important;
 	}
 }
+
+/* A label wider than its row drifts to show its tail and back; one that fits never moves */
+.marquee {
+	overflow: hidden;
+	white-space: nowrap;
+	container-type: inline-size;
+}
+
+.marquee > span {
+	display: inline-block;
+	animation: marquee 8s ease-in-out infinite alternate;
+}
+
+@keyframes marquee {
+	0%,
+	20% {
+		transform: translateX(0);
+	}
+	80%,
+	100% {
+		transform: translateX(min(0px, calc(100cqw - 100%)));
+	}
+}

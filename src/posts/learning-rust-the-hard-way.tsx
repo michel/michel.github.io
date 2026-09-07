@@ -25,6 +25,10 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		<div key="video" className="flex flex-col gap-1">
 			<video
 				src="/images/posts/learning-rust-the-hard-way/soulseek-rs-demo.webm"
+				poster="/images/posts/learning-rust-the-hard-way/soulseek-rs-demo-poster.webp"
+				preload="none"
+				width={2792}
+				height={1958}
 				controls
 				className="max-w-full rounded border border-border bg-black"
 			/>
@@ -165,11 +169,11 @@ export const learningRustTheHardWay: { title: string; date: string; lines: React
 		"",
 		<span key="link">
 			Find the project on:{" "}
-			<a href="https://re-invention.nl/soulseek-rs/" className="text-blue hover:underline">
+			<a href="https://re-invention.nl/soulseek-rs/" className="text-blue underline">
 				https://re-invention.nl/soulseek-rs/
 			</a>{" "}
 			or{" "}
-			<a href="https://github.com/michel/soulseek-rs" className="text-blue hover:underline">
+			<a href="https://github.com/michel/soulseek-rs" className="text-blue underline">
 				GitHub
 			</a>
 		</span>,

@@ -97,7 +97,7 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 			JSON is data. I wanted a cockpit. Something that feels like{" "}
 			<a
 				href="https://htop.dev"
-				className="text-blue hover:underline"
+				className="text-blue underline"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
@@ -128,7 +128,7 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		"",
 		<span key="p9">
 			Check it out:{" "}
-			<a href="/projects" className="text-blue hover:underline">
+			<a href="/projects" className="text-blue underline">
 				/projects
 			</a>
 		</span>,
@@ -195,7 +195,7 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		"",
 		<span key="link">
 			Try it:{" "}
-			<a href="/projects" className="text-blue hover:underline">
+			<a href="/projects" className="text-blue underline">
 				/projects
 			</a>
 		</span>,
