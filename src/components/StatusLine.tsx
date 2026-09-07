@@ -18,17 +18,17 @@ export default function StatusLine() {
 
 	return (
 		<div className="flex h-4 md:h-6 select-none items-center justify-between bg-bg-dark font-mono text-[10px] md:text-sm text-fg">
-			<div className="flex">
+			<div className="flex min-w-0">
 				<span className={`w-[9ch] text-center font-bold uppercase ${modeColors[mode]}`}>
 					{mode}
 				</span>
 				<span className="flex items-center gap-1 bg-border px-2 text-cyan">
 					<GitBranch aria-hidden="true" className="h-3 w-3" /> master
 				</span>
-				<span className="px-2 text-comment">{filename}</span>
+				<span className="truncate px-2 text-comment">{filename}</span>
 				<span className="px-2 text-comment">[+]</span>
 			</div>
-			<div className="flex gap-4 px-2">
+			<div className="flex shrink-0 gap-4 whitespace-nowrap px-2">
 				<span className="hidden md:inline text-comment">? for help</span>
 				<span className="hidden md:inline text-comment">utf-8</span>
 				<span className="hidden md:inline text-comment">unix</span>
