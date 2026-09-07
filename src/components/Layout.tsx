@@ -40,6 +40,7 @@ export default function Layout() {
 		snakeGameOpen,
 		adventureGameOpen,
 		openBuffer,
+		closeTerminal,
 	} = useEditor()
 	const [terminalHeight, setTerminalHeight] = useState(() =>
 		typeof window !== "undefined" ? Math.floor(window.innerHeight * 0.4) : 300,
@@ -154,6 +155,14 @@ export default function Layout() {
 								}}
 								style={{ backgroundColor: isResizing ? "var(--color-magenta)" : "transparent" }}
 							/>
+							<button
+								type="button"
+								aria-label="Close terminal"
+								className="absolute right-0 top-0 z-10 min-h-11 min-w-11 px-3 text-lg text-comment transition-colors duration-100 hover:text-fg md:hidden"
+								onClick={closeTerminal}
+							>
+								×
+							</button>
 							<Terminal />
 						</div>
 					)}
