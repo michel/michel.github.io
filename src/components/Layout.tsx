@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react"
 import { Outlet, useLocation } from "react-router-dom"
-import { useEditor } from "../context/EditorContext"
+import { allFiles, useEditor } from "../context/EditorContext"
 import { usePostHogPageview } from "../hooks/usePostHogPageview"
 import { useVimKeys } from "../hooks/useVimKeys"
 import CommandLine from "./CommandLine"
@@ -39,6 +39,7 @@ export default function Layout() {
 		terminalOpen,
 		snakeGameOpen,
 		adventureGameOpen,
+		openBuffer,
 	} = useEditor()
 	const [terminalHeight, setTerminalHeight] = useState(() =>
 		typeof window !== "undefined" ? Math.floor(window.innerHeight * 0.4) : 300,
@@ -80,6 +81,11 @@ export default function Layout() {
 			document.body.style.cursor = ""
 		}
 	}, [isResizing, handleMouseMove, handleMouseUp])
+
+	// A deep link or refresh opens its file as a tab, like navigating from the tree does
+	useEffect(() => {
+		if (allFiles.some((f) => f.path === location.pathname)) openBuffer(location.pathname)
+	}, [location.pathname, openBuffer])
 
 	// Scroll to top on route change
 	useEffect(() => {

@@ -191,6 +191,8 @@ export default function Projects() {
 	const [projects, setProjects] = useState<Project[]>([])
 	const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading")
 	const [selectedIndex, setSelectedIndex] = useState(0)
+	// Rows mount in batches: a 256-row DOM made PostHog's session-recorder snapshot a long task
+	const [rowLimit, setRowLimit] = useState(60)
 	const [searchParams, setSearchParams] = useSearchParams()
 	const [sortCol, setSortCol] = useState<SortColumn>("commits")
 	const [sortAsc, setSortAsc] = useState(false)
@@ -516,6 +518,11 @@ export default function Projects() {
 	useEffect(() => {
 		setSelectedIndex((i) => Math.min(i, Math.max(0, filteredProjects.length - 1)))
 	}, [filteredProjects.length])
+
+	// Keyboard navigation can jump past the mounted rows
+	useEffect(() => {
+		setRowLimit((n) => (selectedIndex < n ? n : selectedIndex + 60))
+	}, [selectedIndex])
 
 	// Scroll selected row into view
 	useEffect(() => {
@@ -972,18 +979,25 @@ export default function Projects() {
 					)}
 
 					{/* List */}
-					<div ref={listRef} className="flex-1 overflow-y-auto">
+					<div
+						ref={listRef}
+						className="flex-1 overflow-y-auto"
+						onScroll={(e) => {
+							const el = e.currentTarget
+							if (el.scrollTop + el.clientHeight > el.scrollHeight - 600) setRowLimit((n) => n + 60)
+						}}
+					>
 						{filteredProjects.length === 0 ? (
 							<div className="p-4 text-center text-comment">E486: Pattern not found</div>
 						) : (
-							filteredProjects.map((p, i) => {
+							filteredProjects.slice(0, rowLimit).map((p, i) => {
 								const statusColor =
 									p.status === "active"
 										? "font-bold text-green"
 										: p.status === "maintained"
 											? "text-cyan"
 											: p.status === "archived"
-												? "text-red opacity-70"
+												? "text-red"
 												: "text-comment"
 
 								return (
@@ -991,7 +1005,7 @@ export default function Projects() {
 										key={p.path}
 										className={`flex min-h-11 shrink-0 cursor-pointer items-center gap-2 border-b border-l-2 border-border/50 p-2 text-xs transition-colors duration-150 [content-visibility:auto] [contain-intrinsic-size:0_32px] md:min-h-0 ${
 											i === selectedIndex
-												? "border-l-cyan bg-cyan/20"
+												? "border-l-cyan bg-bg-active"
 												: "border-l-transparent hover:bg-cyan/10"
 										}`}
 										onClick={() => setSelectedIndex(i)}

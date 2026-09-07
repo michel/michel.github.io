@@ -13,7 +13,10 @@ export default function Contact() {
 					<span className="text-yellow">Re-invention B.V.</span>
 					<span>
 						<span className="text-cyan">➤</span>{" "}
-						<a href="mailto:michel@re-invention.nl" className="underline hover:text-cyan">
+						<a
+							href="mailto:michel@re-invention.nl"
+							className="inline-block py-1 underline hover:text-cyan"
+						>
 							michel@re-invention.nl
 						</a>
 					</span>
@@ -24,7 +27,7 @@ export default function Contact() {
 							href="https://re-invention.nl"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="underline hover:text-cyan"
+							className="inline-block py-1 underline hover:text-cyan"
 						>
 							re-invention.nl
 						</a>
@@ -32,7 +35,7 @@ export default function Contact() {
 					<span className="text-yellow">1506WR Zaandam</span>
 					<span>
 						<span className="text-cyan">☏</span>{" "}
-						<a href="tel:+31636427407" className="underline hover:text-cyan">
+						<a href="tel:+31636427407" className="inline-block py-1 underline hover:text-cyan">
 							+31 (0)6 36 42 74 07
 						</a>
 					</span>
@@ -54,7 +57,7 @@ export default function Contact() {
 						href="https://github.com/michel"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="underline hover:text-cyan"
+						className="inline-block py-1 underline hover:text-cyan"
 					>
 						github.com/michel
 					</a>
@@ -65,7 +68,7 @@ export default function Contact() {
 						href="https://x.com/micheldegraaf"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="underline hover:text-cyan"
+						className="inline-block py-1 underline hover:text-cyan"
 					>
 						@micheldegraaf
 					</a>
@@ -76,7 +79,7 @@ export default function Contact() {
 						href="https://www.linkedin.com/in/micheldegraaf/"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="underline hover:text-cyan"
+						className="inline-block py-1 underline hover:text-cyan"
 					>
 						micheldegraaf
 					</a>
@@ -87,7 +90,7 @@ export default function Contact() {
 						href="https://soundcloud.com/herrgraaf"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="underline hover:text-cyan"
+						className="inline-block py-1 underline hover:text-cyan"
 					>
 						herrgraaf
 					</a>
@@ -98,7 +101,7 @@ export default function Contact() {
 						href="https://www.instagram.com/herrgraaf/"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="underline hover:text-cyan"
+						className="inline-block py-1 underline hover:text-cyan"
 					>
 						@herrgraaf
 					</a>

@@ -1,3 +1,4 @@
+import data from "./projects.json"
 export type Language = {
 	language: string
 	files?: number
@@ -32,22 +33,8 @@ type ProjectsData = {
 	projects: Project[]
 }
 
-let cache: Promise<Project[]> | null = null
+// Bundled rather than fetched so About can render its metrics during prerender and
+// hydrate without a layout shift
+export const projects = (data as unknown as ProjectsData).projects
 
-const fetchProjects = async () => {
-	const res = await fetch("/projects.json")
-	if (!res.ok) throw new Error(`projects.json: ${res.status}`)
-	const data = (await res.json()) as ProjectsData
-	return data.projects
-}
-
-// One fetch per session, shared by About and Projects
-export const loadProjects = () => {
-	if (cache) return cache
-	cache = fetchProjects().catch((err) => {
-		// Drop the rejected promise so a retry re-fetches instead of replaying the failure
-		cache = null
-		throw err
-	})
-	return cache
-}
+export const loadProjects = () => Promise.resolve(projects)

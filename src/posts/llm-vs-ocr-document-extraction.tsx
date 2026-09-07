@@ -41,10 +41,12 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		<div key="img1-wrapper" className="flex flex-col gap-1">
 			<Lightbox
 				key="img1"
-				src="/images/posts/llm-vs-ocr-document-extraction/invoice_example.webp"
+				src="/images/posts/llm-vs-ocr-document-extraction/invoice_example-1000.webp"
+				full="/images/posts/llm-vs-ocr-document-extraction/invoice_example.webp"
 				alt="Redacted Dutch car invoice"
-				width={2473}
-				height={3497}
+				width={1000}
+				height={1415}
+				eager
 			/>
 			<span className="text-comment text-sm">
 				{"// typical Dutch car invoice with VIN, IBAN, prices, and tax fields"}
@@ -52,9 +54,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</div>,
 		"",
 		// THE NAIVE APPROACH
-		<h3 key="naive" className="text-cyan font-bold">
+		<h2 key="naive" className="text-cyan font-bold">
 			### Just use GPT, right?
-		</h3>,
+		</h2>,
 		"",
 		<span key="p2">
 			First attempt: "Just use GPT with vision." Send the invoice image, ask it to extract all
@@ -76,9 +78,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			distributions, not characters, and for a checksummed identifier close is useless.
 		</span>,
 		"",
-		<h3 key="background" className="text-cyan font-bold">
+		<h2 key="background" className="text-cyan font-bold">
 			### I've seen this before
-		</h3>,
+		</h2>,
 		"",
 		<span key="bg1">
 			In 2016, I built <span className="text-blue font-bold">Dutchies Travel</span> (BackpackApp), a
@@ -94,9 +96,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		</span>,
 		"",
 		// THE SOLUTION
-		<h3 key="hybrid" className="text-cyan font-bold">
+		<h2 key="hybrid" className="text-cyan font-bold">
 			### The fix: let each tool do what it's best at
-		</h3>,
+		</h2>,
 		"",
 		<span key="p5">
 			The solution was a <span className="text-green font-bold">hybrid dual-extraction</span>{" "}
@@ -126,9 +128,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			height={1552}
 		/>,
 		"",
-		<h3 key="prompts" className="text-cyan font-bold">
+		<h2 key="prompts" className="text-cyan font-bold">
 			### The prompt optimization rabbit hole
-		</h3>,
+		</h2>,
 		"",
 		<span key="p6">
 			I went deep on prompt optimization. Built a 331-line system prompt with detailed extraction
@@ -140,7 +142,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			Even used{" "}
 			<a
 				href="https://github.com/SalesforceAIResearch/promptomatix"
-				className="text-blue hover:underline"
+				className="text-blue underline"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
@@ -155,9 +157,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			want; it still operates on tokens, not characters. The fix has to be architectural.
 		</span>,
 		"",
-		<h3 key="normalization" className="text-cyan font-bold">
+		<h2 key="normalization" className="text-cyan font-bold">
 			### Normalization is everything
-		</h3>,
+		</h2>,
 		"",
 		<span key="p9">
 			Extraction is the easy part. The real work is{" "}
@@ -181,9 +183,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			height={1552}
 		/>,
 		"",
-		<h3 key="degradation" className="text-cyan font-bold">
+		<h2 key="degradation" className="text-cyan font-bold">
 			### Building for failure
-		</h3>,
+		</h2>,
 		"",
 		<span key="p11">Everything here fails eventually. Here's what happens when it does:</span>,
 		"",
@@ -208,9 +210,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 			Non-critical fields can fail without invalidating the invoice.
 		</span>,
 		"",
-		<h3 key="alternative" className="text-cyan font-bold">
+		<h2 key="alternative" className="text-cyan font-bold">
 			### Full circle: back to vendor-specific extractors?
-		</h3>,
+		</h2>,
 		"",
 		<span key="p12">
 			In 2016 the per-vendor regex extractors were too labour-intensive to maintain. But they were{" "}
@@ -244,7 +246,7 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		<span key="link">
 			See the project:{" "}
-			<a href="/projects?customer=revive%20capital" className="text-blue hover:underline">
+			<a href="/projects?customer=revive%20capital" className="text-blue underline">
 				Revive Capital on my projects page
 			</a>
 		</span>,
