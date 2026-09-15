@@ -4,6 +4,26 @@ import Buffer from "../components/Buffer"
 import { type Project, projects } from "../data/loadProjects"
 import { usePageTitle } from "../hooks/usePageTitle"
 
+const sites = {
+	apollo: "https://www.apollo.com/",
+	avans: "https://www.avans.nl/",
+	beequip: "https://beequip.com/",
+	financiallease: "https://www.financiallease.nl/",
+	hypotheekrente: "https://www.hypotheekrente.nl/",
+	ikea: "https://www.ikea.com/",
+	ing: "https://ing.com/",
+	kabisa: "https://kabisa.nl/",
+	mediahuis: "https://www.mediahuis.nl/",
+	peliqan: "https://peliqan.eu/",
+	philips: "https://www.philips.com/",
+	revive: "https://revive-capital.nl/",
+	scrum: "https://www.scrum.org/",
+	seacon: "https://www.seaconlogistics.com/",
+	tele2: "https://www.tele2.com/",
+	uva: "https://www.uva.nl/en",
+	yellowbrick: "https://yellowbrick.nl/",
+}
+
 const formatNum = (n: number) =>
 	n >= 1_000_000
 		? `${(n / 1_000_000).toFixed(1)}M`
@@ -20,24 +40,51 @@ const getYearRange = (p: Project): string => {
 	return `${start}-${end}`
 }
 
+const Ext = ({ href, children }: { href: string; children: ReactNode }) => (
+	<a href={href} target="_blank" rel="noreferrer" className="underline hover:text-cyan">
+		{children}
+	</a>
+)
+
+type Logo = { src: string; alt: string; width: number; href?: string }
+
+const LogoImg = ({ src, alt, width, href }: Logo) => {
+	const img = <img src={src} alt={alt} width={width} height={16} className="my-1.5 block h-4" />
+	if (!href) return img
+	return (
+		<a href={href} target="_blank" rel="noreferrer" className="hover:opacity-80">
+			{img}
+		</a>
+	)
+}
+
 const ManEntry = ({
 	id,
 	title,
 	date,
 	children,
 	tech,
+	logos,
 }: {
 	id: string
 	title: string
 	date: string
 	children: ReactNode
 	tech?: string[]
+	logos?: Logo[]
 }): ReactNode[] => [
 	<div key={`${id}-header`} className="flex justify-between max-w-3xl">
 		<span className="font-bold text-yellow">{title}</span>
 		<span className="text-comment">{date}</span>
 	</div>,
 	<div key={`${id}-content`} className="text-fg">
+		{logos && (
+			<div className="flex items-center gap-3">
+				{logos.map((logo) => (
+					<LogoImg key={logo.src} {...logo} />
+				))}
+			</div>
+		)}
 		{children}
 	</div>,
 	...(tech
@@ -147,7 +194,8 @@ export default function About() {
 		<div key="desc-content" className="ml-8 max-w-2xl">
 			I design and build complete systems from the ground up, frontend through infrastructure, and
 			lead the teams that ship them. Mostly fintech startups, where I build financial information
-			systems; sometimes enterprises like IKEA, ING and Tele2.
+			systems; sometimes enterprises like <Ext href={sites.ikea}>IKEA</Ext>,{" "}
+			<Ext href={sites.ing}>ING</Ext> and <Ext href={sites.tele2}>Tele2</Ext>.
 		</div>,
 		"",
 		...(metrics
@@ -231,7 +279,7 @@ export default function About() {
 									— {formatNum(p.totalLinesOfCode)} LOC, {formatNum(p.myCommitCount)} personal
 									commits
 									{p.customer &&
-										` (${p.customer === "Homigo" ? "ING" : p.customer === "Brickyard" ? "Yellobrick" : p.customer})`}
+										` (${p.customer === "Homigo" ? "ING" : p.customer === "Brickyard" ? "Yellowbrick" : p.customer})`}
 									{years && ` [${years}]`}
 								</span>
 							</div>
@@ -264,27 +312,15 @@ export default function About() {
 			id: "peliqan",
 			title: "Peliqan - Chief Technology Officer",
 			date: "Apr 2026 - Present",
+			logos: [
+				{ src: "/images/peliqan-logo.svg", alt: "PELIQAN logo", width: 79, href: sites.peliqan },
+			],
 			children: (
 				<>
-					<img
-						src="/images/peliqan-logo.svg"
-						alt="PELIQAN logo"
-						width={79}
-						height={16}
-						className="h-4 my-1.5"
-					/>
 					<div className="text-comment">Amsterdam, North Holland, Netherlands · On-site</div>
-					Building the{" "}
-					<a
-						href="https://peliqan.eu/"
-						target="_blank"
-						rel="noreferrer"
-						className="underline hover:text-cyan"
-					>
-						Peliqan
-					</a>{" "}
-					platform. Investors see their whole portfolio and can act on it: sell a position, finance
-					a commitment, plan ahead. Institutions have had that for decades; everyone else hasn't.
+					Building the <Ext href={sites.peliqan}>Peliqan</Ext> platform. Investors see their whole
+					portfolio and can act on it: sell a position, finance a commitment, plan ahead.
+					Institutions have had that for decades; everyone else hasn't.
 				</>
 			),
 		}).map((line, i) => (
@@ -296,6 +332,7 @@ export default function About() {
 			id: "reinvention",
 			title: "Re-invention (Founder)",
 			date: "2004 - Current",
+			logos: [{ src: "/images/reinvention-logo.svg", alt: "Re-invention logo", width: 18 }],
 			children: "My consultancy company: specialized in advanced (web-based) software solutions.",
 		}).map((line, i) => (
 			<div key={`reinvention-${i}`} className="ml-8">
@@ -306,8 +343,20 @@ export default function About() {
 			id: "revive",
 			title: "Revive Capital B.V - Tech Lead (Freelance)",
 			date: "2024 - Current",
-			children:
-				"Leading engineering at Revive Capital, a fintech leasing startup. Built their asset-backed lending platform for brokers from scratch.",
+			logos: [
+				{
+					src: "/images/revive-logo.svg",
+					alt: "Revive Capital logo",
+					width: 107,
+					href: sites.revive,
+				},
+			],
+			children: (
+				<>
+					Leading engineering at <Ext href={sites.revive}>Revive Capital</Ext>, a fintech leasing
+					startup. Built their asset-backed lending platform for brokers from scratch.
+				</>
+			),
 			tech: [
 				"TypeScript",
 				"TDD",
@@ -333,6 +382,14 @@ export default function About() {
 			id: "finlease",
 			title: "Financial Lease - Tech Lead (Freelance)",
 			date: "2023 - 2024",
+			logos: [
+				{
+					src: "/images/financiallease-logo.svg",
+					alt: "FinancialLease.nl logo",
+					width: 125,
+					href: sites.financiallease,
+				},
+			],
 			children:
 				"Built a dealer portal for car leases. A dealer takes a customer's request, finalises the lease and hands over the car in the time it takes to drink two coffees.",
 			tech: [
@@ -358,6 +415,7 @@ export default function About() {
 			id: "ikea",
 			title: "IKEA - Tech Lead (Freelance)",
 			date: "2022 - 2023",
+			logos: [{ src: "/images/ikea-logo.svg", alt: "IKEA logo", width: 39, href: sites.ikea }],
 			children:
 				"Led the IKEA Content Coworker Experience program: getting shop-floor coworkers the information they need, personalised per person, on top of a knowledge graph.",
 			tech: ["Neo4J", "TypeScript", "GraphQL", "Apollo", "React", "Azure", "Node.js", "CI/CD"],
@@ -370,6 +428,14 @@ export default function About() {
 			id: "hypotheek",
 			title: "hypotheekrente.nl - Tech Lead (Freelance)",
 			date: "2022 - 2025",
+			logos: [
+				{
+					src: "/images/hypotheekrente-logo.svg",
+					alt: "hypotheekrente.nl logo",
+					width: 134,
+					href: sites.hypotheekrente,
+				},
+			],
 			children:
 				"Built the lead system that matches people looking for mortgage advice with an advisor who can take them on.",
 			tech: [
@@ -391,6 +457,10 @@ export default function About() {
 			id: "homigo",
 			title: "ING / Homigo - CTO (Freelance)",
 			date: "2019 - 2022",
+			logos: [
+				{ src: "/images/ing-logo.svg", alt: "ING logo", width: 64, href: sites.ing },
+				{ src: "/images/homigo-logo.svg", alt: "Homigo logo", width: 57 },
+			],
 			children:
 				"At Homigo, a corporate startup backed by ING Neo, I led the technical implementation of a SaaS productivity platform (mobile/web) for contractors and homeowners to manage home renovations. I designed and implemented the hard parts: real-time chat, file sharing, resource planning, and other domain-specific tools.",
 			tech: ["Ruby on Rails", "TypeScript", "React Native", "Apollo", "GraphQL", "Docker", "CI/CD"],
@@ -403,8 +473,19 @@ export default function About() {
 			id: "beequip",
 			title: "BEEQUIP - Tech Lead (Freelance)",
 			date: "2016 - 2019",
-			children:
-				"Developing BEEQUIP's (startup, fintech) online leasing platform from the ground up and helping build the technology team. Designed and implemented BEEHIVE, an information system that captured and automated core business processes, exposing a GraphQL API consumed by the dealer portal and customer portal (BEEPORT). In 2022, BEEQUIP provided €735 million in lease financing, and in 2024, the company was acquired by Apollo Capital Management.",
+			logos: [
+				{ src: "/images/beequip-logo.svg", alt: "BEEQUIP logo", width: 67, href: sites.beequip },
+			],
+			children: (
+				<>
+					Developing <Ext href={sites.beequip}>BEEQUIP</Ext>'s (startup, fintech) online leasing
+					platform from the ground up and helping build the technology team. Designed and
+					implemented BEEHIVE, an information system that captured and automated core business
+					processes, exposing a GraphQL API consumed by the dealer portal and customer portal
+					(BEEPORT). In 2022, BEEQUIP provided €735 million in lease financing, and in 2024, the
+					company was acquired by <Ext href={sites.apollo}>Apollo Global Management</Ext>.
+				</>
+			),
 			tech: [
 				"Ruby on Rails",
 				"Python",
@@ -429,6 +510,7 @@ export default function About() {
 			id: "backpack",
 			title: "Backpackapp - CTO",
 			date: "2015 - 2018",
+			logos: [{ src: "/images/backpackapp-logo.svg", alt: "Backpackapp logo", width: 178 }],
 			children:
 				"Building a travel agency platform for backpackers on the go, tackling challenges such as automated document classification and recognition, and developing an offline-first, cross-platform mobile app.",
 			tech: ["Elixir", "React Native", "JavaScript"],
@@ -441,6 +523,7 @@ export default function About() {
 			id: "tele2",
 			title: "Tele2 - Software Engineer (Freelance)",
 			date: "2015 - 2016",
+			logos: [{ src: "/images/tele2-logo.svg", alt: "Tele2 logo", width: 43, href: sites.tele2 }],
 			children:
 				"Maintaining a software system for commissioning and provisioning 4G network devices. Developed a consistency-checking tool to audit device configurations and enhanced overall software quality by improving tests and engineering practices.",
 			tech: [
@@ -462,6 +545,7 @@ export default function About() {
 			id: "postinitial",
 			title: "Postinitial - CTO",
 			date: "2014 - 2016",
+			logos: [{ src: "/images/postinitial-logo.svg", alt: "Postinitial logo", width: 67 }],
 			children: "Building an e-learning platform for Corporate Finance.",
 			tech: ["Ruby", "JavaScript", "Rails", "React", "Flux", "Docker"],
 		}).map((line, i) => (
@@ -473,8 +557,19 @@ export default function About() {
 			id: "kabisa",
 			title: "Kabisa - Software Engineer / Lead / DevOps / Consultant",
 			date: "2008 - 2015",
-			children:
-				"Kabisa builds enterprise software in Ruby on Rails and Java. I joined at the start and worked as scrum master, DevOps engineer, lead developer, consultant and architect for clients including Philips, Media Groep Limburg, Seacon Logistics and Yellobrick.",
+			logos: [
+				{ src: "/images/kabisa-logo.svg", alt: "Kabisa logo", width: 50, href: sites.kabisa },
+			],
+			children: (
+				<>
+					<Ext href={sites.kabisa}>Kabisa</Ext> builds enterprise software in Ruby on Rails and
+					Java. I joined at the start and worked as scrum master, DevOps engineer, lead developer,
+					consultant and architect for clients including <Ext href={sites.philips}>Philips</Ext>,{" "}
+					<Ext href={sites.mediahuis}>Media Groep Limburg</Ext>,{" "}
+					<Ext href={sites.seacon}>Seacon Logistics</Ext> and{" "}
+					<Ext href={sites.yellowbrick}>Yellowbrick</Ext>.
+				</>
+			),
 		}).map((line, i) => (
 			<div key={`kabisa-${i}`} className="ml-8">
 				{line}
@@ -484,6 +579,9 @@ export default function About() {
 			id: "philips",
 			title: "Philips - Internship",
 			date: "2007 - 2008",
+			logos: [
+				{ src: "/images/philips-logo.svg", alt: "Philips logo", width: 87, href: sites.philips },
+			],
 			children:
 				"Internship where I developed an internet-connected television prototype where users can share photos and play games over the internet.",
 		}).map((line, i) => (
@@ -499,6 +597,14 @@ export default function About() {
 			id: "uva",
 			title: "University of Amsterdam - Master Software Engineering",
 			date: "2008 - 2009",
+			logos: [
+				{
+					src: "/images/uva-logo.svg",
+					alt: "University of Amsterdam logo",
+					width: 145,
+					href: sites.uva,
+				},
+			],
 			children: "For my master's thesis, I researched Intelligent fuzzing of web applications.",
 		}).map((line, i) => (
 			<div key={`uva-${i}`} className="ml-8">
@@ -507,14 +613,22 @@ export default function About() {
 		)),
 		...ManEntry({
 			id: "avans",
-			title: "Avans Hogeschool s-Hertogenbosch - Bachelor Computer Science",
+			title: "Avans Hogeschool 's-Hertogenbosch - Bachelor Computer Science",
 			date: "2005 - 2008",
+			logos: [
+				{
+					src: "/images/avans-logo.svg",
+					alt: "Avans Hogeschool logo",
+					width: 54,
+					href: sites.avans,
+				},
+			],
 			children: (
 				<ul className="list-disc list-inside">
 					<li>Graduated cum laude</li>
 					<li>
-						Graduation internship at the Philips Innovation Lab worked on the European-funded Amigo
-						project
+						Graduation internship at the <Ext href={sites.philips}>Philips</Ext> Innovation Lab
+						worked on the European-funded Amigo project
 					</li>
 				</ul>
 			),
@@ -535,7 +649,9 @@ export default function About() {
 		</div>,
 		<ul key="awards-content" className="ml-8 list-disc list-inside">
 			<li>Graduated cum laude for bachelor degree computer science</li>
-			<li>Professional Scrum Master certificate (Scrum.org)</li>
+			<li>
+				Professional Scrum Master certificate (<Ext href={sites.scrum}>Scrum.org</Ext>)
+			</li>
 			<li>Coursera: Neural Networks and Deep Learning</li>
 			<li>Placed first at the RubyenRails 2009 rumble</li>
 			<li>Dutch Drivers license (B)</li>
