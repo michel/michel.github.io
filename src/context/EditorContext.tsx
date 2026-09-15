@@ -16,7 +16,7 @@ export interface FileNode {
 	id: string
 	name: string
 	path: string
-	type: "file" | "folder"
+	type: "file" | "folder" | "link"
 	children?: FileNode[]
 }
 
@@ -58,6 +58,12 @@ export const fileTree: FileNode[] = [
 	{ id: files.cv.id, name: files.cv.name, path: files.cv.path, type: "file" },
 	{ id: files.projects.id, name: files.projects.name, path: files.projects.path, type: "file" },
 	{ id: files.contact.id, name: files.contact.name, path: files.contact.path, type: "file" },
+	{
+		id: "soulseek-rs",
+		name: "soulseek-rs",
+		path: "https://re-invention.nl/soulseek-rs/",
+		type: "link",
+	},
 ]
 
 export function flattenVisibleTree(nodes: FileNode[], expandedFolders: Set<string>): FileNode[] {

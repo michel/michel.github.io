@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, FileText, FolderClosed } from "lucide-react"
+import { ChevronDown, ChevronRight, ExternalLink, FileText, FolderClosed } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { type FileNode, fileTree, flattenVisibleTree, useEditor } from "../context/EditorContext"
@@ -42,6 +42,15 @@ function FileTreeNode({
 				<FolderClosed aria-hidden="true" className="h-3 w-3 shrink-0 text-yellow" />
 				<span className="text-fg">{node.name}</span>
 			</button>
+		)
+	}
+
+	if (node.type === "link") {
+		return (
+			<a href={node.path} className={`${rowBase} ${cursorClass}`} style={{ paddingLeft }}>
+				<ExternalLink aria-hidden="true" className="h-3 w-3 shrink-0 text-blue" />
+				<span className="text-fg">{node.name}</span>
+			</a>
 		)
 	}
 
