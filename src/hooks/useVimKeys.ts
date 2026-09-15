@@ -174,6 +174,8 @@ export function useVimKeys() {
 						if (node) {
 							if (node.type === "folder") {
 								toggleFolder(node.id)
+							} else if (node.type === "link") {
+								window.location.assign(node.path)
 							} else {
 								openBuffer(node.path)
 								navigate(node.path)
