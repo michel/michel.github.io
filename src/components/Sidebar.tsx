@@ -85,7 +85,8 @@ function getNodeDepth(node: FileNode, tree: FileNode[], depth = 0): number {
 }
 
 export default function Sidebar() {
-	const [width, setWidth] = useState(320)
+	// Unset until dragged, so w-max sizes the tree to its longest file name
+	const [width, setWidth] = useState<number>()
 	const [isResizing, setIsResizing] = useState(false)
 	const { sidebarCursorIndex, expandedFolders, toggleFolder, sidebarFocused } = useEditor()
 
@@ -122,7 +123,7 @@ export default function Sidebar() {
 
 	return (
 		<aside
-			className={`relative hidden flex-col border-r border-border bg-bg md:flex ${sidebarFocused ? "ring-1 ring-inset ring-magenta" : ""}`}
+			className={`relative hidden w-max shrink-0 flex-col border-r border-border bg-bg md:flex ${sidebarFocused ? "ring-1 ring-inset ring-magenta" : ""}`}
 			style={{ width }}
 		>
 			<div className="bg-bg-dark px-2 py-1 font-bold text-magenta">re-invention</div>
