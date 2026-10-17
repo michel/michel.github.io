@@ -7,7 +7,8 @@ import {
 	useMemo,
 	useState,
 } from "react"
-import { type FileId, files, getPreview } from "../data/files"
+import { useLocation } from "react-router-dom"
+import { fileMeta } from "../data/fileMeta"
 import { applyTheme, getStoredTheme, storeTheme, themeNames } from "../data/themes"
 
 export type VimMode = "NORMAL" | "INSERT" | "VISUAL" | "COMMAND"
@@ -29,35 +30,45 @@ export const fileTree: FileNode[] = [
 		type: "folder",
 		children: [
 			{
-				id: files.askwhere.id,
-				name: files.askwhere.name,
-				path: files.askwhere.path,
+				id: fileMeta.askwhere.id,
+				name: fileMeta.askwhere.name,
+				path: fileMeta.askwhere.path,
 				type: "file",
 			},
 			{
-				id: files.rust.id,
-				name: files.rust.name,
-				path: files.rust.path,
+				id: fileMeta.rust.id,
+				name: fileMeta.rust.name,
+				path: fileMeta.rust.path,
 				type: "file",
 			},
 			{
-				id: files.llmocr.id,
-				name: files.llmocr.name,
-				path: files.llmocr.path,
+				id: fileMeta.llmocr.id,
+				name: fileMeta.llmocr.name,
+				path: fileMeta.llmocr.path,
 				type: "file",
 			},
 			{
-				id: files.portfolio.id,
-				name: files.portfolio.name,
-				path: files.portfolio.path,
+				id: fileMeta.portfolio.id,
+				name: fileMeta.portfolio.name,
+				path: fileMeta.portfolio.path,
 				type: "file",
 			},
 		],
 	},
-	{ id: files.home.id, name: files.home.name, path: files.home.path, type: "file" },
-	{ id: files.cv.id, name: files.cv.name, path: files.cv.path, type: "file" },
-	{ id: files.projects.id, name: files.projects.name, path: files.projects.path, type: "file" },
-	{ id: files.contact.id, name: files.contact.name, path: files.contact.path, type: "file" },
+	{ id: fileMeta.home.id, name: fileMeta.home.name, path: fileMeta.home.path, type: "file" },
+	{ id: fileMeta.cv.id, name: fileMeta.cv.name, path: fileMeta.cv.path, type: "file" },
+	{
+		id: fileMeta.projects.id,
+		name: fileMeta.projects.name,
+		path: fileMeta.projects.path,
+		type: "file",
+	},
+	{
+		id: fileMeta.contact.id,
+		name: fileMeta.contact.name,
+		path: fileMeta.contact.path,
+		type: "file",
+	},
 	{
 		id: "soulseek-rs",
 		name: "soulseek-rs",
@@ -77,11 +88,10 @@ export function flattenVisibleTree(nodes: FileNode[], expandedFolders: Set<strin
 }
 
 // All files derived from unified lookup table
-export const allFiles = Object.values(files).map((f) => ({
+export const allFiles = Object.values(fileMeta).map((f) => ({
 	id: f.id,
 	name: f.name,
 	path: f.path,
-	preview: getPreview(f.id as FileId),
 }))
 
 export type TmuxWindow = 0 | 1 | 2 | 3 | 4 | 5 | 6
@@ -156,11 +166,14 @@ interface EditorContextType extends EditorState {
 const EditorContext = createContext<EditorContextType | null>(null)
 
 export function EditorProvider({ children }: { children: ReactNode }) {
+	const { pathname } = useLocation()
 	const [state, setState] = useState<EditorState>(() => {
 		const storedTheme = getStoredTheme()
 		return {
 			mode: "NORMAL",
-			openBuffers: ["/"],
+			// A deep link's tab is in the prerendered HTML, so it does not pop in on hydration
+			openBuffers:
+				pathname !== "/" && allFiles.some((f) => f.path === pathname) ? ["/", pathname] : ["/"],
 			sidebarOpen: true,
 			sidebarFocused: false,
 			sidebarCursorIndex: 0,
@@ -345,7 +358,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 	const moveCursor = useCallback((direction: "up" | "down") => {
 		setState((s) => {
 			const newLine = direction === "down" ? s.cursorLine + 1 : s.cursorLine - 1
-			return { ...s, cursorLine: Math.max(0, Math.min(newLine, s.lineCount - 1)) }
+			const line = Math.max(0, Math.min(newLine, s.lineCount - 1))
+			// Unchanged state skips the re-render of every consumer (j/k on a page without lines)
+			return line === s.cursorLine ? s : { ...s, cursorLine: line }
 		})
 	}, [])
 

@@ -70,29 +70,28 @@ export const tips: Tip[] = [
 
 const STORAGE_KEY = "seen-tips"
 
-export function getSeenTips(): string[] {
-	const stored = localStorage.getItem(STORAGE_KEY)
-	return stored ? JSON.parse(stored) : []
-}
-
-export function markTipSeen(tipId: string) {
-	const seen = getSeenTips()
-	if (!seen.includes(tipId)) {
-		seen.push(tipId)
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(seen))
+// Blocked storage or a malformed value reads as nothing seen yet
+const readSeen = (): string[] => {
+	try {
+		const seen = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]")
+		return Array.isArray(seen) ? seen : []
+	} catch {
+		return []
 	}
 }
 
-export function getRandomTip(): Tip {
-	const seen = getSeenTips()
+// Picks a tip not shown yet and remembers it; once every tip is seen the cycle starts over
+export function nextTip(): Tip {
+	const seen = readSeen()
 	const unseen = tips.filter((t) => !seen.includes(t.id))
-
-	// If all tips seen, reset and start over
-	const pool = unseen.length === 0 ? tips : unseen
-	if (unseen.length === 0) localStorage.removeItem(STORAGE_KEY)
-
-	const idx = Math.floor(Math.random() * pool.length)
-	return pool[idx] as Tip
+	const pool = unseen.length ? unseen : tips
+	const tip = pool[Math.floor(Math.random() * pool.length)] as Tip
+	try {
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(unseen.length ? [...seen, tip.id] : [tip.id]))
+	} catch {
+		// Storage blocked: tips still rotate, they may just repeat
+	}
+	return tip
 }
 
 export function getAllTips(): Tip[] {

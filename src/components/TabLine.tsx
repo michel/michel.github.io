@@ -110,7 +110,10 @@ export default function TabLine() {
 				<Palette aria-hidden="true" className="h-4 w-4" />
 				<span className="pointer-events-none absolute right-0 top-full z-20 mt-1 block opacity-0 transition-opacity group-hover:opacity-100">
 					<span className="block whitespace-nowrap border border-border bg-bg-dark px-2 py-1 text-xs text-fg">
-						Theme: <span className="text-cyan">{themes[theme]?.label ?? theme}</span>
+						Theme:{" "}
+						<span className="text-cyan" suppressHydrationWarning>
+							{themes[theme]?.label ?? theme}
+						</span>
 					</span>
 				</span>
 			</button>

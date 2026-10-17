@@ -29,12 +29,12 @@ console.log(
 const root = document.getElementById("root")!
 const app = (
 	<StrictMode>
-		<BrowserRouter>
+		<BrowserRouter basename="/blog">
 			<App />
 		</BrowserRouter>
 	</StrictMode>
 )
 
-// Production index.html is prerendered (scripts/prerender.tsx); dev serves an empty root
+// Production blog pages are prerendered (scripts/prerender.tsx); dev serves an empty root
 if (root.hasChildNodes()) hydrateRoot(root, app)
 else createRoot(root).render(app)

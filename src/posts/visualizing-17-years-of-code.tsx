@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { Link } from "react-router-dom"
 import Lightbox from "../components/Lightbox"
 
 export const visualizing17YearsOfCode: { title: string; date: string; lines: ReactNode[] } = {
@@ -128,9 +129,9 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		"",
 		<span key="p9">
 			Check it out:{" "}
-			<a href="/projects" className="text-blue underline">
+			<Link to="/projects" className="text-blue underline">
 				/projects
-			</a>
+			</Link>
 		</span>,
 		"",
 		<h2 key="learned" className="text-green font-bold text-lg">
@@ -195,9 +196,9 @@ export const visualizing17YearsOfCode: { title: string; date: string; lines: Rea
 		"",
 		<span key="link">
 			Try it:{" "}
-			<a href="/projects" className="text-blue underline">
+			<Link to="/projects" className="text-blue underline">
 				/projects
-			</a>
+			</Link>
 		</span>,
 		"",
 		<span key="tags" className="text-comment">

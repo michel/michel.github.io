@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { allFiles, useEditor } from "../context/EditorContext"
+import { type FileId, getPreview } from "../data/files"
 
 export default function FuzzyFinder() {
 	const [query, setQuery] = useState("")
@@ -131,7 +132,7 @@ export default function FuzzyFinder() {
 						Grep Preview
 					</span>
 					<div className="flex-1 overflow-y-auto overflow-x-hidden whitespace-pre-wrap p-3 text-fg">
-						{selectedFile?.preview ?? ""}
+						{selectedFile ? getPreview(selectedFile.id as FileId) : ""}
 					</div>
 				</div>
 			</div>

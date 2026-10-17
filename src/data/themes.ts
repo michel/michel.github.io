@@ -167,14 +167,23 @@ export function applyTheme(themeName: string) {
 		root.style.setProperty(prop, value)
 }
 
+// Storage can be missing (prerender) or throw (site data blocked); a stale key falls back too
 export function getStoredTheme(): string {
-	if (typeof localStorage === "undefined") return "default"
-	return localStorage.getItem("theme") || "default"
+	try {
+		const stored = localStorage.getItem("theme")
+		return stored && themeNames.includes(stored) ? stored : "default"
+	} catch {
+		return "default"
+	}
 }
 
 export function storeTheme(themeName: string) {
-	localStorage.setItem("theme", themeName)
-	// Mirrored vars let index.html's boot script re-theme before first paint
-	// without shipping the palette table; applyTheme corrects any stale copy on mount
-	localStorage.setItem("themeVars", JSON.stringify(themeVars(themeName)))
+	try {
+		localStorage.setItem("theme", themeName)
+		// Mirrored vars let index.html's boot script re-theme before first paint
+		// without shipping the palette table; applyTheme corrects any stale copy on mount
+		localStorage.setItem("themeVars", JSON.stringify(themeVars(themeName)))
+	} catch {
+		// Storage blocked: the theme still applies, it is just not remembered
+	}
 }

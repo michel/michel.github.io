@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import { useEditor } from "../context/EditorContext"
 import { projects } from "../data/loadProjects"
 import { usePageTitle } from "../hooks/usePageTitle"
 
@@ -11,13 +12,14 @@ type Filter = {
 type SortColumn = "name" | "customer" | "language" | "lines" | "commits" | "status" | "start"
 
 // Utilities
-const formatNum = (num: number) =>
-	new Intl.NumberFormat("en-US", { notation: "compact", compactDisplay: "short" }).format(num)
+const compact = new Intl.NumberFormat("en-US", { notation: "compact", compactDisplay: "short" })
+const formatNum = (num: number) => compact.format(num)
 
+// Years are read in UTC: the dates sit on UTC year boundaries, and the prerender runs in UTC
 const parseDate = (d?: string | null): Date | null => {
 	if (!d) return null
 	const date = new Date(d)
-	return date.getFullYear() === 1970 ? null : date
+	return date.getUTCFullYear() === 1970 ? null : date
 }
 
 // Panel component
@@ -191,6 +193,10 @@ export default function Projects() {
 	const [searchMode, setSearchMode] = useState(false)
 	const listRef = useRef<HTMLDivElement>(null)
 	const searchInputRef = useRef<HTMLInputElement>(null)
+	const { sidebarFocused, snakeGameOpen, adventureGameOpen } = useEditor()
+	// The prerendered HTML is frozen at deploy time: clock-based stats wait for mount
+	const [now, setNow] = useState<number | null>(null)
+	useEffect(() => setNow(Date.now()), [])
 
 	// Read filter state from URL
 	const filter: Filter = useMemo(() => {
@@ -211,10 +217,9 @@ export default function Projects() {
 			.map((p) => parseDate(p.firstCommitDate))
 			.filter((d): d is Date => d !== null)
 		const earliest = validDates.length
-			? new Date(Math.min(...validDates.map((d) => d.getTime())))
-			: new Date()
-		const now = new Date()
-		const diffTime = Math.abs(now.getTime() - earliest.getTime())
+			? Math.min(...validDates.map((d) => d.getTime()))
+			: (now ?? 0)
+		const diffTime = now === null ? 0 : Math.abs(now - earliest)
 		const diffYears = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365))
 		const diffDays = Math.floor((diffTime % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24))
 
@@ -231,7 +236,7 @@ export default function Projects() {
 			totalProjects: projects.length,
 			avgLocPerDay,
 		}
-	}, [projects])
+	}, [projects, now])
 
 	// Busiest project, used to scale the contribution meter
 	const maxMyCommitCount = useMemo(
@@ -242,7 +247,6 @@ export default function Projects() {
 	// Commit history by year
 	const commitsByYear = useMemo(() => {
 		const byYear: Record<number, number> = {}
-		const currentYear = new Date().getFullYear()
 
 		projects.forEach((p) => {
 			if (p.commitYearStats) {
@@ -254,6 +258,8 @@ export default function Projects() {
 		})
 
 		const allYears = Object.keys(byYear).map(Number)
+		// Until mount the data's last year stands in for the clock, so hydration matches the HTML
+		const currentYear = now === null ? Math.max(...allYears) : new Date(now).getUTCFullYear()
 		const minYear = allYears.length ? Math.min(...allYears) : currentYear
 		const years: { year: number; count: number }[] = []
 		let maxVal = 0
@@ -265,7 +271,7 @@ export default function Projects() {
 		}
 
 		return { years, maxVal }
-	}, [projects])
+	}, [projects, now])
 
 	// Language stats
 	const languageStats = useMemo(() => {
@@ -444,6 +450,14 @@ export default function Projects() {
 			// Never steal keys from a field the user is typing in
 			const tag = (e.target as HTMLElement).tagName
 			if (tag === "INPUT" || tag === "TEXTAREA") return
+			// Nor from the sidebar, a game or a popup that has the keyboard
+			if (
+				sidebarFocused ||
+				snakeGameOpen ||
+				adventureGameOpen ||
+				document.querySelector('[aria-modal="true"]')
+			)
+				return
 
 			// "/" to enter search mode
 			if (e.key === "/" && !searchMode) {
@@ -477,7 +491,16 @@ export default function Projects() {
 		}
 		document.addEventListener("keydown", handleKeydown)
 		return () => document.removeEventListener("keydown", handleKeydown)
-	}, [filteredProjects.length, searchMode, filter.type, updateSearchQuery, clearFilter])
+	}, [
+		filteredProjects.length,
+		searchMode,
+		filter.type,
+		updateSearchQuery,
+		clearFilter,
+		sidebarFocused,
+		snakeGameOpen,
+		adventureGameOpen,
+	])
 
 	// Focus search input when search mode is activated
 	useEffect(() => {
@@ -521,7 +544,7 @@ export default function Projects() {
 						<div className="flex flex-col justify-between">
 							<span className="text-[10px] text-comment md:text-xs">UPTIME</span>
 							<span className="text-base font-bold text-fg md:text-xl">
-								{globalStats.diffYears}y {globalStats.diffDays}d
+								{now === null ? "--" : `${globalStats.diffYears}y ${globalStats.diffDays}d`}
 							</span>
 						</div>
 						<div className="flex flex-col justify-between">
@@ -545,7 +568,7 @@ export default function Projects() {
 						<div className="col-span-2 flex flex-col justify-between md:col-span-1">
 							<span className="text-[10px] text-comment md:text-xs">AVG LOC/DAY</span>
 							<span className="text-base font-bold text-fg md:text-xl">
-								{formatNum(globalStats.avgLocPerDay)}
+								{now === null ? "--" : formatNum(globalStats.avgLocPerDay)}
 							</span>
 						</div>
 					</div>
@@ -657,13 +680,13 @@ export default function Projects() {
 								<div>
 									<span className="block text-comment">Start</span>
 									<span className="text-fg">
-										{parseDate(selectedProject.firstCommitDate)?.getFullYear() || "-"}
+										{parseDate(selectedProject.firstCommitDate)?.getUTCFullYear() || "-"}
 									</span>
 								</div>
 								<div>
 									<span className="block text-comment">End</span>
 									<span className="text-fg">
-										{parseDate(selectedProject.lastCommitDate)?.getFullYear() || "-"}
+										{parseDate(selectedProject.lastCommitDate)?.getUTCFullYear() || "-"}
 									</span>
 								</div>
 							</div>
@@ -981,7 +1004,7 @@ export default function Projects() {
 											{p.myCommitCount || 0}
 										</div>
 										<div className="hidden w-12 shrink-0 text-center font-mono text-comment lg:block">
-											{parseDate(p.firstCommitDate)?.getFullYear() || "-"}
+											{parseDate(p.firstCommitDate)?.getUTCFullYear() || "-"}
 										</div>
 										<div
 											className={`w-20 shrink-0 text-center text-[10px] uppercase ${statusColor}`}

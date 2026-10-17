@@ -6,6 +6,7 @@ tasks
 
 .env
 tsconfig.tsbuildinfo
+output
 
 .impeccable/hook.cache.json
 .impeccable/config.local.json

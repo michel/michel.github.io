@@ -10,13 +10,22 @@ const INITIAL_SPEED = 150
 const SPEED_INCREMENT = 5
 const MIN_SPEED = 50
 
+// Blocked storage or a malformed value reads as no high score yet
 const getHighScore = () => {
-	const stored = localStorage.getItem("snake-high-score")
-	return stored ? parseInt(stored, 10) : 0
+	try {
+		const score = parseInt(localStorage.getItem("snake-high-score") ?? "", 10)
+		return Number.isFinite(score) ? score : 0
+	} catch {
+		return 0
+	}
 }
 
 const setHighScore = (score: number) => {
-	localStorage.setItem("snake-high-score", score.toString())
+	try {
+		localStorage.setItem("snake-high-score", score.toString())
+	} catch {
+		// Storage blocked: the score holds for this game, it is just not remembered
+	}
 }
 
 export default function SnakeGame() {
