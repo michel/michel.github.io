@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { Link } from "react-router-dom"
 import Lightbox from "../components/Lightbox"
 
 export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: ReactNode[] } = {
@@ -246,9 +247,9 @@ export const llmVsOcrDocumentExtraction: { title: string; date: string; lines: R
 		"",
 		<span key="link">
 			See the project:{" "}
-			<a href="/projects?customer=revive%20capital" className="text-blue underline">
+			<Link to="/projects?customer=revive%20capital" className="text-blue underline">
 				Revive Capital on my projects page
-			</a>
+			</Link>
 		</span>,
 		"",
 		<span key="tags" className="text-comment">

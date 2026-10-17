@@ -32,8 +32,8 @@ const formatNum = (n: number) =>
 			: String(n)
 
 const getYearRange = (p: Project): string => {
-	const start = p.firstCommitDate ? new Date(p.firstCommitDate).getFullYear() : null
-	const end = p.lastCommitDate ? new Date(p.lastCommitDate).getFullYear() : null
+	const start = p.firstCommitDate ? new Date(p.firstCommitDate).getUTCFullYear() : null
+	const end = p.lastCommitDate ? new Date(p.lastCommitDate).getUTCFullYear() : null
 	if (!start || start < 1980) return ""
 	if (!end || end < 1980) return `${start}`
 	if (start === end) return `${start}`
@@ -104,9 +104,13 @@ export default function About() {
 
 		const dates = projects
 			.map((p) => (p.firstCommitDate ? new Date(p.firstCommitDate) : null))
-			.filter((d): d is Date => d !== null && d.getFullYear() > 1970)
-		const earliest = dates.length ? Math.min(...dates.map((d) => d.getTime())) : Date.now()
-		const years = new Date().getFullYear() - new Date(earliest).getFullYear()
+			.filter((d): d is Date => d !== null && d.getUTCFullYear() > 1970)
+		// From the data, not the clock, in UTC like the prerender: the count must survive hydration
+		const latest = Math.max(
+			...projects.map((p) => (p.lastCommitDate ? Date.parse(p.lastCommitDate) : 0)),
+		)
+		const earliest = dates.length ? Math.min(...dates.map((d) => d.getTime())) : latest
+		const years = new Date(latest).getUTCFullYear() - new Date(earliest).getUTCFullYear()
 
 		const totalLoc = projects.reduce((acc, p) => acc + (p.myLinesOfCode || 0), 0)
 		const totalCommits = projects.reduce((acc, p) => acc + (p.myCommitCount || 0), 0)

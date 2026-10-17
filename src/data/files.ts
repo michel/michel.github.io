@@ -1,6 +1,7 @@
-// Unified file content lookup table
+import { fileMeta } from "./fileMeta"
+
+// Unified file content lookup table, keyed and ordered like fileMeta
 // All file content is defined here once and shared across:
-// - File Explorer (Sidebar)
 // - Fuzzy Finder
 // - Terminal simulation
 
@@ -15,10 +16,7 @@ export interface FileContent {
 // Using a const assertion to preserve literal keys for type safety
 export const files = {
 	home: {
-		id: "home",
-		name: "README.md",
-		path: "/",
-		terminalPath: "/home/michel/blog/README.md",
+		...fileMeta.home,
 		content: [
 			"\x1b[magenta]                        -=:        :=\x1b[reset]",
 			"\x1b[magenta]                      -++=.        :=.\x1b[reset]",
@@ -71,10 +69,7 @@ export const files = {
 		],
 	},
 	rust: {
-		id: "rust",
-		name: "learning_rust_the_hard_way.md",
-		path: "/posts/learning-rust-the-hard-way",
-		terminalPath: "/home/michel/blog/posts/learning_rust_the_hard_way.md",
+		...fileMeta.rust,
 		content: [
 			"\x1b[comment]---\x1b[reset]",
 			'\x1b[comment]title: "Learning Rust the Hard Way"\x1b[reset]',
@@ -154,10 +149,7 @@ export const files = {
 		],
 	},
 	askwhere: {
-		id: "askwhere",
-		name: "ask_the_model_where_not_what_document_extraction.md",
-		path: "/posts/ask-the-model-where-not-what-document-extraction",
-		terminalPath: "/home/michel/blog/posts/ask_the_model_where_not_what_document_extraction.md",
+		...fileMeta.askwhere,
 		content: [
 			"---",
 			'title: "Ask the Model Where, Not What"',
@@ -357,10 +349,7 @@ export const files = {
 		],
 	},
 	llmocr: {
-		id: "llmocr",
-		name: "llm_vs_ocr_document_extraction.md",
-		path: "/posts/llm-vs-ocr-document-extraction",
-		terminalPath: "/home/michel/blog/posts/llm_vs_ocr_document_extraction.md",
+		...fileMeta.llmocr,
 		content: [
 			"\x1b[comment]---\x1b[reset]",
 			'\x1b[comment]title: "Combining LLM and OCR for Invoice Validation: Lessons Learned"\x1b[reset]',
@@ -443,10 +432,7 @@ export const files = {
 		],
 	},
 	portfolio: {
-		id: "portfolio",
-		name: "visualizing_17_years_of_code.md",
-		path: "/posts/visualizing-17-years-of-code",
-		terminalPath: "/home/michel/blog/posts/visualizing_17_years_of_code.md",
+		...fileMeta.portfolio,
 		content: [
 			"\x1b[comment]---\x1b[reset]",
 			'\x1b[comment]title: "Visualizing 17 Years of Code"\x1b[reset]',
@@ -525,10 +511,7 @@ export const files = {
 		],
 	},
 	cv: {
-		id: "cv",
-		name: "about_michel.man",
-		path: "/about",
-		terminalPath: "/home/michel/blog/about_michel.man",
+		...fileMeta.cv,
 		content: [
 			"\x1b[cyan]MICHEL(1)\x1b[reset]              General Commands Manual",
 			"",
@@ -644,10 +627,7 @@ export const files = {
 		],
 	},
 	contact: {
-		id: "contact",
-		name: "contact_card.vcf",
-		path: "/contact",
-		terminalPath: "/home/michel/blog/contact_card.vcf",
+		...fileMeta.contact,
 		content: [
 			"\x1b[magenta]RE-INVENTION B.V.\x1b[reset]",
 			"",
@@ -676,10 +656,7 @@ export const files = {
 		],
 	},
 	projects: {
-		id: "projects",
-		name: "projects.sys",
-		path: "/projects",
-		terminalPath: "/home/michel/blog/projects.sys",
+		...fileMeta.projects,
 		content: [
 			"\x1b[cyan]SYSTEM MONITOR // PORTFOLIO\x1b[reset]",
 			"",

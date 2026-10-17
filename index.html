@@ -1,39 +1,913 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>michel@re-invention:~</title>
-    <meta name="description" content="Michel de Graaf — CTO at Peliqan, 22 years of building financial information systems for fintech startups. A personal site rendered as a vim/tmux session; keyboard recommended." />
-    <meta name="theme-color" content="#232135" />
-    <meta property="og:title" content="michel@re-invention:~" />
-    <meta property="og:description" content="Michel de Graaf — CTO at Peliqan, 22 years of building financial information systems for fintech startups. A personal site rendered as a vim/tmux session." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://re-invention.nl/" />
-    <link rel="preload" href="/fonts/roboto-mono.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="196x196" href="/favicon-192.png" />
-    <link rel="icon" type="image/png" sizes="160x160" href="/favicon-160.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-    <link rel="apple-touch-icon" href="/favicon-57.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/favicon-114.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/favicon-72.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/favicon-144.png" />
-    <link rel="apple-touch-icon" sizes="60x60" href="/favicon-60.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/favicon-120.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/favicon-76.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/favicon-152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
-    <meta name="msapplication-TileColor" content="#232136" />
-    <meta name="msapplication-TileImage" content="/favicon-144.png" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<title>re-invention | Software built around your business</title>
+		<meta
+			name="description"
+			content="re-invention combines technical consulting with hands-on development for businesses and enterprises, from financial platforms to agentic workflows."
+		/>
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+		<meta name="color-scheme" content="light dark" />
+		<link rel="canonical" href="https://re-invention.nl/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://re-invention.nl/" />
+		<meta property="og:title" content="re-invention | Software built around your business" />
+		<meta
+			property="og:description"
+			content="Technical consulting and hands-on development for businesses and enterprises: from business problem to software in production."
+		/>
+		<meta property="og:image" content="https://re-invention.nl/brand/og.png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/brand/app-icon-light.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/favicon-180.png" />
+		<link rel="preload" href="/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin />
+		<script>
+			document.documentElement.classList.add("js")
+			if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+				document.documentElement.classList.add("motion")
+			try {
+				var theme = localStorage.getItem("site-theme")
+				if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme
+			} catch (e) {}
+		</script>
+		<link rel="stylesheet" href="/src/site/site.css" />
+		<script type="module" src="/src/site/main.ts"></script>
+	</head>
+	<body>
+		<a class="skip micro" href="#main">Skip to content</a>
+
+		<header class="site-header" data-header>
+			<div class="wrap site-header__inner">
+				<a class="site-header__logo" href="/" aria-label="re-invention, home" data-header-logo>
+					<img src="/brand/logo-black.svg" alt="re-invention" width="240" height="31" />
+				</a>
+				<nav class="site-nav" id="site-nav" aria-label="Main" data-nav>
+					<ol class="site-nav__list">
+						<li>
+							<a href="#expertise"><span class="site-nav__index">01</span>Expertise</a>
+						</li>
+						<li>
+							<a href="#approach"><span class="site-nav__index">02</span>Approach</a>
+						</li>
+						<li>
+							<a href="#work"><span class="site-nav__index">03</span>Work</a>
+						</li>
+						<li>
+							<a href="#blog"><span class="site-nav__index">04</span>Blog</a>
+						</li>
+						<li>
+							<a href="#contact"><span class="site-nav__index">05</span>Contact</a>
+						</li>
+					</ol>
+					<span class="site-nav__marker" aria-hidden="true"></span>
+					<a class="button site-nav__cta" href="#contact">Discuss your project</a>
+					<p class="site-nav__mail micro">
+						<a href="mailto:michel@re-invention.nl">michel@re-invention.nl</a>
+					</p>
+					<button class="theme-toggle" type="button" data-theme-toggle>
+						<span class="theme-toggle__icon" aria-hidden="true"></span>
+						<span class="theme-toggle__label micro">Switch to dark mode</span>
+					</button>
+				</nav>
+				<button
+					class="site-header__menu"
+					type="button"
+					aria-expanded="false"
+					aria-controls="site-nav"
+					data-menu-button
+				>
+					<span class="site-header__menu-label micro">Menu</span>
+					<span class="site-header__menu-icon" aria-hidden="true"></span>
+				</button>
+			</div>
+		</header>
+
+		<main id="main">
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="wrap">
+					<div class="hero__logo" data-hero-logo>
+						<img src="/brand/logo-black.svg" alt="" width="1443" height="185" fetchpriority="high" />
+					</div>
+					<div class="hero__grid">
+						<h1 id="hero-title" class="hero__title display">Software built around your business</h1>
+						<div class="hero__copy">
+							<p class="hero__text ui-body">
+								We combine technical consulting with hands-on development for businesses and
+								enterprises. From financial platforms to agentic workflows, we turn complex business
+								processes into working software, built from the ground up. We are AI native: our agentic
+								software engineering delivers working software sooner.
+							</p>
+							<a class="button" href="#contact">Discuss your project</a>
+						</div>
+					</div>
+				</div>
+				<div class="clients">
+					<div class="wrap clients__inner">
+						<div class="clients__head">
+							<p class="micro muted" id="clients-label">Worked with</p>
+							<button
+								class="clients__toggle"
+								type="button"
+								aria-label="Pause the logos"
+								aria-pressed="false"
+								data-marquee-toggle
+								hidden
+							></button>
+						</div>
+						<div class="clients__track">
+							<ul class="clients__list" aria-labelledby="clients-label">
+								<li><img src="/brand/clients/ikea.svg" alt="IKEA" width="62" height="23" loading="lazy" /></li>
+								<li><img src="/brand/clients/ing.svg" alt="ING" width="97" height="24" loading="lazy" /></li>
+								<li><img src="/brand/clients/philips.svg" alt="Philips" width="93" height="17" loading="lazy" /></li>
+								<li><img src="/brand/clients/tele2.svg" alt="Tele2" width="59" height="22" loading="lazy" /></li>
+								<li><img src="/brand/clients/hoya.svg" alt="HOYA" width="84" height="19" loading="lazy" /></li>
+								<li>
+									<img src="/brand/clients/beequip.svg" alt="BEEQUIP" width="95" height="23" loading="lazy" />
+								</li>
+								<li>
+									<img src="/brand/clients/peliqan.svg" alt="Peliqan" width="104" height="21" loading="lazy" />
+								</li>
+								<li>
+									<img src="/brand/clients/revive.svg" alt="Revive Capital" width="71" height="21" loading="lazy" />
+								</li>
+								<li>
+									<img
+										src="/brand/clients/financiallease.svg"
+										alt="Financial Lease"
+										width="154"
+										height="20"
+										loading="lazy"
+									/>
+								</li>
+								<li>
+									<img
+										src="/brand/clients/hypotheekrente.svg"
+										alt="hypotheekrente.nl"
+										width="161"
+										height="19"
+										loading="lazy"
+									/>
+								</li>
+							</ul>
+							<ul class="clients__list" aria-hidden="true">
+								<li><img src="/brand/clients/ikea.svg" alt="" width="62" height="23" loading="lazy" /></li>
+								<li><img src="/brand/clients/ing.svg" alt="" width="97" height="24" loading="lazy" /></li>
+								<li><img src="/brand/clients/philips.svg" alt="" width="93" height="17" loading="lazy" /></li>
+								<li><img src="/brand/clients/tele2.svg" alt="" width="59" height="22" loading="lazy" /></li>
+								<li><img src="/brand/clients/hoya.svg" alt="" width="84" height="19" loading="lazy" /></li>
+								<li><img src="/brand/clients/beequip.svg" alt="" width="95" height="23" loading="lazy" /></li>
+								<li><img src="/brand/clients/peliqan.svg" alt="" width="104" height="21" loading="lazy" /></li>
+								<li><img src="/brand/clients/revive.svg" alt="" width="71" height="21" loading="lazy" /></li>
+								<li>
+									<img
+										src="/brand/clients/financiallease.svg"
+										alt=""
+										width="154"
+										height="20"
+										loading="lazy"
+									/>
+								</li>
+								<li>
+									<img
+										src="/brand/clients/hypotheekrente.svg"
+										alt=""
+										width="161"
+										height="19"
+										loading="lazy"
+									/>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="start" aria-labelledby="start-title">
+				<div class="wrap">
+					<div class="start__grid">
+						<div class="start__head">
+							<p class="label muted">For businesses and enterprises</p>
+							<h2 id="start-title" class="h2">Start with what you have.</h2>
+						</div>
+						<ol class="start__list">
+							<li>
+								<p class="micro muted">01</p>
+								<h3 class="h3">A business problem</h3>
+								<p class="small muted">
+									A process that takes too much effort, or decisions made without the right
+									information. We define the system that solves it.
+								</p>
+							</li>
+							<li>
+								<p class="micro muted">02</p>
+								<h3 class="h3">An initial idea</h3>
+								<p class="small muted">
+									A product or platform you want to build. We turn it into requirements, an
+									architecture and a first release.
+								</p>
+							</li>
+							<li>
+								<p class="micro muted">03</p>
+								<h3 class="h3">Requirements that need direction</h3>
+								<p class="small muted">
+									A specification and technical choices still to make. We assess the options,
+									decide with you and build the result.
+								</p>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+
+			<section id="expertise" class="section section--surface" aria-labelledby="expertise-title">
+				<div class="wrap">
+					<header class="section-head">
+						<p class="section-head__eyebrow label muted">01 / Expertise</p>
+						<p class="section-head__index micro muted" aria-hidden="true">01 / 05</p>
+						<h2 id="expertise-title" class="section-head__title h1">Advice and delivery, connected.</h2>
+						<p class="section-head__intro small">
+							Technical consulting and full-stack development are one line of work: the
+							architecture we recommend is the architecture we build. Our deepest experience is in
+							financial systems and agentic workflows.
+						</p>
+					</header>
+					<hr class="rule" />
+					<div class="caps">
+						<p class="caps__group caps__group--build micro" aria-hidden="true">Advice and build</p>
+						<p class="caps__group caps__group--depth micro" aria-hidden="true">Specialisms</p>
+						<article class="cap">
+							<figure class="cap__figure">
+								<!-- scene:consulting -->
+								<figcaption class="micro muted">Fig 01.1</figcaption>
+							</figure>
+							<h3 class="h3">Technical consulting</h3>
+							<p class="small">
+								Clarify the problem before choosing the technology. We define requirements,
+								assess technical choices and set out a practical architecture and delivery plan.
+							</p>
+							<ul class="cap__list micro">
+								<li>Requirements and scope</li>
+								<li>Architecture and data model</li>
+								<li>Assessment of technical options</li>
+								<li>Delivery plan</li>
+							</ul>
+						</article>
+						<article class="cap">
+							<figure class="cap__figure">
+								<!-- scene:full-stack -->
+								<figcaption class="micro muted">Fig 01.2</figcaption>
+							</figure>
+							<h3 class="h3">Full-stack development</h3>
+							<p class="small">
+								Build the whole system and put it into production. We develop interfaces, backend
+								services and integrations, and set up the cloud infrastructure as code, with testing
+								and deployment from the first release.
+							</p>
+							<ul class="cap__list micro">
+								<li>Web and mobile interfaces</li>
+								<li>Backend services and APIs</li>
+								<li>Integrations</li>
+								<li>Cloud infrastructure as code</li>
+							</ul>
+						</article>
+						<article class="cap">
+							<figure class="cap__figure">
+								<!-- scene:financial -->
+								<figcaption class="micro muted">Fig 01.3</figcaption>
+							</figure>
+							<h3 class="h3">Financial systems</h3>
+							<p class="small">
+								Systems where amounts have to add up and decisions have to be traceable. We build
+								financial platforms, backend systems and the information flows that support
+								financial operations.
+							</p>
+							<ul class="cap__list micro">
+								<li>Leasing and lending platforms</li>
+								<li>Private equity platforms</li>
+								<li>Broker and dealer portals</li>
+								<li>Financial data models</li>
+							</ul>
+						</article>
+						<article class="cap">
+							<figure class="cap__figure">
+								<!-- scene:agentic -->
+								<figcaption class="micro muted">Fig 01.4</figcaption>
+							</figure>
+							<h3 class="h3">Agentic workflows</h3>
+							<p class="small">
+								AI agents with a specific job in a business process. They recognise documents,
+								extract information, coordinate workflow steps and carry out standard operating
+								procedures, with people reviewing the results.
+							</p>
+							<ul class="cap__list micro">
+								<li>Document recognition and OCR</li>
+								<li>Information extraction</li>
+								<li>Workflow coordination</li>
+								<li>Standard operating procedures</li>
+							</ul>
+						</article>
+					</div>
+				</div>
+			</section>
+
+			<section id="approach" class="section approach" aria-labelledby="approach-title">
+				<div class="wrap">
+					<header class="section-head">
+						<p class="section-head__eyebrow label muted">02 / Approach</p>
+						<p class="section-head__index micro muted" aria-hidden="true">02 / 05</p>
+						<h2 id="approach-title" class="section-head__title h1">From problem to production.</h2>
+						<p class="section-head__intro small">
+							One continuous line from advice to implementation. We make the architectural
+							decisions and build the system ourselves, set up its infrastructure and hand it over,
+							so every decision is tested in working software and carried through to production.
+						</p>
+					</header>
+					<hr class="rule" />
+					<div class="approach__body">
+						<ol class="steps">
+							<li class="step">
+								<div class="step__figure"><!-- scene:problem --></div>
+								<div class="step__head">
+									<p class="step__index label">01 / Problem</p>
+									<h3 class="step__title h2">Understand the problem.</h3>
+								</div>
+								<div class="step__body">
+									<p class="small">
+										We start with the business: the process, the people involved, the information
+										they need and the decisions the system has to support.
+									</p>
+									<dl class="step__meta">
+										<div>
+											<dt class="micro muted">Result</dt>
+											<dd class="ui-body">Requirements and a clear scope for the first release.</dd>
+										</div>
+										<div>
+											<dt class="micro muted">Led by</dt>
+											<dd class="ui-body">Technical consulting</dd>
+										</div>
+									</dl>
+								</div>
+							</li>
+							<li class="step">
+								<div class="step__figure"><!-- scene:architecture --></div>
+								<div class="step__head">
+									<p class="step__index label">02 / Architecture</p>
+									<h3 class="step__title h2">Design the system.</h3>
+								</div>
+								<div class="step__body">
+									<p class="small">
+										We assess the technical choices and set out the architecture: data model,
+										interfaces, integrations, cloud infrastructure and the steps where AI agents
+										take part.
+									</p>
+									<dl class="step__meta">
+										<div>
+											<dt class="micro muted">Result</dt>
+											<dd class="ui-body">
+												An architecture and a delivery plan in small, usable increments.
+											</dd>
+										</div>
+										<div>
+											<dt class="micro muted">Led by</dt>
+											<dd class="ui-body">Technical consulting and full-stack development</dd>
+										</div>
+									</dl>
+								</div>
+							</li>
+							<li class="step">
+								<div class="step__figure"><!-- scene:development --></div>
+								<div class="step__head">
+									<p class="step__index label">03 / Development</p>
+									<h3 class="step__title h2">Build it.</h3>
+								</div>
+								<div class="step__body">
+									<p class="small">
+										We build the interfaces, backend services and integrations with agentic
+										software engineering: AI agents write and test code under our direction and
+										review, with automated tests and deployment from the first increment.
+									</p>
+									<dl class="step__meta">
+										<div>
+											<dt class="micro muted">Result</dt>
+											<dd class="ui-body">Working software, reviewed with you in short cycles.</dd>
+										</div>
+										<div>
+											<dt class="micro muted">Led by</dt>
+											<dd class="ui-body">Full-stack development</dd>
+										</div>
+									</dl>
+								</div>
+							</li>
+							<li class="step">
+								<div class="step__figure"><!-- scene:infrastructure --></div>
+								<div class="step__head">
+									<p class="step__index label">04 / Infrastructure</p>
+									<h3 class="step__title h2">Set up the infrastructure.</h3>
+								</div>
+								<div class="step__body">
+									<p class="small">
+										We set up the cloud infrastructure on a provider such as AWS or Azure, defined as
+										code with tools such as Terraform, so every environment can be rebuilt, reviewed
+										and changed like the software itself.
+									</p>
+									<dl class="step__meta">
+										<div>
+											<dt class="micro muted">Result</dt>
+											<dd class="ui-body">
+												Production and test environments in code, with automated deployment and
+												monitoring.
+											</dd>
+										</div>
+										<div>
+											<dt class="micro muted">Led by</dt>
+											<dd class="ui-body">Full-stack development</dd>
+										</div>
+									</dl>
+								</div>
+							</li>
+							<li class="step">
+								<div class="step__figure"><!-- scene:production --></div>
+								<div class="step__head">
+									<p class="step__index label">05 / Production</p>
+									<h3 class="step__title h2">Run it and hand it over.</h3>
+								</div>
+								<div class="step__body">
+									<p class="small">
+										We release the system, monitor it and improve it with the people who use it.
+										Then we hand it over: the code, the infrastructure definitions, the
+										documentation and the knowledge your team needs to run it.
+									</p>
+									<dl class="step__meta">
+										<div>
+											<dt class="micro muted">Result</dt>
+											<dd class="ui-body">A system in production that your team owns.</dd>
+										</div>
+										<div>
+											<dt class="micro muted">Led by</dt>
+											<dd class="ui-body">Full-stack development and technical consulting</dd>
+										</div>
+									</dl>
+								</div>
+							</li>
+						</ol>
+					</div>
+					<div class="principles">
+						<hr class="rule" />
+						<ul class="principles__list">
+							<li>
+								<h3 class="h3">Precise</h3>
+								<p class="small muted">Make decisions, responsibilities and outcomes clear.</p>
+							</li>
+							<li>
+								<h3 class="h3">Inventive</h3>
+								<p class="small muted">Explore better ways to solve the business problem.</p>
+							</li>
+							<li>
+								<h3 class="h3">Practical</h3>
+								<p class="small muted">Carry the work through to production.</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section id="work" class="section section--surface" aria-labelledby="work-title">
+				<div class="wrap">
+					<header class="section-head">
+						<p class="section-head__eyebrow label muted">03 / Work</p>
+						<p class="section-head__index micro muted" aria-hidden="true">03 / 05</p>
+						<h2 id="work-title" class="section-head__title h1">Built from the ground up.</h2>
+						<p class="section-head__intro small">
+							Since 2004, re-invention has designed and built complete systems, from interface to
+							infrastructure: mostly financial information systems for fintech companies, and also systems
+							for enterprises such as IKEA, ING and Tele2.
+						</p>
+					</header>
+					<hr class="rule" />
+					<ol class="cases">
+						<li class="case">
+							<div class="case__meta">
+								<h3 class="case__logo">
+									<a href="https://peliqan.eu/" target="_blank" rel="noreferrer">
+										<img src="/brand/clients/peliqan.svg" alt="Peliqan" width="108" height="22" loading="lazy" />
+									</a>
+								</h3>
+								<p class="micro muted">2026 / CTO</p>
+								<p class="case__tags micro">Financial systems / Full-stack development</p>
+							</div>
+							<dl class="case__body">
+								<div>
+									<dt class="micro muted">Problem</dt>
+									<dd class="small">
+										Individual private equity investors tracked capital calls on each fund’s own schedule
+										and valuations in quarterly PDFs, without the systems institutions use, and had few
+										ways to sell a position or raise cash against it.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Contribution</dt>
+									<dd class="small">
+										As CTO, built the Peliqan platform from the ground up: portfolio management, a
+										marketplace for private equity secondaries and NAV loan lending facilities, with
+										values extracted from investment reports and traceable to their source.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Outcome</dt>
+									<dd class="small">
+										Investors see their whole portfolio and can act on it: sell a position, finance a
+										commitment, plan ahead.
+									</dd>
+								</div>
+							</dl>
+						</li>
+						<li class="case">
+							<div class="case__meta">
+								<h3 class="case__logo">
+									<a href="https://www.hoyavision.com/nl/" target="_blank" rel="noreferrer">
+										<img src="/brand/clients/hoya.svg" alt="HOYA" width="97" height="22" loading="lazy" />
+									</a>
+								</h3>
+								<p class="micro muted">2025–2026 / Lead developer</p>
+								<p class="case__tags micro">Full-stack development</p>
+							</div>
+							<dl class="case__body">
+								<div>
+									<dt class="micro muted">Problem</dt>
+									<dd class="small">
+										Progressive lenses are hard to compare in a store: customers only notice the
+										difference between lens designs once they wear them.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Contribution</dt>
+									<dd class="small">
+										Built a lens experience simulator for the browser: a photorealistic street, captured
+										as a Gaussian splat, seen through virtual glasses that render each lens design, with
+										head tracking on the phone’s gyroscope.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Outcome</dt>
+									<dd class="small">
+										Customers ride a bike through the street, swap the lens design for each eye and see
+										the difference for themselves.
+									</dd>
+								</div>
+							</dl>
+						</li>
+						<li class="case">
+							<div class="case__meta">
+								<h3 class="case__logo">
+									<a href="https://revive-capital.nl/" target="_blank" rel="noreferrer">
+										<img src="/brand/clients/revive.svg" alt="Revive Capital" width="76" height="22" loading="lazy" />
+									</a>
+								</h3>
+								<p class="micro muted">2024–present / Tech lead</p>
+								<p class="case__tags micro">Financial systems / Full-stack development</p>
+							</div>
+							<dl class="case__body">
+								<div>
+									<dt class="micro muted">Problem</dt>
+									<dd class="small">
+										A fintech start-up in asset leasing needed an asset-backed lending platform for brokers.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Contribution</dt>
+									<dd class="small">
+										Set up the backend platform that runs the lease process for brokers and their
+										customers.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Outcome</dt>
+									<dd class="small">
+										Customers get their lease in the time it takes to drink two cups of coffee.
+									</dd>
+								</div>
+							</dl>
+						</li>
+						<li class="case">
+							<div class="case__meta">
+								<h3 class="case__logo">
+									<a href="https://www.financiallease.nl/" target="_blank" rel="noreferrer">
+										<img
+											src="/brand/clients/financiallease.svg"
+											alt="Financial Lease"
+											width="156"
+											height="20"
+											loading="lazy"
+										/>
+									</a>
+								</h3>
+								<p class="micro muted">2023–2024 / Tech lead</p>
+								<p class="case__tags micro">Full-stack development / Financial systems</p>
+							</div>
+							<dl class="case__body">
+								<div>
+									<dt class="micro muted">Problem</dt>
+									<dd class="small">
+										Car dealers needed a faster way to handle their customers’ lease requests.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Contribution</dt>
+									<dd class="small">
+										Led the development of a dealer portal that takes a lease from the customer’s
+										request to a finalised contract.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Outcome</dt>
+									<dd class="small">
+										Dealers finalise a lease and deliver the vehicle in the time it takes to drink two
+										cups of coffee.
+									</dd>
+								</div>
+							</dl>
+						</li>
+						<li class="case">
+							<div class="case__meta">
+								<h3 class="case__logo">
+									<a href="https://www.ikea.com/" target="_blank" rel="noreferrer">
+										<img src="/brand/clients/ikea.svg" alt="IKEA" width="69" height="28" loading="lazy" />
+									</a>
+								</h3>
+								<p class="micro muted">2022–2023 / Tech lead</p>
+								<p class="case__tags micro">Technical consulting / Full-stack development</p>
+							</div>
+							<dl class="case__body">
+								<div>
+									<dt class="micro muted">Problem</dt>
+									<dd class="small">
+										Sales co-workers struggled to find the information they needed for their work.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Contribution</dt>
+									<dd class="small">
+										Led the development and technical implementation of the Content Coworker
+										Experience programme, built on a knowledge graph.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Outcome</dt>
+									<dd class="small">
+										Co-workers get information personalised to them, through a new interface on top of
+										the knowledge graph.
+									</dd>
+								</div>
+							</dl>
+						</li>
+						<li class="case">
+							<div class="case__meta">
+								<h3 class="case__logo">
+									<a href="https://www.ing.com/" target="_blank" rel="noreferrer">
+										<img src="/brand/clients/ing.svg" alt="ING" width="97" height="24" loading="lazy" />
+									</a>
+									<img src="/brand/clients/homigo.svg" alt="Homigo" width="85" height="24" loading="lazy" />
+								</h3>
+								<p class="micro muted">2019–2022 / CTO</p>
+								<p class="case__tags micro">Technical consulting / Full-stack development</p>
+							</div>
+							<dl class="case__body">
+								<div>
+									<dt class="micro muted">Problem</dt>
+									<dd class="small">
+										Homigo, a corporate start-up backed by ING Neo, needed a platform where contractors
+										and homeowners manage home renovations.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Contribution</dt>
+									<dd class="small">
+										As CTO, led the technical implementation and designed and built
+										the most demanding features.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Outcome</dt>
+									<dd class="small">
+										A SaaS platform on mobile and web, with real-time chat, file sharing and resource
+										planning for renovation projects.
+									</dd>
+								</div>
+							</dl>
+						</li>
+						<li class="case">
+							<div class="case__meta">
+								<h3 class="case__logo">
+									<a href="https://beequip.com/" target="_blank" rel="noreferrer">
+										<img src="/brand/clients/beequip.svg" alt="BEEQUIP" width="93" height="22" loading="lazy" />
+									</a>
+								</h3>
+								<p class="micro muted">2016–2019 / Tech lead</p>
+								<p class="case__tags micro">Financial systems</p>
+							</div>
+							<dl class="case__body">
+								<div>
+									<dt class="micro muted">Problem</dt>
+									<dd class="small">
+										A fintech start-up in leasing needed an online leasing platform and the
+										information system behind it.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Contribution</dt>
+									<dd class="small">
+										Developed the leasing platform from the ground up. Designed and implemented
+										BEEHIVE, the information system that captured and automated core business
+										processes, with a GraphQL API for the dealer portal and the customer portal.
+									</dd>
+								</div>
+								<div>
+									<dt class="micro muted">Outcome</dt>
+									<dd class="small">
+										In 2022 BEEQUIP provided €735 million in lease financing. In 2024 the company was
+										acquired by Apollo.
+									</dd>
+								</div>
+							</dl>
+						</li>
+					</ol>
+					<div class="also">
+						<p class="micro muted">Also</p>
+						<ul class="also__list">
+							<li>
+								<span class="micro muted">2022–2025</span>
+								<span class="also__name">
+									<img
+										src="/brand/clients/hypotheekrente.svg"
+										alt="hypotheekrente.nl"
+										width="134"
+										height="16"
+										loading="lazy"
+									/>
+								</span>
+								<span class="ui-body muted"
+									>A lead-processing system that matches people seeking
+									mortgage advice with qualified advisors.</span
+								>
+							</li>
+							<li>
+								<span class="micro muted">2021–2022</span>
+								<span class="also__name">
+									<img src="/brand/clients/homey.svg" alt="Homey" width="78" height="18" loading="lazy" />
+								</span>
+								<span class="ui-body muted"
+									>A home-loan comparison website for Thailand, with offers from 12 banks ranked by
+									interest rate, monthly cost or total cost.</span
+								>
+							</li>
+							<li>
+								<span class="micro muted">2015–2018</span>
+								<span class="also__name">
+									<img
+										src="/brand/clients/backpackapp.svg"
+										alt="Backpackapp"
+										width="145"
+										height="13"
+										loading="lazy"
+									/>
+								</span>
+								<span class="ui-body muted"
+									>A travel platform for backpackers, with automated document classification and
+									recognition and an offline-first mobile app.</span
+								>
+							</li>
+							<li>
+								<span class="micro muted">2015–2016</span>
+								<span class="also__name">
+									<img src="/brand/clients/tele2.svg" alt="Tele2" width="53" height="20" loading="lazy" />
+								</span>
+								<span class="ui-body muted"
+									>Infrastructure and workflow systems for provisioning mobile network hardware, and a
+									consistency-checking tool to audit the configuration of 4G network devices.</span
+								>
+							</li>
+							<li>
+								<span class="micro muted">2014–2015</span>
+								<span class="also__name">
+									<img
+										src="/brand/clients/postinitial.svg"
+										alt="Postinitial"
+										width="84"
+										height="20"
+										loading="lazy"
+									/>
+								</span>
+								<span class="ui-body muted"
+									>An e-learning platform for young professionals in corporate finance, with online
+									micro-courses, exams, certificates and bookable in-person training.</span
+								>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section id="blog" class="section blog" aria-labelledby="blog-title">
+				<div class="wrap">
+					<header class="section-head">
+						<p class="section-head__eyebrow label muted">04 / Blog</p>
+						<p class="section-head__index micro muted" aria-hidden="true">04 / 05</p>
+						<h2 id="blog-title" class="section-head__title h1">Notes from the work.</h2>
+						<p class="section-head__intro small">
+							Write-ups of problems we ran into while building systems, and how we solved them.
+						</p>
+					</header>
+					<hr class="rule" />
+					<ol class="posts">
+						<!-- posts -->
+					</ol>
+					<a class="button blog__all" href="/blog">Read the blog</a>
+				</div>
+			</section>
+
+			<section id="contact" class="section contact" aria-labelledby="contact-title">
+				<div class="wrap">
+					<header class="section-head">
+						<p class="section-head__eyebrow label muted">05 / Contact</p>
+						<p class="section-head__index micro muted" aria-hidden="true">05 / 05</p>
+						<h2 id="contact-title" class="section-head__title display">Discuss your project.</h2>
+					</header>
+					<hr class="rule" />
+					<div class="contact__grid">
+						<div class="contact__copy">
+							<p class="body">
+								Send a short description of the business problem, what already exists and when you
+								need the system in production. You will get a reply with questions or a time to
+								talk.
+							</p>
+							<a class="button" href="mailto:michel@re-invention.nl?subject=Project%20discussion"
+								>Discuss your project</a
+							>
+						</div>
+						<dl class="contact__details">
+							<div>
+								<dt class="micro muted">Email</dt>
+								<dd class="h3">
+									<a id="contact-email" href="mailto:michel@re-invention.nl">michel@re-invention.nl</a>
+									<button
+										class="text-button micro"
+										type="button"
+										data-copy="michel@re-invention.nl"
+										aria-describedby="contact-email"
+										aria-live="polite"
+										hidden
+									>
+										Copy
+									</button>
+								</dd>
+							</div>
+							<div>
+								<dt class="micro muted">Web</dt>
+								<dd class="h3"><a href="https://re-invention.nl/">re-invention.nl</a></dd>
+							</div>
+							<div>
+								<dt class="micro muted">Based in</dt>
+								<dd class="h3">Amsterdam, the Netherlands</dd>
+							</div>
+						</dl>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer class="site-footer section--surface">
+			<div class="wrap">
+				<img
+					class="site-footer__logo"
+					src="/brand/logo-black.svg"
+					alt=""
+					width="1443"
+					height="185"
+					loading="lazy"
+				/>
+				<div class="site-footer__statement">
+					<p class="h2">Software built around your business</p>
+					<p class="small muted">
+						The name stands for continuous reinvention: experimenting, learning and improving.
+					</p>
+				</div>
+				<hr class="rule" />
+				<div class="site-footer__base micro muted">
+					<p>Re-invention B.V. / Nida Senffstraat 173, 1095 MX Amsterdam / KvK 83193499</p>
+					<ul>
+						<li><a href="/blog">Blog</a></li>
+						<li><a href="/brand/re-invention-press-kit.zip" download>Press kit</a></li>
+					</ul>
+					<p>© 2026 re-invention</p>
+				</div>
+			</div>
+		</footer>
+	</body>
 </html>

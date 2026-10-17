@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 
 const CHART_W = 660
 
@@ -106,13 +107,11 @@ const stageCenter = (i: number) => STAGE_X0 + i * (STAGE_W + STAGE_GAP) + STAGE_
 const PipelineDiagram = () => {
 	const [step, setStep] = useState(0)
 	const [skipCycle, setSkipCycle] = useState(false)
-	const [playing, setPlaying] = useState(
-		() =>
-			!(
-				typeof window !== "undefined" &&
-				window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-			),
-	)
+	// Starts playing like the prerendered HTML; reduced motion pauses it after hydration
+	const [playing, setPlaying] = useState(true)
+	useEffect(() => {
+		if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) setPlaying(false)
+	}, [])
 	const seq = skipCycle ? SKIP_SEQ : FULL_SEQ
 	const active = seq[Math.min(step, seq.length - 1)] ?? 0
 	const skipping = skipCycle && active === 3
@@ -419,13 +418,11 @@ const mono = "ui-monospace, SFMono-Regular, Menlo, monospace"
 
 const PointDontType = () => {
 	const [step, setStep] = useState(0)
-	const [playing, setPlaying] = useState(
-		() =>
-			!(
-				typeof window !== "undefined" &&
-				window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-			),
-	)
+	// Starts playing like the prerendered HTML; reduced motion pauses it after hydration
+	const [playing, setPlaying] = useState(true)
+	useEffect(() => {
+		if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) setPlaying(false)
+	}, [])
 
 	useEffect(() => {
 		if (!playing) return
@@ -892,13 +889,11 @@ const TABLE_FOCUS = new Set(["b16", "b17", "b18", "b52", "b53", "b54", "b55"])
 
 const BlockGraph = () => {
 	const [level, setLevel] = useState(0)
-	const [playing, setPlaying] = useState(
-		() =>
-			!(
-				typeof window !== "undefined" &&
-				window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-			),
-	)
+	// Starts playing like the prerendered HTML; reduced motion pauses it after hydration
+	const [playing, setPlaying] = useState(true)
+	useEffect(() => {
+		if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) setPlaying(false)
+	}, [])
 	useEffect(() => {
 		if (!playing) return
 		const t = setInterval(() => setLevel((s) => (s + 1) % GRAPH_LEVELS.length), 3600)
@@ -1191,9 +1186,9 @@ export const askTheModelWhereNotWhat: { title: string; date: string; lines: Reac
 		<p key="history">
 			I've been working on AI document extraction for a while. In 2016 I was writing extractors for
 			travel voucher PDFs. More recently, I wrote about{" "}
-			<a href="/posts/llm-vs-ocr-document-extraction" className="text-blue underline">
+			<Link to="/posts/llm-vs-ocr-document-extraction" className="text-blue underline">
 				combining language models with text recognition for invoice validation
-			</a>
+			</Link>
 			. Now, working on software for private equity, I keep coming back to the same problem. You
 			need one investment value, but the report has pages of tables, commentary and notes. Getting a
 			number out is the easy part. Checking that it's the number you asked for takes more work.

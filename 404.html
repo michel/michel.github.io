@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<title>Page not found | re-invention</title>
+		<meta name="robots" content="noindex" />
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+		<meta name="color-scheme" content="light dark" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/brand/app-icon-light.svg" type="image/svg+xml" />
+		<link rel="preload" href="/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
+		<script>
+			// Pages that lived at the root before the blog moved to /blog: forward the forms the
+			// redirect stubs do not catch, such as a trailing slash or the bare /posts
+			var path = location.pathname.replace(/\/+$/, "")
+			if (/^\/(posts\/[a-z0-9-]+|about|projects)$/.test(path))
+				location.replace("/blog" + path + location.search + location.hash)
+			else if (path === "/posts") location.replace("/blog" + location.search)
+			else if (path === "/contact") location.replace("/" + location.search + "#contact")
+			try {
+				var theme = localStorage.getItem("site-theme")
+				if (theme === "light" || theme === "dark") {
+					document.documentElement.dataset.theme = theme
+					document.querySelectorAll('meta[name="theme-color"]').forEach(function (meta) {
+						meta.content = theme === "dark" ? "#000000" : "#ffffff"
+					})
+				}
+			} catch (e) {}
+		</script>
+		<link rel="stylesheet" href="/src/site/site.css" />
+	</head>
+	<body>
+		<header class="site-header is-stuck">
+			<div class="wrap site-header__inner">
+				<a class="site-header__logo" href="/" aria-label="re-invention, home">
+					<img src="/brand/logo-black.svg" alt="re-invention" width="240" height="31" />
+				</a>
+				<nav class="site-nav" aria-label="Main">
+					<ol class="site-nav__list">
+						<li>
+							<a href="/#expertise"><span class="site-nav__index">01</span>Expertise</a>
+						</li>
+						<li>
+							<a href="/#approach"><span class="site-nav__index">02</span>Approach</a>
+						</li>
+						<li>
+							<a href="/#work"><span class="site-nav__index">03</span>Work</a>
+						</li>
+						<li>
+							<a href="/#blog"><span class="site-nav__index">04</span>Blog</a>
+						</li>
+						<li>
+							<a href="/#contact"><span class="site-nav__index">05</span>Contact</a>
+						</li>
+					</ol>
+				</nav>
+			</div>
+		</header>
+		<main class="section">
+			<div class="wrap not-found">
+				<p class="label muted">404 / Not found</p>
+				<h1 class="display">Page not found.</h1>
+				<p class="body">
+					This address does not exist, or it moved. The writing that used to live at the root of
+					this site is now on the blog.
+				</p>
+				<p class="not-found__links ui-body">
+					<a class="button" href="/">Go to re-invention.nl</a>
+					<a href="/blog">Open the blog</a>
+				</p>
+			</div>
+		</main>
+	</body>
+</html>

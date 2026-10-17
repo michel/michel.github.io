@@ -4,23 +4,24 @@ import { allFiles, useEditor } from "../context/EditorContext"
 import { usePostHogPageview } from "../hooks/usePostHogPageview"
 import { useVimKeys } from "../hooks/useVimKeys"
 import CommandLine from "./CommandLine"
-import FuzzyFinder from "./FuzzyFinder"
 import HelpPopup from "./HelpPopup"
 import MobileSidebar from "./MobileSidebar"
 import Sidebar from "./Sidebar"
 import StatusLine from "./StatusLine"
 import TabLine from "./TabLine"
-import Terminal from "./Terminal"
 import TmuxLine from "./TmuxLine"
 
-// Easter-egg terminals and games only load when opened (JurassicTerminal pulls in three.js)
+// The terminal, the fuzzy finder (both carry the file contents), the easter-egg terminals and
+// the games only load when opened (JurassicTerminal pulls in three.js)
 const AdventureGame = lazy(() => import("./AdventureGame"))
 const ColossusTerminal = lazy(() => import("./ColossusTerminal"))
+const FuzzyFinder = lazy(() => import("./FuzzyFinder"))
 const GladosTerminal = lazy(() => import("./GladosTerminal"))
 const IndependenceTerminal = lazy(() => import("./IndependenceTerminal"))
 const JurassicTerminal = lazy(() => import("./JurassicTerminal"))
 const MatrixTerminal = lazy(() => import("./MatrixTerminal"))
 const SnakeGame = lazy(() => import("./SnakeGame"))
+const Terminal = lazy(() => import("./Terminal"))
 
 export default function Layout() {
 	useVimKeys()
@@ -103,7 +104,7 @@ export default function Layout() {
 			>
 				skip to content
 			</a>
-			{fuzzyFinderOpen && <FuzzyFinder />}
+			<Suspense fallback={null}>{fuzzyFinderOpen && <FuzzyFinder />}</Suspense>
 			{helpPopupOpen && <HelpPopup />}
 			<Suspense fallback={null}>
 				{snakeGameOpen && <SnakeGame />}
@@ -163,7 +164,9 @@ export default function Layout() {
 							>
 								×
 							</button>
-							<Terminal />
+							<Suspense fallback={null}>
+								<Terminal />
+							</Suspense>
 						</div>
 					)}
 				</div>
@@ -199,7 +202,9 @@ export default function Layout() {
 				</Suspense>
 			) : (
 				<div className="flex min-h-0 flex-1 overflow-hidden bg-bg-dark">
-					<Terminal />
+					<Suspense fallback={null}>
+						<Terminal />
+					</Suspense>
 				</div>
 			)}
 
