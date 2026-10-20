@@ -1,4 +1,22 @@
+# Search engines and AI assistants are welcome. A Markdown version of the site for language
+# models is at https://re-invention.nl/llms.txt (llmstxt.org), and every page there has its
+# Markdown next to it (/index.md, /blog/posts/<slug>.md).
+
 User-agent: *
+Allow: /
+
+# AI crawlers, named so a blanket rule elsewhere never shuts them out
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://re-invention.nl/sitemap.xml

@@ -77,10 +77,30 @@ for (const route of routes) {
 		if (f.size > 16_000) return m
 		return `poster="data:${f.type};base64,${Buffer.from(readFileSync(`${dist}${src}`)).toString("base64")}"`
 	})
+	// Posts and the about page are also written as Markdown (scripts/llms.ts): the page points
+	// agents at it, and a post tells search engines what it is
+	const slug = route.startsWith("/posts/") ? route.slice("/posts/".length) : null
+	const post = slug ? posts[slug] : null
+	const alternate =
+		post || route === "/about"
+			? `<link rel="alternate" type="text/markdown" href="${path}.md" />`
+			: ""
+	const article = post
+		? `<script type="application/ld+json">${JSON.stringify({
+				"@context": "https://schema.org",
+				"@type": "BlogPosting",
+				headline: post.title,
+				datePublished: post.date,
+				url: `${ORIGIN}${path}`,
+				author: { "@type": "Person", name: "Michel de Graaf", url: `${ORIGIN}${BASE}/about` },
+				publisher: { "@type": "Organization", name: "re-invention", url: `${ORIGIN}/` },
+			})}</script>`
+		: ""
 	const page = template
 		.replace(marker, `<div id="root">${inlined}</div>`)
 		.replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
 		.replace(`content="${ORIGIN}${BASE}"`, `content="${ORIGIN}${path}"`)
+		.replace("</head>", `${alternate}${article}</head>`)
 	// blog/about.html serves /blog/about on GitHub Pages without the trailing-slash redirect a
 	// directory gets. The home page is written twice: Pages may serve blog.html for /blog or
 	// redirect /blog to /blog/
