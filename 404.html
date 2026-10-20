@@ -19,6 +19,8 @@
 				location.replace("/blog" + path + location.search + location.hash)
 			else if (path === "/posts") location.replace("/blog" + location.search)
 			else if (path === "/contact") location.replace("/" + location.search + "#contact")
+			if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+				document.documentElement.classList.add("motion")
 			try {
 				var theme = localStorage.getItem("site-theme")
 				if (theme === "light" || theme === "dark") {
@@ -60,6 +62,7 @@
 		</header>
 		<main class="section">
 			<div class="wrap not-found">
+				<div class="not-found__echo"><!-- scene:echo --></div>
 				<p class="label muted">404 / Not found</p>
 				<h1 class="display">Page not found.</h1>
 				<p class="body">

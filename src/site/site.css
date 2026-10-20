@@ -557,7 +557,7 @@ button {
    lockup's own units and runs out behind the whole hero. On load a pen traces the symbol at one
    speed (--pen per lattice unit), the solid symbol resolves over the line and the lattice spreads
    out from it */
-.scene--loop {
+:is(.scene--loop, .scene--echo) {
 	position: absolute;
 	inset: 0;
 	z-index: -1;
@@ -573,10 +573,10 @@ button {
 .site-header.is-stuck ~ main .loop__symbol {
 	opacity: 0;
 }
-.scene--loop path.loop__rule {
+.figure path.loop__rule {
 	stroke: var(--loop-rule);
 }
-.scene--loop path.loop__rule--fine {
+.figure path.loop__rule--fine {
 	stroke: var(--loop-fine);
 }
 .motion {
@@ -607,9 +607,77 @@ button {
 	stroke-dasharray: 0.14 2;
 	stroke-dashoffset: 0.14;
 }
-.motion .scene--loop.is-playing .loop__pulse {
+.motion :is(.scene--loop, .scene--echo, .scene--patch):is(.is-playing, .not-found *) .loop__pulse {
 	animation: loop-pulse calc(6s + var(--i) * 1.1s) ease-in-out
 		calc(18 * var(--pen) + 2400ms + var(--i) * 1.4s) infinite;
+}
+/* The lattice comes back, quieter, in three places: behind the footer's lockup, on the 404 page
+   and in a corner of the contact section. There it spreads once as it comes into view (on the 404
+   page on load, like the hero), with a few pulses and no shine */
+:is(.scene--echo, .scene--patch) {
+	opacity: 0.7;
+}
+.motion :is(.scene--echo, .scene--patch):not(.not-found *) .loop__spread {
+	animation: none;
+	transform: scale(0);
+	transition: transform 1600ms var(--ease-brand);
+}
+.motion :is(.scene--echo, .scene--patch).is-shown .loop__spread {
+	transform: none;
+}
+.contact {
+	position: relative;
+	z-index: 0;
+	overflow: clip;
+}
+.scene--patch {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: -1;
+	width: min(60vw, 760px);
+	overflow: hidden;
+	pointer-events: none;
+}
+.site-footer {
+	overflow: clip;
+}
+.site-footer__mark {
+	position: relative;
+	z-index: 0;
+	width: min(100%, 880px);
+}
+.not-found__echo {
+	position: absolute;
+	top: var(--header);
+	left: max(var(--gutter), env(safe-area-inset-left));
+	z-index: -1;
+	width: min(100% - 2 * var(--gutter), 880px);
+	aspect-ratio: 1443 / 185;
+}
+main:has(> .not-found) {
+	overflow: clip;
+}
+
+/* Now and then a glint runs along a hairline once it has been drawn, slow and rare */
+.motion .rule[data-draw].is-drawn {
+	position: relative;
+	overflow: hidden;
+}
+.motion .rule[data-draw].is-drawn::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, transparent, var(--il-route), transparent) no-repeat;
+	background-position: -160px 0;
+	background-size: 160px 100%;
+	animation: rule-glint 16s ease-in-out 2s infinite;
+}
+@keyframes rule-glint {
+	20%,
+	to {
+		background-position: calc(100% + 160px) 0;
+	}
 }
 @property --mark {
 	syntax: "<number>";
@@ -1357,7 +1425,7 @@ button {
 	padding-block: var(--section) 40px;
 }
 .site-footer__logo {
-	width: min(100%, 880px);
+	width: 100%;
 	height: auto;
 }
 .site-footer__statement {
@@ -1383,6 +1451,8 @@ button {
 /* 404 */
 
 .not-found {
+	position: relative;
+	z-index: 0;
 	display: grid;
 	gap: 32px;
 	justify-items: start;
@@ -1615,7 +1685,7 @@ button {
 
 @media (max-width: 760px) {
 	/* The unit and half-unit lattice are too dense at phone scale */
-	.scene--loop .loop__fine {
+	.figure .loop__fine {
 		display: none;
 	}
 	/* The proposition stands on the centre line, under the full-width lockup */
