@@ -205,7 +205,15 @@ export const loop = () => {
 		lockupTiers(large),
 		(d) => `<path d="${d}" mask="url(#loop-shine)" stroke="${C.seam}"/>${pulses}`,
 	)
-	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg>`
+	// On phones pulses also run along the large drawing: a lap of its outline and each bend, a
+	// little heavier than its lines so they show on them, and glowing on a dark ground (site.css)
+	const tracers = [OUTLINE, ...BENDS.map((b) => b.stroke)]
+		.map(
+			(stroke, i) =>
+				`<path d="${path(stroke, LARGE)}" class="loop__pulse loop__pulse--symbol" style="--i: ${i}" pathLength="1" stroke="${C.activity}" stroke-width="6" stroke-linecap="round"/>`,
+		)
+		.join("")
+	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}<filter id="loop-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10" result="glow"/><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="core"/><feMerge><feMergeNode in="glow"/><feMergeNode in="glow"/><feMergeNode in="core"/></feMerge></filter></defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g><g class="loop__large loop__glow" opacity="0.8">${tracers}</g></svg>`
 }
 
 // The footer's lockup and the 404 page: the hero's lattice again, without the drawing or the
