@@ -100,7 +100,8 @@ const everywhere = `maskUnits="userSpaceOnUse" x="-3000" y="-3000" width="7000" 
 const pen = (d: string, at: number, length: number, width: number) =>
 	`<path d="${d}" class="loop__pen" style="--at: ${at}; --for: ${length}" pathLength="1" stroke="#fff" stroke-width="${width}"/>`
 
-// The large drawing is ruled as heavy as the wordmark's letters, the width of their stems
+// The large drawing is ruled as heavy as the wordmark's letters, the width of their stems, a step
+// dimmer than them so the pulses along it read as light
 const STEM = 18.3
 
 // One drawing of the symbol; the pens that reveal it go in the mask
@@ -109,7 +110,7 @@ const drawing = (placing: Placing, cls = "") => {
 		{ at: 0, stroke: OUTLINE, length: 18 },
 		...BENDS.map((b) => ({ ...b, length: 6 })),
 	]
-	const art = `<path${cls ? ` class="${cls}"` : ""} d="${strokes.map(({ stroke }) => path(stroke, placing)).join("")}" stroke="${C.outline}"${placing.s > 1 ? ` stroke-width="${STEM}"` : ""}/>`
+	const art = `<path${cls ? ` class="${cls}"` : ""} d="${strokes.map(({ stroke }) => path(stroke, placing)).join("")}" ${placing.s > 1 ? `stroke="${C.route}" stroke-width="${STEM}"` : `stroke="${C.outline}"`}/>`
 	const pens = strokes
 		.map(({ at, stroke, length }) =>
 			pen(path(stroke, placing), at, length, placing.s > 1 ? 2 * STEM : 10),
@@ -210,18 +211,18 @@ export const loop = () => {
 		lockupTiers(large),
 		(d) => `<path d="${d}" mask="url(#loop-shine)" stroke="${C.seam}"/>${pulses}`,
 	)
-	// On phones pulses also run along the large drawing: a lap of its outline and each bend, a
-	// little heavier than its lines so they show on them, under a wide faint halo that reads as a
-	// glow on a dark ground (site.css). They get an svg of their own, a layer apart, so moving them
+	// On phones pulses also run along the large drawing: a lap of its outline and each bend, the
+	// line itself lighting up, under a wide faint halo that reads as a glow on a dark ground
+	// (site.css). They get an svg of their own, a layer apart, so moving them
 	// repaints only them and not the masked lattice beneath
 	const tracers = [OUTLINE, ...BENDS.map((b) => b.stroke)]
 		.map((stroke, i) => {
 			const d = path(stroke, LARGE)
-			const at = `pathLength="1" style="--i: ${i}" stroke="${C.activity}" stroke-linecap="round"`
-			return `<path d="${d}" class="loop__pulse loop__pulse--symbol loop__halo" ${at} stroke-width="${3 * STEM}"/><path d="${d}" class="loop__pulse loop__pulse--symbol" ${at} stroke-width="${STEM + 6}"/>`
+			const at = `pathLength="1" style="--i: ${i}" stroke="${C.activity}"`
+			return `<path d="${d}" class="loop__pulse loop__pulse--symbol loop__halo" ${at} stroke-width="${2 * STEM}" stroke-linecap="round"/><path d="${d}" class="loop__pulse loop__pulse--symbol" ${at} stroke-width="${STEM}"/>`
 		})
 		.join("")
-	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg><svg class="figure scene scene--loop loop__tracers" aria-hidden="true" focusable="false" ${LOCKUP.replace(/ xmlns="[^"]*"/, "")}><g opacity="0.8">${tracers}</g></svg>`
+	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg><svg class="figure scene scene--loop loop__tracers" aria-hidden="true" focusable="false" ${LOCKUP.replace(/ xmlns="[^"]*"/, "")}>${tracers}</svg>`
 }
 
 // The footer's lockup and the 404 page: the hero's lattice again, without the drawing or the
