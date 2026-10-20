@@ -611,13 +611,22 @@ button {
 	stroke-dasharray: 0.08 2;
 	stroke-dashoffset: 0.08;
 }
+/* The pulses along the phone's large drawing sit on a layer of their own, shown only with it */
+.loop__tracers {
+	display: none;
+	will-change: transform;
+}
 /* A glow reads as light only on a dark ground; on paper the pulses stay crisp */
-:root[data-theme="dark"] .loop__glow {
-	filter: url(#loop-glow);
+.loop__halo {
+	display: none;
+	stroke-opacity: 0.22;
+}
+:root[data-theme="dark"] .loop__halo {
+	display: inline;
 }
 @media (prefers-color-scheme: dark) {
-	:root:not([data-theme="light"]) .loop__glow {
-		filter: url(#loop-glow);
+	:root:not([data-theme="light"]) .loop__halo {
+		display: inline;
 	}
 }
 .motion :is(.scene--loop, .scene--echo, .scene--patch):is(.is-playing, .not-found *) .loop__pulse {
@@ -1793,6 +1802,9 @@ main:has(> .not-found) {
 	}
 	.scene--loop .loop__large {
 		display: inline;
+	}
+	.loop__tracers {
+		display: block;
 	}
 	.scene--loop .loop__small {
 		display: none;
