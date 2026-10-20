@@ -607,6 +607,19 @@ button {
 	stroke-dasharray: 0.14 2;
 	stroke-dashoffset: 0.14;
 }
+.loop__pulse--symbol {
+	stroke-dasharray: 0.08 2;
+	stroke-dashoffset: 0.08;
+}
+/* A glow reads as light only on a dark ground; on paper the pulses stay crisp */
+:root[data-theme="dark"] .loop__glow {
+	filter: url(#loop-glow);
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) .loop__glow {
+		filter: url(#loop-glow);
+	}
+}
 .motion :is(.scene--loop, .scene--echo, .scene--patch):is(.is-playing, .not-found *) .loop__pulse {
 	animation: loop-pulse calc(6s + var(--i) * 1.1s) ease-in-out
 		calc(18 * var(--pen) + 2400ms + var(--i) * 1.4s) infinite;
@@ -1688,6 +1701,14 @@ main:has(> .not-found) {
 	.figure .loop__fine {
 		display: none;
 	}
+	/* Phones leave the lockup still: it is there from the start, without its own trace */
+	.motion :is(.hero__mark img, .logo-morph) {
+		-webkit-mask-image: none;
+		mask-image: none;
+	}
+	.scene--loop .loop__symbol {
+		display: none;
+	}
 	/* The proposition stands on the centre line, under the full-width lockup */
 	.hero__grid {
 		text-align: center;
@@ -1775,6 +1796,18 @@ main:has(> .not-found) {
 	}
 	.scene--loop .loop__small {
 		display: none;
+	}
+	/* With the symbol drawn large above it, the lockup shows its wordmark alone, centred (the
+	   wordmark spans 19% to 100% of the lockup, the symbol ends before 16%). The symbol comes back
+	   as the lockup shrinks into the header (main.ts sets --docked) */
+	.hero .hero__mark img {
+		-webkit-mask-image: linear-gradient(90deg, transparent 16%, #000 0);
+		mask-image: linear-gradient(90deg, transparent 16%, #000 0);
+		transform: translateX(-9.53%);
+	}
+	.motion .site-header .logo-morph {
+		-webkit-mask-image: linear-gradient(90deg, rgb(0 0 0 / var(--docked, 1)) 16%, #000 0);
+		mask-image: linear-gradient(90deg, rgb(0 0 0 / var(--docked, 1)) 16%, #000 0);
 	}
 }
 

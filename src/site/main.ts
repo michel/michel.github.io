@@ -66,6 +66,7 @@ if (header && heroLogo && slot) {
 			const x = from.x + (to.x - from.x) * t
 			const y = top + (to.y - top) * t
 			ghost.style.transform = `translate(${x}px, ${y}px) scale(${1 + (to.w / from.w - 1) * s})`
+			ghost.style.setProperty("--docked", String(s))
 			stick()
 		}
 		measure()
