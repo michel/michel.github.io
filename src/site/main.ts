@@ -1,3 +1,4 @@
+import "../banner"
 import { clamp, smoothstep } from "./ease"
 
 const root = document.documentElement
