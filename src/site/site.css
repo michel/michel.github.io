@@ -1823,6 +1823,12 @@ main:has(> .not-found) {
 	}
 }
 
+/* The large drawing is ruled as heavy as the wordmark's letters (STEM in scenes/loop.ts) */
+.scene path.loop__large {
+	vector-effect: none;
+	stroke-width: 18.3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

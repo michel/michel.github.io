@@ -97,8 +97,11 @@ const PULSES: [Family, number][] = [
 ]
 
 const everywhere = `maskUnits="userSpaceOnUse" x="-3000" y="-3000" width="7000" height="7000"`
-const pen = (d: string, at: number, length: number) =>
-	`<path d="${d}" class="loop__pen" style="--at: ${at}; --for: ${length}" pathLength="1" stroke="#fff" stroke-width="10"/>`
+const pen = (d: string, at: number, length: number, width: number) =>
+	`<path d="${d}" class="loop__pen" style="--at: ${at}; --for: ${length}" pathLength="1" stroke="#fff" stroke-width="${width}"/>`
+
+// The large drawing is ruled as heavy as the wordmark's letters, the width of their stems
+const STEM = 18.3
 
 // One drawing of the symbol; the pens that reveal it go in the mask
 const drawing = (placing: Placing, cls = "") => {
@@ -106,9 +109,11 @@ const drawing = (placing: Placing, cls = "") => {
 		{ at: 0, stroke: OUTLINE, length: 18 },
 		...BENDS.map((b) => ({ ...b, length: 6 })),
 	]
-	const art = `<path${cls ? ` class="${cls}"` : ""} d="${strokes.map(({ stroke }) => path(stroke, placing)).join("")}" stroke="${C.outline}"/>`
+	const art = `<path${cls ? ` class="${cls}"` : ""} d="${strokes.map(({ stroke }) => path(stroke, placing)).join("")}" stroke="${C.outline}"${placing.s > 1 ? ` stroke-width="${STEM}"` : ""}/>`
 	const pens = strokes
-		.map(({ at, stroke, length }) => pen(path(stroke, placing), at, length))
+		.map(({ at, stroke, length }) =>
+			pen(path(stroke, placing), at, length, placing.s > 1 ? 2 * STEM : 10),
+		)
 		.join("")
 	return { art, pens }
 }
@@ -213,7 +218,7 @@ export const loop = () => {
 		.map((stroke, i) => {
 			const d = path(stroke, LARGE)
 			const at = `pathLength="1" style="--i: ${i}" stroke="${C.activity}" stroke-linecap="round"`
-			return `<path d="${d}" class="loop__pulse loop__pulse--symbol loop__halo" ${at} stroke-width="24"/><path d="${d}" class="loop__pulse loop__pulse--symbol" ${at} stroke-width="6"/>`
+			return `<path d="${d}" class="loop__pulse loop__pulse--symbol loop__halo" ${at} stroke-width="${3 * STEM}"/><path d="${d}" class="loop__pulse loop__pulse--symbol" ${at} stroke-width="${STEM + 6}"/>`
 		})
 		.join("")
 	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg><svg class="figure scene scene--loop loop__tracers" aria-hidden="true" focusable="false" ${LOCKUP.replace(/ xmlns="[^"]*"/, "")}><g opacity="0.8">${tracers}</g></svg>`
