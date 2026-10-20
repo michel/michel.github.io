@@ -5,14 +5,17 @@ import { development } from "./development"
 import { financial } from "./financial"
 import { fullStack } from "./full-stack"
 import { infrastructure } from "./infrastructure"
-import { loop } from "./loop"
+import { echo, loop, patch } from "./loop"
 import { problem } from "./problem"
 import { production } from "./production"
 
 // The illustrations drawn in code, inlined by vite.config.ts at <!-- scene:name -->: the hero's
-// drawing of the loop, one per Expertise capability and one per Approach step
+// drawing of the loop and its echoes (footer, 404, contact), one per Expertise capability and one
+// per Approach step
 export const scenes: Record<string, () => string> = {
 	loop,
+	echo,
+	patch,
 	consulting,
 	"full-stack": fullStack,
 	financial,

@@ -113,52 +113,118 @@ const drawing = (placing: Placing, cls = "") => {
 	return { art, pens }
 }
 
-// Each spacing shows through a soft-edged mask that spreads from the symbol, the finer ones
-// staying closer to it, so the lattice loses detail towards the right; on phones the two
-// coarse ones spread around the large drawing instead
+// Each spacing shows through a soft-edged mask that spreads from where the lattice starts, the
+// finer ones staying closer to it, so it loses detail further away. Ids carry the scene's name, as
+// the hero and the footer share a page
+type Tier = { at: Pt; rx: number; ry: number; spacing: number; tone: string; phone?: [Pt, number] }
 const sheet = (id: string, shapes: string) => `<mask id="${id}" ${everywhere}>${shapes}</mask>`
-const spread = ([cx, cy]: Pt, rx: number, ry: number, cls = "") =>
-	`<ellipse class="loop__spread${cls && ` ${cls}`}" cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#loop-fade)"/>`
+const spread = (name: string, [cx, cy]: Pt, rx: number, ry: number, cls = "") =>
+	`<ellipse class="loop__spread${cls && ` ${cls}`}" cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#${name}-fade)"/>`
+const fade = (name: string) =>
+	`<radialGradient id="${name}-fade"><stop offset="0" stop-color="#fff"/><stop offset="0.4" stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>`
 
-export const loop = () => {
-	const small = node(7 / 3, 7 / 3)
-	const large = node(13, 17)
-	const right = (dx: number, dy = 0): Pt => [small[0] + dx, small[1] + dy]
-	const one = drawing(SMALL, "loop__symbol")
-	const three = drawing(LARGE, "loop__large")
-	const tiers = [
-		{ at: right(1100, 80), rx: 1900, ry: 620, phone: 1500, tone: C.guide },
-		{ at: right(600, 40), rx: 1300, ry: 520, phone: 1000, tone: C.guide },
-		{ at: right(250), rx: 760, ry: 400, phone: 0, tone: C.guide },
-		{ at: small, rx: 320, ry: 260, phone: 0, tone: C.grid },
-	]
+// The tiers of lattice; extra adds to the lines every third unit (pulses, the shine)
+const sheets = (name: string, tiers: Tier[], extra: (rules: string) => string) => {
 	const masks = tiers
 		.map(({ at, rx, ry, phone }, i) =>
 			sheet(
-				`loop-tier-${i}`,
+				`${name}-tier-${i}`,
 				phone
-					? spread(at, rx, ry, "loop__small") + spread(large, phone, phone, "loop__large")
-					: spread(at, rx, ry),
+					? spread(name, at, rx, ry, "loop__small") +
+							spread(name, phone[0], phone[1], phone[1], "loop__large")
+					: spread(name, at, rx, ry),
 			),
 		)
 		.join("")
+	const grid = tiers
+		.map(({ at, rx, spacing, tone }, i) => {
+			const d = lattice(at, rx, spacing)
+			return `<g mask="url(#${name}-tier-${i})"${spacing > 1 ? ` class="loop__fine"` : ""}><path d="${d}" class="loop__rule${spacing > 2 ? " loop__rule--fine" : ""}" stroke="${tone}"/>${spacing === 1 ? extra(d) : ""}</g>`
+		})
+		.join("")
+	return { defs: fade(name) + masks, grid }
+}
+
+const pulse = (d: string, i: number) =>
+	`<path d="${d}" class="loop__pulse" style="--i: ${i}" pathLength="1" stroke="${C.route}"/>`
+
+// For the quieter echoes: a few lines every third unit that pass close to where the lattice
+// starts, spread evenly over the ones that do
+const pulsesNear = (center: Pt, radius: number, count: number) => {
+	const lines: string[] = []
+	for (let n = -90; n <= 90; n++)
+		for (const family of [0, 1] as const) {
+			if (!ruled(n, 3, family ? 1 : 0)) continue
+			const [px, py] = node(n, 0)
+			const [dx, dy] = SLOPES[family] as Pt
+			if (Math.abs((center[0] - px) * dy - (center[1] - py) * dx) > radius / 2) continue
+			lines.push(ruling(center, radius, family, n))
+		}
+	const every = lines.length / count
+	return Array.from({ length: count }, (_, i) =>
+		pulse(lines[Math.floor((i + 0.5) * every)] ?? "", i),
+	).join("")
+}
+
+const LOCKUP = `viewBox="53.4 87.9 1443.2 185" fill="none" xmlns="http://www.w3.org/2000/svg"`
+const SYMBOL = node(7 / 3, 7 / 3)
+const right = (dx: number, dy = 0): Pt => [SYMBOL[0] + dx, SYMBOL[1] + dy]
+const lockupTiers = (phone?: Pt): Tier[] => [
+	{
+		at: right(1100, 80),
+		rx: 1900,
+		ry: 620,
+		spacing: 0,
+		tone: C.guide,
+		...(phone && { phone: [phone, 1500] }),
+	},
+	{
+		at: right(600, 40),
+		rx: 1300,
+		ry: 520,
+		spacing: 1,
+		tone: C.guide,
+		...(phone && { phone: [phone, 1000] }),
+	},
+	{ at: right(250), rx: 760, ry: 400, spacing: 2, tone: C.guide },
+	{ at: SYMBOL, rx: 320, ry: 260, spacing: 3, tone: C.grid },
+]
+
+export const loop = () => {
+	const large = node(13, 17)
+	const one = drawing(SMALL, "loop__symbol")
+	const three = drawing(LARGE, "loop__large")
 	// A band of light crosses the lines every third unit now and then, at the angle of the rising
 	// lines: those lines again, brighter, seen only through the band. It waits off the sheet, so
 	// without motion the lattice is still
-	const thirds = tiers[1] as (typeof tiers)[number]
-	const shine = `<linearGradient id="loop-band"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="loop-shine" ${everywhere}><g transform="rotate(30 ${thirds.at[0]} ${thirds.at[1]})"><rect class="loop__shine" x="-3000" y="-4000" width="500" height="8000" fill="url(#loop-band)"/></g></mask>`
-	const pulses = PULSES.map(
-		([family, n], i) =>
-			`<path d="${ruling(thirds.at, 1000, family, n)}" class="loop__pulse" style="--i: ${i}" pathLength="1" stroke="${C.route}"/>`,
-	).join("")
-	const grid = tiers
-		.map(({ at, rx, tone }, i) => {
-			const d = lattice(at, rx, i)
-			const extra =
-				i === 1 ? `<path d="${d}" mask="url(#loop-shine)" stroke="${C.seam}"/>${pulses}` : ""
-			return `<g mask="url(#loop-tier-${i})"${i > 1 ? ` class="loop__fine"` : ""}><path d="${d}" class="loop__rule${i > 2 ? " loop__rule--fine" : ""}" stroke="${tone}"/>${extra}</g>`
-		})
-		.join("")
-	const defs = `<defs><radialGradient id="loop-fade"><stop offset="0" stop-color="#fff"/><stop offset="0.4" stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>${masks}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>`
-	return `<svg viewBox="53.4 87.9 1443.2 185" fill="none" xmlns="http://www.w3.org/2000/svg">${defs}${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg>`
+	const thirds = right(600, 40)
+	const shine = `<linearGradient id="loop-band"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="loop-shine" ${everywhere}><g transform="rotate(30 ${thirds[0]} ${thirds[1]})"><rect class="loop__shine" x="-3000" y="-4000" width="500" height="8000" fill="url(#loop-band)"/></g></mask>`
+	const pulses = PULSES.map(([family, n], i) => pulse(ruling(thirds, 1000, family, n), i)).join("")
+	const { defs, grid } = sheets(
+		"loop",
+		lockupTiers(large),
+		(d) => `<path d="${d}" mask="url(#loop-shine)" stroke="${C.seam}"/>${pulses}`,
+	)
+	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg>`
+}
+
+// The footer's lockup and the 404 page: the hero's lattice again, without the drawing or the
+// shine, a few pulses only
+export const echo = () => {
+	const { defs, grid } = sheets("echo", lockupTiers(), () => pulsesNear(right(600, 40), 1000, 4))
+	return `<svg ${LOCKUP}><defs>${defs}</defs>${grid}</svg>`
+}
+
+// Contact: a patch of lattice spreading from the top right corner, two spacings and three pulses
+export const patch = () => {
+	const corner: Pt = [866, 0]
+	const { defs, grid } = sheets(
+		"patch",
+		[
+			{ at: corner, rx: 560, ry: 360, spacing: 1, tone: C.guide },
+			{ at: corner, rx: 280, ry: 190, spacing: 2, tone: C.guide },
+		],
+		() => pulsesNear(corner, 520, 3),
+	)
+	return `<svg viewBox="0 0 866 433" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs>${grid}</svg>`
 }
