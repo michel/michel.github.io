@@ -1,4 +1,5 @@
 import "../banner"
+import { capturePageview } from "../posthog"
 import { clamp, smoothstep } from "./ease"
 
 const root = document.documentElement
@@ -226,3 +227,5 @@ if (themeToggle) {
 		sync()
 	})
 }
+
+capturePageview()
