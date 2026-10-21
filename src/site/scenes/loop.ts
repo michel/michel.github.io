@@ -205,18 +205,20 @@ export const loop = () => {
 		lockupTiers(large),
 		(d) => `<path d="${d}" mask="url(#loop-shine)" stroke="${C.seam}"/>${pulses}`,
 	)
-	// On phones pulses also run along the large drawing: a lap of its outline and each bend, a
-	// little heavier than its lines so they show on them, under a wide faint halo that reads as a
-	// glow on a dark ground (site.css). They get an svg of their own, a layer apart, so moving them
-	// repaints only them and not the masked lattice beneath
-	const tracers = [OUTLINE, ...BENDS.map((b) => b.stroke)]
-		.map((stroke, i) => {
-			const d = path(stroke, LARGE)
-			const at = `pathLength="1" style="--i: ${i}" stroke="${C.activity}" stroke-linecap="round"`
-			return `<path d="${d}" class="loop__pulse loop__pulse--symbol loop__halo" ${at} stroke-width="24"/><path d="${d}" class="loop__pulse loop__pulse--symbol" ${at} stroke-width="6"/>`
-		})
-		.join("")
-	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg><svg class="figure scene scene--loop loop__tracers" aria-hidden="true" focusable="false" ${LOCKUP.replace(/ xmlns="[^"]*"/, "")}><g opacity="0.8">${tracers}</g></svg>`
+	// Pulses also run along the symbol: a lap of its outline and each bend, a little heavier than
+	// its lines so they show on them, under a wide faint halo that reads as a glow on a dark ground
+	// (site.css). Each drawing gets its own, shown with it; the small one lies on the lockup, in the
+	// ground's colour, and main.ts lifts it into the header with the lockup. They get an svg of
+	// their own, a layer apart, so moving them repaints only them and not the masked lattice beneath
+	const tracers = (placing: Placing, cls: string, tone: string) =>
+		`<g class="${cls}" opacity="0.8">${[OUTLINE, ...BENDS.map((b) => b.stroke)]
+			.map((stroke, i) => {
+				const d = path(stroke, placing)
+				const at = `pathLength="1" style="--i: ${i}" stroke="${tone}" stroke-linecap="round"`
+				return `<path d="${d}" class="loop__pulse loop__pulse--symbol loop__halo" ${at} stroke-width="${8 * placing.s}"/><path d="${d}" class="loop__pulse loop__pulse--symbol" ${at} stroke-width="${2 * placing.s}"/>`
+			})
+			.join("")}</g>`
+	return `<svg ${LOCKUP}><defs>${defs}<mask id="loop-pen" ${everywhere}>${one.pens}${three.pens}</mask>${shine}</defs>${grid}<g mask="url(#loop-pen)">${one.art}${three.art}</g></svg><svg class="figure scene scene--loop loop__tracers" aria-hidden="true" focusable="false" ${LOCKUP.replace(/ xmlns="[^"]*"/, "")}>${tracers(SMALL, "loop__small loop__symbol", "#fff")}${tracers(LARGE, "loop__large", C.activity)}</svg>`
 }
 
 // The footer's lockup and the 404 page: the hero's lattice again, without the drawing or the

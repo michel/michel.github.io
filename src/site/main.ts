@@ -41,10 +41,20 @@ const slot = document.querySelector<HTMLImageElement>("[data-header-logo] img")
 if (header && heroLogo && slot) {
 	const stick = () => header.classList.toggle("is-stuck", scrollY > 4)
 	if (motion) {
-		const ghost = slot.cloneNode() as HTMLImageElement
+		const ghost = document.createElement("div")
 		ghost.className = "logo-morph"
-		ghost.alt = ""
 		ghost.setAttribute("aria-hidden", "true")
+		const mark = slot.cloneNode() as HTMLImageElement
+		mark.alt = ""
+		ghost.append(mark)
+		// The pulses along the small symbol travel with the lockup they lie on, over it
+		const tracers = document.querySelector(".loop__tracers")
+		const small = tracers?.querySelector(".loop__small")
+		if (tracers && small) {
+			const layer = tracers.cloneNode()
+			layer.appendChild(small)
+			ghost.append(layer)
+		}
 		header.append(ghost)
 		root.classList.add("has-morph")
 		let from = { x: 0, y: 0, w: 1, h: 1 }
