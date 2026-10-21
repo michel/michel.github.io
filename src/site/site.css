@@ -65,6 +65,7 @@
 	/* The hero's lattice (scenes/loop.ts) sits on open paper, so light needs it a step stronger */
 	--loop-rule: #c0c6cc;
 	--loop-fine: #d5dade;
+	--loop-pulse: var(--il-outline);
 	/* The black brand vectors (lockup, client logos) turn white on a dark ground */
 	--mark-filter: none;
 	--font-sans:
@@ -103,6 +104,7 @@
 		--il-grid: #212428;
 		--loop-rule: var(--il-guide);
 		--loop-fine: var(--il-grid);
+		--loop-pulse: var(--il-route);
 		--mark-filter: invert(1);
 	}
 }
@@ -122,6 +124,7 @@
 	--il-grid: #212428;
 	--loop-rule: var(--il-guide);
 	--loop-fine: var(--il-grid);
+	--loop-pulse: var(--il-route);
 	--mark-filter: invert(1);
 }
 
@@ -411,6 +414,11 @@ button {
 	transform-origin: 0 0;
 	pointer-events: none;
 }
+.logo-morph img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
 .has-morph .hero__logo img,
 .menu-open .logo-morph {
 	visibility: hidden;
@@ -611,10 +619,22 @@ button {
 	stroke-dasharray: 0.08 2;
 	stroke-dashoffset: 0.08;
 }
-/* The pulses along the phone's large drawing sit on a layer of their own, shown only with it */
+/* The pulses along the symbol sit on a layer of their own, over the lockup. The small symbol's
+   lie within its bars, in the ground's colour, so they show on it in either theme */
 .loop__tracers {
-	display: none;
+	z-index: 0;
 	will-change: transform;
+}
+.loop__tracers .loop__small path {
+	stroke: var(--background);
+}
+.site-header.is-stuck .loop__symbol {
+	opacity: 0;
+}
+/* On paper the route grey is too faint for a pulse on the lattice's hairlines */
+.scene--loop .loop__pulse:not(.loop__pulse--symbol) {
+	stroke: var(--loop-pulse);
+	stroke-width: 1.5;
 }
 /* A glow reads as light only on a dark ground; on paper the pulses stay crisp */
 .loop__halo {
@@ -1802,9 +1822,6 @@ main:has(> .not-found) {
 	}
 	.scene--loop .loop__large {
 		display: inline;
-	}
-	.loop__tracers {
-		display: block;
 	}
 	.scene--loop .loop__small {
 		display: none;
