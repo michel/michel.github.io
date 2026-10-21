@@ -620,24 +620,13 @@ button {
 	stroke-dashoffset: 0.08;
 }
 /* The pulses along the symbol sit on a layer of their own, over the lockup. The small symbol's
-   lie within its bars, in the ground's colour, and only on a dark ground */
+   lie within its bars, in the ground's colour, so they show on it in either theme */
 .loop__tracers {
 	z-index: 0;
 	will-change: transform;
 }
 .loop__tracers .loop__small path {
 	stroke: var(--background);
-}
-.logo-morph .loop__tracers {
-	display: none;
-}
-:root[data-theme="dark"] .logo-morph .loop__tracers {
-	display: block;
-}
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme="light"]) .logo-morph .loop__tracers {
-		display: block;
-	}
 }
 .site-header.is-stuck .loop__symbol {
 	opacity: 0;
