@@ -178,7 +178,8 @@ svg {
 	max-width: 100%;
 }
 
-img[src^="/brand/"] {
+img[src^="/brand/"],
+.logo-morph__lockup {
 	filter: var(--mark-filter);
 }
 
@@ -414,7 +415,7 @@ button {
 	transform-origin: 0 0;
 	pointer-events: none;
 }
-.logo-morph img {
+.logo-morph :is(img, .logo-morph__lockup) {
 	display: block;
 	width: 100%;
 	height: auto;

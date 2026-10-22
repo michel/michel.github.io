@@ -1,6 +1,7 @@
 import "../banner"
 import { capturePageview } from "../posthog"
 import { clamp, smoothstep } from "./ease"
+import { animateLogo } from "./logo"
 
 const root = document.documentElement
 const motion = root.classList.contains("motion")
@@ -56,6 +57,7 @@ if (header && heroLogo && slot) {
 			ghost.append(layer)
 		}
 		header.append(ghost)
+		animateLogo(ghost, slot.parentElement ?? header)
 		root.classList.add("has-morph")
 		let from = { x: 0, y: 0, w: 1, h: 1 }
 		let to = { x: 0, y: 0, w: 1 }
