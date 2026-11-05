@@ -94,17 +94,6 @@ export default function Contact() {
 					>
 						herrgraaf
 					</a>
-					<span>
-						<span className="text-blue">Instagram</span>
-					</span>
-					<a
-						href="https://www.instagram.com/herrgraaf/"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="inline-block py-1 underline hover:text-cyan"
-					>
-						@herrgraaf
-					</a>
 				</div>
 			</div>
 		</div>

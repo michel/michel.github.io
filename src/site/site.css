@@ -860,6 +860,14 @@ main:has(> .not-found) {
 	max-width: none;
 	/* black at 60% reads as the muted grey #666 on white */
 	opacity: 0.6;
+	transition: opacity var(--duration-ui) var(--ease-brand);
+}
+.clients__list a {
+	display: block;
+}
+.clients__list a:hover img,
+.clients__list a:focus-visible img {
+	opacity: 1;
 }
 .clients__track:hover .clients__list,
 .clients.is-paused .clients__list {
@@ -1281,11 +1289,13 @@ main:has(> .not-found) {
 	width: auto;
 	max-width: 100%;
 }
-.case__logo a {
+.case__logo a,
+.also__name a {
 	display: block;
 	transition: opacity var(--duration-ui) var(--ease-brand);
 }
-.case__logo a:hover {
+.case__logo a:hover,
+.also__name a:hover {
 	opacity: 0.6;
 }
 .case__tags {

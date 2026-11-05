@@ -315,14 +315,14 @@ export default function About() {
 		...ManEntry({
 			id: "peliqan",
 			title: "Peliqan - Chief Technology Officer",
-			date: "Apr 2026 - Present",
+			date: "Apr 2026 - Oct 2026",
 			logos: [
 				{ src: "/images/peliqan-logo.svg", alt: "PELIQAN logo", width: 79, href: sites.peliqan },
 			],
 			children: (
 				<>
 					<div className="text-comment">Amsterdam, North Holland, Netherlands · On-site</div>
-					Building the <Ext href={sites.peliqan}>Peliqan</Ext> platform. Investors see their whole
+					Built the <Ext href={sites.peliqan}>Peliqan</Ext> platform. Investors see their whole
 					portfolio and can act on it: sell a position, finance a commitment, plan ahead.
 					Institutions have had that for decades; everyone else hasn't.
 				</>
@@ -336,7 +336,9 @@ export default function About() {
 			id: "reinvention",
 			title: "Re-invention (Founder)",
 			date: "2004 - Current",
-			logos: [{ src: "/images/reinvention-logo.svg", alt: "Re-invention logo", width: 18 }],
+			logos: [
+				{ src: "/images/reinvention-logo.svg", alt: "Re-invention logo", width: 18, href: "/" },
+			],
 			children: "My consultancy company: specialized in advanced (web-based) software solutions.",
 		}).map((line, i) => (
 			<div key={`reinvention-${i}`} className="ml-8">

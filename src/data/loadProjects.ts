@@ -8,7 +8,6 @@ export type Language = {
 
 export type Project = {
 	name: string
-	description?: string | null
 	customer?: string | null
 	language: string
 	languages?: Language[]
@@ -18,17 +17,12 @@ export type Project = {
 	totalLinesOfCode: number
 	myLinesOfCode: number
 	myCommitCount: number
-	totalCommitCount?: number
 	status: string
-	path: string
 	isPersonalProject?: boolean
-	repository?: string | null
 	commitYearStats?: Record<string, number>
 }
 
 type ProjectsData = {
-	generatedAt: string
-	rootPath: string
 	totalProjects: number
 	projects: Project[]
 }

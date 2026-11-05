@@ -56,6 +56,19 @@ function parseColoredText(text: string): React.ReactNode[] {
 	return parts.length > 0 ? parts : [text]
 }
 
+const welcome = [
+	"",
+	"\x1b[green]This is a real shell. Go on, type something.\x1b[reset]",
+	"",
+	"  \x1b[yellow]help\x1b[reset]                  every command there is",
+	"  \x1b[yellow]ls\x1b[reset]                    look around",
+	"  \x1b[yellow]cat about_michel.man\x1b[reset]  who I am",
+	"  \x1b[yellow]snake\x1b[reset]                 or just play a game",
+	"",
+	"\x1b[comment]Tab completes, ↑ recalls, Esc leaves.\x1b[reset]",
+	"",
+]
+
 const generateId = () =>
 	typeof crypto !== "undefined" && crypto.randomUUID
 		? crypto.randomUUID()
@@ -102,9 +115,9 @@ export default function Terminal() {
 	}
 	const [currentDirectory, setCurrentDirectory] = useState("/home/michel/blog")
 	const [history, setHistory] = useState<TerminalLine[]>(() => {
-		// Run neofetch on initial mount
+		// Run neofetch on initial mount, then say plainly that this is a shell to type in
 		const result = executeCommand("neofetch", "/home/michel/blog")
-		return result.output.map((content) => ({
+		return [...result.output, ...welcome].map((content) => ({
 			id: generateId(),
 			type: "output" as const,
 			content,
@@ -318,6 +331,9 @@ export default function Terminal() {
 						<span className="text-fg">{input}</span>
 						<span className="text-comment">{suggestion?.slice(input.length)}</span>
 						<span className={`${terminalFocused ? "cursor-blink" : ""} bg-fg text-bg`}> </span>
+						{!input && commandHistory.length === 0 && (
+							<span className="text-comment"> type help and press Enter</span>
+						)}
 					</div>
 				</div>
 			</div>

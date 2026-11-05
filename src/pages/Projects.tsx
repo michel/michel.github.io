@@ -74,9 +74,8 @@ const SortHeader = ({
 const CUSTOMER_DATA: Record<string, { role: string; period: string; activities: string }> = {
 	Peliqan: {
 		role: "CTO",
-		period: "2026 - Current",
-		activities:
-			"Building the Peliqan platform: portfolio visibility and liquidity for PE investors",
+		period: "2026",
+		activities: "Built the Peliqan platform: portfolio visibility and liquidity for PE investors",
 	},
 	"Revive Capital": {
 		role: "Tech lead",
@@ -650,15 +649,7 @@ export default function Projects() {
 				<Panel title="DETAILS" titleColor="text-yellow" className="flex-1 p-2 md:p-4">
 					{selectedProject ? (
 						<div className="flex h-full flex-col gap-4">
-							<div>
-								<h2 className="mb-1 text-xl font-bold text-fg">{selectedProject.name}</h2>
-								<div className="mb-2 break-all font-mono text-xs text-cyan">
-									{selectedProject.path.replace("/Users/micheldegraaf", "~")}
-								</div>
-								<div className="text-sm italic text-comment">
-									{selectedProject.description || "--"}
-								</div>
-							</div>
+							<h2 className="text-xl font-bold text-fg">{selectedProject.name}</h2>
 
 							<div className="grid grid-cols-2 gap-2 border-y border-border py-3 text-xs">
 								<div>
@@ -979,7 +970,7 @@ export default function Projects() {
 
 								return (
 									<div
-										key={p.path}
+										key={`${p.name}-${i}`}
 										className={`flex min-h-11 shrink-0 cursor-pointer items-center gap-2 border-b border-l-2 border-border/50 p-2 text-xs transition-colors duration-150 [content-visibility:auto] [contain-intrinsic-size:0_32px] md:min-h-0 ${
 											i === selectedIndex
 												? "border-l-cyan bg-bg-active"
