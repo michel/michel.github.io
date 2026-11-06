@@ -90,7 +90,7 @@ const CUSTOMER_DATA: Record<string, { role: string; period: string; activities: 
 	IKEA: {
 		role: "Tech lead",
 		period: "2022 - 2023",
-		activities: "Leading Content Coworker Experience program ",
+		activities: "Leading Content Coworker Experience program",
 	},
 	"Hypotheekrente.nl": {
 		role: "Tech lead",
